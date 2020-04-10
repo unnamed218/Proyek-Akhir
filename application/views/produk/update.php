@@ -1,0 +1,70 @@
+<html>
+<head></head>
+
+<body>
+
+		<div class="x_panel">
+ <div class="x_title">
+    <h3 class="panel-title"><center><b>Edit Produk</b></center></h3>
+  </div>
+  	 <div class="x_content">
+<div>
+<form method="POST" action="<?php echo site_url().'/c_masterdata/edit_produk'; ?>">
+	<div class="form-group">
+		<div class="row">
+			<div class="col-xs-4">
+				<label>ID Produk</label>
+				<input readonly type="text" class="form-control" name="no_produk" value="<?php echo $data['no_produk'] ; ?>"  >
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="row">
+			<div class="col-xs-4">
+				<label>Nama Produk</label>
+				<input type="text" class="form-control" name="nama_produk" value="<?php echo $data['nama_produk'] ; ?>" >
+			</div>
+		</div>
+		<?php echo form_error('nama_produk'); ?>
+	</div>
+	<div class="form-group">
+		<div class="row">
+			<div class="col-xs-4">
+				<label>Harga</label>
+				<input type="text" class="form-control" name="harga" value="<?php echo $data['harga'] ; ?>" >
+			</div>
+		</div>
+		<?php echo form_error('harga'); ?>
+	</div>
+	<div class="form-group">
+		<div class="row">
+			<div class="col-xs-4">
+				<label>Stok</label>
+				<input type="text" class="form-control" name="stok" value="<?php echo $data['stok'] ; ?>" readonly >
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="row">
+			<div class="col-xs-4">
+				 <label>Satuan</label>
+			<input type="text" class="form-control" name="satuan" value="<?php echo $data['satuan'] ; ?>" readonly >
+			</div>
+		</div>
+	</div>
+	<?php echo form_error('satuan'); ?>
+
+		<input type="submit" name="submit" class="btn btn-primary" value="Simpan">
+
+		<a href = "<?php echo site_url()."/c_masterdata/lihat_produk"?>" class="btn btn-default" role="button">Kembali</a><!-- 
+		<a href="lihat_produk" class="btn btn-default">Back</a>
+		<input type="button" class="btn btn-default" value="Back" onClick=history.go(-1);> -->
+	</div>
+	</div>
+	</div>
+</form>
+</div>
+</div>
+</div>
+</body>
+</html>
