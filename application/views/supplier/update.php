@@ -28,6 +28,20 @@
 		<?php echo form_error('nama_supp_bp'); ?>
 	</div>
 
+		<div class="form-group">
+			  <label>No. Telepon</label>
+			  <input type = "text" name = "notel" class = "form-control" value ="<?php echo $data['notel'] ; ?>">
+			  
+			  <?php echo form_error('notel'); ?>
+			</div>
+
+			<div class="form-group">
+			  <label>Alamat</label>
+			  <input type = "text" name = "alamat" class = "form-control" vallue ="<?php echo $data['alamat']?>">
+			  
+			  <?php echo form_error('alamat'); ?>
+			</div>
+
 		<input type="submit" name="submit" class="btn btn-primary" value="Simpan">
 
 		<a href = "<?php echo site_url()."/c_masterdata/lihat_supp_bp"?>" class="btn btn-default" role="button">Kembali</a><!-- 

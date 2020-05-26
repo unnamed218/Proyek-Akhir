@@ -896,6 +896,22 @@ class c_masterdata extends CI_controller{
                   'customAlpha' => '%s hanya boleh berupa huruf!',
                   'is_unique' => '%s sudah ada di database!'
                )
+            ),
+            array(
+               'field' => 'notel',
+               'label' => 'No. Telepon',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            ),
+            array(
+               'field' => 'alamat',
+               'label' => 'Alamat',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
             )
          );
          $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
@@ -906,7 +922,9 @@ class c_masterdata extends CI_controller{
          } else {
             $data = array(
                'no_supp_bp' => $_POST['no_supp_bp'],
-               'nama_supp_bp' => $_POST['nama_supp_bp']
+               'nama_supp_bp' => $_POST['nama_supp_bp'],
+               'notel'        => $_POST['notel'],
+               'alamat' => $_POST['alamat']
             );
             $this->db->insert('supplier_bp', $data);
           
@@ -941,6 +959,22 @@ class c_masterdata extends CI_controller{
                   'max_length' => '%s maksimal 30 huruf!',
                   'customAlpha' => '%s hanya boleh berupa huruf!'
                )
+            ),
+            array(
+               'field' => 'notel',
+               'label' => 'No. Telepon',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            ),
+            array(
+               'field' => 'alamat',
+               'label' => 'Alamat',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
             )
        
             
@@ -955,9 +989,13 @@ class c_masterdata extends CI_controller{
          } else {
             $no_supp_bp   = $_POST['no_supp_bp'];
             $nama_supp_bp = $_POST['nama_supp_bp'];
+            $notel        = $_POST['notel'];
+            $alamat       = $_POST['alamat'];
             
             $data = array(
-               'nama_supp_bp' => $nama_supp_bp
+               'nama_supp_bp' => $nama_supp_bp,
+               'notel' => $notel,
+               'alamat' => $alamat
             );
             
             $this->db->where('no_supp_bp', $no_supp_bp);
@@ -1057,9 +1095,9 @@ class c_masterdata extends CI_controller{
          // $this->db->where('b.nama_bop', $id);
          // $this->db->join('bop a', 'a.nama_bop = b.nama_bop');
          // $x['result'] = $this->db->get('detail_bop b')->result_array();
-        $query = "SELECT a.nama_bop, nama_bop, harga, DAY(LAST_DAY(CONCAT(tahun,'-',bulan,'-01'))) as hari
+        $query = "SELECT b.nama_bop, harga, DAY(LAST_DAY(CONCAT(tahun,'-',bulan,'-01'))) as hari
          FROM bop a 
-         JOIN detail_bop b ON a.nama_bop = b.nama_bop
+         JOIN detail_bop b ON b.no_bop = a.no_bop
          WHERE b.nama_bop LIKE '".$id."'
       ";
          $x['result'] = $this->db->query($query)->result_array();
@@ -1341,6 +1379,22 @@ class c_masterdata extends CI_controller{
                   'customAlpha' => '%s hanya boleh berupa huruf!',
                   'is_unique' => '%s sudah ada di database!'
                )
+            ),
+            array(
+               'field' => 'notel',
+               'label' => 'No. Telepon',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            ),
+            array(
+               'field' => 'alamat',
+               'label' => 'Alamat',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
             )
          );
          $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
@@ -1351,7 +1405,9 @@ class c_masterdata extends CI_controller{
          } else {
             $data = array(
                'no_ips' => $_POST['no_ips'],
-               'nama_ips' => $_POST['nama_ips']
+               'nama_ips' => $_POST['nama_ips'],
+               'notel' => $_POST['notel'],
+               'alamat' => $_POST['alamat']
             );
             $this->db->insert('konsumen_ips', $data);
            
@@ -1387,6 +1443,22 @@ class c_masterdata extends CI_controller{
                   'customAlpha' => '%s hanya boleh berupa huruf!',
                   'is_unique' => '%s sudah ada di database!'
                )
+            ),
+            array(
+               'field' => 'notel',
+               'label' => 'No. Telepon',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            ),
+            array(
+               'field' => 'alamat',
+               'label' => 'Alamat',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
             )
          );
          $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
@@ -1398,9 +1470,13 @@ class c_masterdata extends CI_controller{
          } else {
             $no_bp   = $_POST['no_ips'];
             $nama_bp = $_POST['nama_ips'];
+            $notel   = $_POST['notel'];
+            $alamat  = $_POST['alamat'];
             
             $data = array(
                'nama_ips' => $nama_bp,
+               'notel' => $notel,
+               'alamat' => $alamat
             );
             
             $this->db->where('no_ips', $no_bp);

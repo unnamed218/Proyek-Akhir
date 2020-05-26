@@ -26,6 +26,8 @@
 						<tr><td>$no</td>
 							<td>".$data['no_supp_bp']."</td>
 							<td>".$data['nama_supp_bp']."</td>
+							<td>".$data['notel']."</td>
+							<td>".$data['alamat']."</td>
 							" ?>
 							<td>
 							<a href="isi_edit_supp_bp/<?php echo $data['no_supp_bp']; ?>">

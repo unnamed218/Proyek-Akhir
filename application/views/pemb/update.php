@@ -33,15 +33,19 @@
 			</div>
 	</div>
 <form method = "POST" action = "<?php echo site_url('c_transaksi/tambah_pemb1');?>">
-	<input readonly type="text" class="form-control"  value="<?php echo $no_trans ; ?>" name="no_trans">
+	<input readonly type="hidden" class="form-control"  value="<?php echo $no_trans ; ?>" name="no_trans">
 	<div class="row">
 	<div class="form-group">
 			<div class="col-xs-5">
 				<div class="form-group">
 				<label>Bahan Baku</label>
 				<input readonly type="text" class="form-control"  value="Susu Sapi"  >
-				<input readonly type="text" class="form-control"  value="BB_001" name="no_bb">
-				<input readonly type="text" class="form-control"  value="5000" name="harga">
+				<input readonly type="hidden" class="form-control"  value="BB_001" name="no_bb">
+				<?php 
+				$this->db->where('no_bb', 'BB_001');
+				$harga = $this->db->get('bahan_baku')->row()->harga;
+				?>
+				<input readonly type="hidden" class="form-control"  value="5000" name="<?php $harga;?>">
 				
 
 			</div>
@@ -176,6 +180,7 @@
 				<label>ID Transaksi</label>
 				<input readonly type="text" class="form-control"  value="<?php echo $no_trans ; ?>"  >
 			</div>
+			
 		</div>
 		
 	

@@ -29,7 +29,6 @@
 						<tr><td>$no</td>
 							<td>".$data['no_produk']."</td>
 							<td>".$data['nama_produk']."</td>
-							<td>".$data['stok']."</td>
 							<td>".format_rp($data['harga'])."</td>
 							<td>".$data['satuan']."</td>
 

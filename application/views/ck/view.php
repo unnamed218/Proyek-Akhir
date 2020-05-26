@@ -1,19 +1,19 @@
 <html>
-	<!-- <head><center><h3><b>Master Data Konsumen IPS</b></h3></center></head>
+	<!-- <head><center><h3><b>Master Data Cek Kualitas</b></h3></center></head>
 	<hr> -->
 	<body>
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar Konsumen IPS</b></h3>
+    <h3 class="panel-title"><b>Daftar Cek Kualitas</b></h3>
   </div>
   	 <div class="x_content">
-  	 		<a href = "<?php echo site_url()."/c_masterdata/form_ips"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
+  	 		<a href = "<?php echo site_url()."/c_transaksi/form_ck"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
   	 	 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">
 				<th style="width: 2px;">No</th>
-				<th>ID Konsumen IPS</th>
-				<th>Nama Konsumen IPS</th>
+				<th>ID Transaksi</th>
+				<th>Tanggal Transaksi</th>
 				<th>Aksi</th>
 			</tr>
 		</thead>
@@ -24,20 +24,19 @@
 					echo "
 
 						<tr><td>$no</td>
-							<td>".$data['no_ips']."</td>
-							<td>".$data['nama_ips']."</td>
-							<td>".$data['notel']."</td>
-							<td>".$data['alamat']."</td>
+							<td>".$data['no_trans']."</td>
+							<td>".$data['tgl_trans']."</td>
 							" ?>
 							<td>
-							<a href="isi_edit_ips/<?php echo $data['no_ips']; ?>">
+							<a href="isi_edit_ck/<?php echo $data['no_trans']; ?>">
+							
 							<span class="fa-stack">
 							  <i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
 							 <span class="glyphicon glyphicon-pencil fa-stack-1x" aria-hidden="true" style="color:white"></span>
-							</span></a>
+							</span> </a>
 							</td>
 							<!--<td align="center">
-							<a class="btn btn-warning" href="isi_edit_ips/<?php echo $data['no_ips']; ?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a>
+							<a class="btn btn-warning" href="isi_edit_ck/<?php echo $data['no_ck']; ?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a>
 					</td>-->
 
 						</tr>

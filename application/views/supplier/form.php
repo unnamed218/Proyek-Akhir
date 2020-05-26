@@ -22,6 +22,21 @@
 			  <input type = "text" name = "nama_supp_bp" class = "form-control">
 			  
 			  <?php echo form_error('nama_supp_bp'); ?>
+			</div>
+
+			<div class="form-group">
+			  <label>No. Telepon</label>
+			  <input type = "text" name = "notel" class = "form-control">
+			  
+			  <?php echo form_error('notel'); ?>
+			</div>
+
+			<div class="form-group">
+			  <label>Alamat</label>
+			  <input type = "text" name = "alamat" class = "form-control">
+			  
+			  <?php echo form_error('alamat'); ?>
+			</div>
 			
 			  <hr>
 			<button type="submit" class="btn btn-default btn-primary">Simpan</button>

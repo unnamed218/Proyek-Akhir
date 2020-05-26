@@ -28,16 +28,13 @@
 							<td>".$data['tgl_trans']."</td>
 							" ?>
 							<td>
-							<a href="isi_edit_produksi_ke2/<?php echo $data['no_trans']; ?>">
+							<a href="isi_edit_produksi_ke21/<?php echo $data['no_trans']; ?>">
 							
 							<span class="fa-stack">
 							  <i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
 							 <span class="glyphicon glyphicon-pencil fa-stack-1x" aria-hidden="true" style="color:white"></span>
 							</span> </a>
 							</td>
-							<!--<td align="center">
-							<a class="btn btn-warning" href="isi_edit_pemb/<?php echo $data['no_pemb']; ?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a>
-					</td>-->
 
 						</tr>
 						

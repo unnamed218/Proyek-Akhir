@@ -22,17 +22,6 @@ class c_transaksi extends CI_controller{
       $data['tgl'] = $this->db->get('pembelian_bb')->row()->tgl_trans;
       $data['peternak'] = $this->db->get('peternak')->result_array();
 
-
-
-      //ISI PEMBELIAN 
-   //    $query1 = "SELECT nama_bb, b.jumlah*c.jumlah as jumlah, harga,satuan,no_bbp
-   // FROM pembelian_bb a 
-   // JOIN detail_target_produksi b ON a.no_tp = b.no_tp
-   // JOIN bom c ON c.no_produk = b.no_produk
-   // JOIN bahan_baku d ON d.no_bb = c.no_bbp
-   // WHERE a.no_trans = '$id' AND c.no_bbp NOT IN
-   // (SELECT no_bb FROM detail_pembelian_bb WHERE no_trans = '$id')";
-   //    $data['result1'] = $this->db->query($query1)->result_array();
       $this->db->where('no_trans', $id);
       $this->db->select('status');
       $data['cek'] = $this->db->get('pembelian_bb')->row()->status;
@@ -55,6 +44,8 @@ class c_transaksi extends CI_controller{
       $this->db->where('no_trans', $id);
       $this->db->select_sum('subtotal');
       $data['total'] = $this->db->get('detail_pembelian_bb')->row()->subtotal;
+
+
    
       $this->template->load('template', 'pemb/update', $data);
       // var_dump($data['cek_selesai']);
@@ -75,13 +66,6 @@ class c_transaksi extends CI_controller{
          $no_trans   = "PMB_" . $kd;
          $data['id'] = $no_trans;
 
-         // $this->db->select('a.no_tp, status, no_bbp');
-         // $this->db->from('target_produksi a');
-         // $this->db->join('detail_target_produksi b', 'a.no_tp = b.no_tp');
-         // $this->db->join('bom c', 'c.no_produk = b.no_produk');
-         // $this->db->where('status', '1');
-         // $this->db->group_by('a.no_tp');
-         // $data['result'] = $this->db->get()->result_array();
          $this->template->load('template', 'pemb/form', $data);
    }
 
@@ -92,9 +76,6 @@ class c_transaksi extends CI_controller{
                'total' => '0');
       $this->db->insert('pembelian_bb', $data);
 
-      // $this->db->where('no_tp', $_POST['no_tp']);
-      // $this->db->set('status', '2');
-      // $this->db->update('target_produksi');
       redirect('c_transaksi/lihat_pemb');
    }
 
@@ -119,9 +100,107 @@ class c_transaksi extends CI_controller{
       $this->db->where('no_trans', $id);
       $this->db->update('pembelian_bb');
 
+      redirect('c_transaksi/isi_edit_pemb/'.$id.'');
+   }
+
+    //Cek kualitas
+   public function lihat_ck(){
+      $data['result'] = $this->db->get('cek_kualitas')->result_array();
+        $this->template->load('template', 'ck/view', $data);
+   }
+
+   public function isi_edit_ck($id){
+      $data['no_trans'] = $id;
+     
+      $this->db->where('no_trans', $id);
+      $data['tgl'] = $this->db->get('cek_kualitas')->row()->tgl_trans;
+   
+      //jumlah bahan baku 
+      $this->db->where('b.no_trans', $id);
+      $this->db->join('detail_pembelian_bb a', 'a.no_trans = b.no_trans_pembb');
+      $data['jumlah'] = $this->db->get('cek_kualitas b')->row()->jumlah;
+
+        //satuan bahan baku 
+      $this->db->where('b.no_trans', $id);
+      $this->db->join('detail_pembelian_bb a', 'a.no_trans = b.no_trans_pembb');
+      $this->db->join('bahan_baku c', 'c.no_bb = a.no_bb');
+      $data['satuan'] = $this->db->get('cek_kualitas b')->row()->satuan;
+
+       // $data['cek_selesai'] = $this->db->query($query1)->num_rows();
+      $this->db->where('no_trans', $id);
+      $data['cek_selesai'] = $this->db->get('detail_cek_kualitas')->num_rows();
+
+       $this->db->where('no_trans', $id);
+      $this->db->select('status');
+      $data['cek'] = $this->db->get('cek_kualitas')->row()->status;
+
+      //-------------------------------------------------------------------------------//
+      //detail
+      $this->db->where('no_trans', $id);
+      $data['detail'] = $this->db->get('detail_cek_kualitas')->result_array();
+
+
+      $this->template->load('template', 'ck/update', $data);
+ 
+   }
+
+   public function form_ck(){
+          $query1   = "SELECT  MAX(RIGHT(no_trans,3)) as kode FROM cek_kualitas";
+         $abc      = $this->db->query($query1);
+         $no_trans = "";
+         if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+               $tmp = ((int) $k->kode) + 1;
+               $kd  = sprintf("%03s", $tmp);
+            }
+         } else {
+            $kd = "001";
+         }
+         $no_trans   = "CK_" . $kd;
+         $data['id'] = $no_trans;
+
+         $this->db->where('status', '1');
+         $this->db->order_by('no_trans');
+         $data['pbb'] = $this->db->get('pembelian_bb')->result_array();
+
+         $this->template->load('template', 'ck/form', $data);
+   }
+
+   public function tambah_ck(){
+      $data = array('no_trans' => $_POST['no_trans'],
+               'tgl_trans' => $_POST['tgl_trans'],
+               'status' => '0',
+               'no_trans_pembb' => $_POST['no_trans_pembb']);
+      $this->db->insert('cek_kualitas', $data);
+
+      $this->db->where('no_trans', $_POST['no_trans_pembb']);
+      $this->db->set('status', '2');
+      $this->db->update('pembelian_bb');
+      redirect('c_transaksi/lihat_ck');
+   }
+
+   public function selesai_ck(){
+      $id = $_POST['no_trans'];
+      $gagal = $_POST['jumlah'] - $_POST['lulus'];
+      $data = array('no_trans' => $_POST['no_trans'],
+               'lulus' => $_POST['lulus'],
+               'gagal' => $gagal,
+               'total' => $_POST['jumlah']);
+      $this->db->insert('detail_cek_kualitas', $data);
+
+
+      $this->db->set('status', '1');
+      $this->db->where('no_trans', $id);
+      $this->db->update('cek_kualitas');
+
+      $this->db->where('no_bb', 'BB_001');
+      $harga = $this->db->get('bahan_baku')->row()->harga;
+
+      $total = $harga * $_POST['lulus'];
+
        $this->m_keuangan->GenerateJurnal('112', $id, 'd', $total);
       $this->m_keuangan->GenerateJurnal('111', $id, 'k', $total);
-      redirect('c_transaksi/isi_edit_pemb/'.$id.'');
+      redirect('c_transaksi/isi_edit_ck/'.$id.'');
    }
 
 
@@ -137,9 +216,23 @@ class c_transaksi extends CI_controller{
       $data['no_trans'] = $id; 
       $this->db->where('no_trans', $id);
       $data['tgl'] = $this->db->get('produksi_ke1')->row()->tgl_trans;
+
       $this->db->where('no_trans', $id);
-      $data['no_trans_pembb'] = $this->db->get('produksi_ke1')->row()->no_trans_pembb;
+      $id_ck = $this->db->get('produksi_ke1')->row()->no_trans_ck;
+      $data['no_ck'] = $id_ck;
+
+      $this->db->where('no_trans', $id_ck);
+      $pembb = $this->db->get('cek_kualitas')->row()->no_trans_pembb;
+      $data['no_trans_pembb'] = $pembb;
+
       $data['peternak'] = $this->db->get('peternak')->result_array();
+
+       $this->db->where('a.no_trans', $id);
+       $this->db->join('cek_kualitas b', 'b.no_trans = a.no_trans_ck');
+       $this->db->join('detail_pembelian_bb c', 'c.no_trans = b.no_trans_pembb');
+       $this->db->join('bahan_baku d', 'd.no_bb = c.no_bb');
+      $data['satuan'] = $this->db->get('produksi_ke1 a')->row()->satuan;
+
 
       
       //bom
@@ -147,7 +240,7 @@ class c_transaksi extends CI_controller{
       $this->db->from('bom a');
       $this->db->join('bahan_baku b', 'a.no_bbp = b. no_bb');
       $this->db->join('detail_pembelian_bb c', 'b.no_bb = c.no_bb');
-      $this->db->where('c.no_trans', $data['no_trans_pembb']);
+      $this->db->where('c.no_trans', $pembb);
       $this->db->group_by('b.no_bb');
 
       $data['bom'] = $this->db->get()->result_array();  
@@ -183,7 +276,7 @@ class c_transaksi extends CI_controller{
          $data['id'] = $no_trans ;
          $this->db->where('status', '1');
          $this->db->order_by('no_trans');
-         $data['pbb'] = $this->db->get('pembelian_bb')->result_array();
+         $data['ck'] = $this->db->get('cek_kualitas')->result_array();
 
 
 
@@ -194,12 +287,12 @@ class c_transaksi extends CI_controller{
       $data = array('no_trans' => $_POST['no_trans'],
                'tgl_trans' => $_POST['tgl_trans'],
                'status' => '0',
-               'no_trans_pembb' => $_POST['no_trans_pembb']);
+               'no_trans_ck' => $_POST['no_trans_ck']);
       $this->db->insert('produksi_ke1', $data);
 
-      $this->db->where('no_trans', $_POST['no_trans_pembb']);
+      $this->db->where('no_trans', $_POST['no_trans_ck']);
       $this->db->set('status', '2');
-      $this->db->update('pembelian_bb');
+      $this->db->update('cek_kualitas');
       redirect('c_transaksi/lihat_produksi_ke1');
    }
 
@@ -257,11 +350,18 @@ class c_transaksi extends CI_controller{
       $this->db->where('a.no_trans', $id);
       $data['detail'] = $this->db->get()->result_array();
 
+      $this->db->where('no_trans', $id);
       $data['cek'] = $this->db->get('pembagian')->row()->status; 
+
+        $this->db->where('e.no_trans', $id);
+        $this->db->join('produksi_ke1 a', 'a.no_trans = e.no_trans_produksi1');
+       $this->db->join('cek_kualitas b', 'b.no_trans = a.no_trans_ck');
+       $this->db->join('detail_pembelian_bb c', 'c.no_trans = b.no_trans_pembb');
+       $this->db->join('bahan_baku d', 'd.no_bb = c.no_bb');
+      $data['satuan'] = $this->db->get('pembagian e')->row()->satuan;
 
       
       $this->template->load('template', 'pembagian/update', $data);
-      // var_dump($data['cek_selesai']);
    }
 
    public function form_pembagian(){
@@ -307,10 +407,12 @@ class c_transaksi extends CI_controller{
       $this->db->where('no_trans', $_POST['no_trans']);
       $this->db->update('pembagian');
 
+      $produksi = 100 - $_POST['jual'];
+
       //input ke detail pembagian
       $data = array( 'no_trans' => $_POST['no_trans'],
                      'jual' => $_POST['jual'],
-                     'produksi' => $_POST['produksi'] );
+                     'produksi' => $produksi );
       $this->db->insert('detail_pembagian', $data);
 
       //update ke stok produk
@@ -418,17 +520,26 @@ class c_transaksi extends CI_controller{
          
          $x['data'] = $this->m_masterdata->edit_data('target_produksi', "no_tp = '$id'")->row_array();
 
-         $this->db->select('jumlah');
-         $this->db->from('target_produksi a');
-         $this->db->join('pembagian b', 'a.no_trans_pembagian = b.no_trans');
-         $this->db->join('detail_produksi_ke1 c', 'c.no_trans = b.no_trans_produksi1');
-         $this->db->where('a.no_tp', $id);
-         $x['jumlah'] = $this->db->get()->row()->jumlah;
+         // $this->db->select('jumlah*produksi/100 as jumlah');
+         // $this->db->from('target_produksi a');
+         // $this->db->join('pembagian b', 'a.no_trans_pembagian = b.no_trans');
+         // $this->db->join('detail_produksi_ke1 c', 'c.no_trans = b.no_trans_produksi1');
+         // $this->db->where('a.no_tp', $id);
+         // $x['jumlah'] = $this->db->get()->row()->jumlah;
+
+         $query3 = "SELECT jumlah*produksi/100 as jumlah
+                  FROM target_produksi a
+                  JOIN pembagian b ON a.no_trans_pembagian = b.no_trans
+                  JOIN detail_produksi_ke1 c ON c.no_trans = b.no_trans_produksi1
+                  JOIN detail_pembagian d ON d.no_trans = b.no_trans
+                  WHERE a.no_tp = '$id'";
+          $x['jumlah'] = $this->db->query($query3)->row()->jumlah;
+    
 
          $x['result'] = $this->db->get('produk')->result_array(); 
          
          $this->db->where('a.no_tp', $id);
-         $this->db->select('a.no_produk, nama_produk, jumlah, a.no_tp, satuan,status');
+         $this->db->select('a.no_produk, nama_produk, jumlah, a.no_tp, satuan, c.status');
          $this->db->from('detail_target_produksi a');
          $this->db->join('produk b', 'a.no_produk = b.no_produk');
          $this->db->join('target_produksi c', 'a.no_tp = c.no_tp');
@@ -441,14 +552,14 @@ class c_transaksi extends CI_controller{
                   JOIN produk b ON a.no_produk = b.no_produk
                   JOIN bom c ON c.no_produk = b.no_produk
                   JOIN bahan_baku d ON d.no_bb = c.no_bbp 
-                  WHERE a.no_tp = 'TP_018'
+                  WHERE a.no_tp = '$id'
 UNION
 SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp
 FROM detail_target_produksi a
 JOIN produk b ON a.no_produk = b.no_produk
 JOIN bom c ON c.no_produk = b.no_produk
 JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
-WHERE a.no_tp = 'TP_018' AND NOT c.no_bbp = 'BB_001'
+WHERE a.no_tp = '$id' AND NOT c.no_bbp = 'BB_001'
 group by no_bbp";
       $x['result2'] = $this->db->query($query1)->result_array();
          $x['id'] = $id;
@@ -657,50 +768,83 @@ group by no_bbp";
       $this->template->load('template', 'prod2/view', $data);
    }
 
-
-    public function isi_edit_produksi_ke2($id){
+   public function isi_edit_produksi_ke21($id){
       $data['id'] = $id;
-
-      //nyari produk
-      $this->db->select('no_produk');
-      $this->db->from('detail_target_produksi a');
-      $this->db->join('produksi_ke2 b', 'a.no_tp = b.no_tp');
-      $this->db->where('no_trans', $id);
-      $data['no_produk'] = $this->db->get()->row()->no_produk;
-
-
       $data['no_trans'] = $id; 
       $this->db->where('no_trans', $id);
-      $data['tgl'] = $this->db->get('produksi_ke1')->row()->tgl_trans;
+      $data['tgl'] = $this->db->get('produksi_ke2')->row()->tgl_trans;
       $this->db->where('no_trans', $id);
-      $data['no_trans_pembb'] = $this->db->get('produksi_ke1')->row()->no_trans_pembb;
-      $data['peternak'] = $this->db->get('peternak')->result_array();
+      $data['no_tp'] = $this->db->get('produksi_ke2')->row()->no_tp;
 
+      $query = "SELECT COUNT(jumlah) as jumlah
+               FROM produksi_ke2 a
+               JOIN detail_target_produksi b ON a.no_tp = b.no_tp
+               WHERE a.no_trans = '$id'";
+      $data['jml_produk'] = $this->db->query($query)->row()->jumlah;
+
+
+      $this->db->where('no_trans', $id);
+      $this->db->from('produksi_ke2 a');
+      $this->db->join('detail_target_produksi b', 'a.no_tp = b.no_tp');
+      $this->db->join('produk c', 'c.no_produk = b.no_produk');
+      $data['detail'] = $this->db->get()->result_array();
+
+      $this->template->load('template', 'prod2/update0', $data);
+
+   }
+
+
+    public function isi_edit_produksi_ke2($id,$no_tp,$no_prod){
+       $data['id'] = $id;
+      $data['no_trans'] = $id; 
+      $this->db->where('no_trans', $id);
+      $data['tgl'] = $this->db->get('produksi_ke2')->row()->tgl_trans;
+      $data['no_tp'] = $no_tp;
+      $data['no_prod'] = $no_prod;
+
+    
+
+      //nama produk
+      $this->db->where('no_produk', $no_prod);
+      $data['nama_produk'] = $this->db->get('produk')->row()->nama_produk;
+
+      //jumlah produksi
+      $this->db->where('no_tp', $no_tp);
+      $this->db->where('no_produk', $no_prod);
+      $data['jumlah'] = $this->db->get('detail_target_produksi')->row()->jumlah;
       
       //bom
-      $this->db->select('a.jumlah, b.nama_bb, b.harga, b.satuan, c.jumlah as jumlahbb');
-      $this->db->from('bom a');
-      $this->db->join('bahan_baku b', 'a.no_bbp = b. no_bb');
-      $this->db->join('detail_pembelian_bb c', 'b.no_bb = c.no_bb');
-      $this->db->where('c.no_trans', $data['no_trans_pembb']);
-      $this->db->group_by('b.no_bb');
-
-      $data['bom'] = $this->db->get()->result_array();  
+      
+       $query1 =   "SELECT nama_bb, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp
+                  FROM detail_target_produksi a
+                  JOIN produk b ON a.no_produk = b.no_produk
+                  JOIN bom c ON c.no_produk = b.no_produk
+                  JOIN bahan_baku d ON d.no_bb = c.no_bbp 
+                  WHERE a.no_tp = '$no_tp' AND a.no_produk = '$no_prod'
+                  UNION
+                  SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp
+                  FROM detail_target_produksi a
+                  JOIN produk b ON a.no_produk = b.no_produk
+                  JOIN bom c ON c.no_produk = b.no_produk
+                  JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
+                  WHERE a.no_tp = '$no_tp' AND NOT c.no_bbp = 'BB_001' AND a.no_produk = '$no_prod'
+                  group by no_bbp";
+      $data['result2'] = $this->db->query($query1)->result_array();
     
-     //jumlah produksi
+      
+      //biaya biaya
+      //bahan baku
 
-      $this->db->where('no_trans', $data['no_trans_pembb']);
-      $data['jmlprod'] = $this->db->get('detail_pembelian_bb')->row()->jumlah;
-
-           //cek selesai produksi
+      //cek selesai produksi
       $this->db->where('no_trans', $id);
-      $data['cek'] = $this->db->get('detail_produksi_ke1')->num_rows();
+      $data['cek'] = $this->db->get('detail_produksi_ke2')->num_rows();
 
 
       
-      $this->template->load('template', 'prod1/update', $data);
-      // var_dump($data['cek_selesai']);
+      $this->template->load('template', 'prod2/update', $data);
    }
+
+
 
    public function form_produksi_ke2(){
           $query1   = "SELECT  MAX(RIGHT(no_trans,3)) as kode FROM produksi_ke2";

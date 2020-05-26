@@ -49,6 +49,39 @@
 		</table>
 
 	
+		
+		 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
+		 	<thead>
+			<tr class="headings">
+				<th rowspan="2"> <center>No</center></th>
+				<th rowspan="2">Tanggal</th>
+				<th rowspan="2">Kode</th>
+				<th rowspan="2">Keterangan</th>
+				<th colspan="3">Penerimaan</th>
+				<th colspan="3">Pengeluaran</th>
+				<th colspan="3">Saldo</th>
+				
+						</tr>
+			
+			<tr>
+				<th>Unit</th>
+				<th>Harga</th>
+				<th>Jumlah</th>
+				<th>Unit</th>
+				<th>Harga</th>
+				<th>Jumlah</th>
+				<th>Unit</th>
+				<th>Harga</th>
+				<th>Jumlah</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+
+				
+		</tr>
+		</tbody>
+	</table>
 	
 	</body>
 </html>

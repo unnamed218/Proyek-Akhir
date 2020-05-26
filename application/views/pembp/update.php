@@ -160,7 +160,7 @@
 					
 					echo "
 							<tr>
-							<td>".$data['nama_supp_bp']."</td>
+							<td>".$data['nama_bp']."</td>
 							<td>".$data['jumlah']." ".$data['satuan']."</td>
 							<td align='right'>".format_rp($data['harga'])."</td>
 						

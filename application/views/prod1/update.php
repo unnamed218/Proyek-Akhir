@@ -13,14 +13,20 @@
 	
 		<div class="row">
 		<div class="form-group">
-			<div class="col-xs-3">
+			<div class="col-xs-2">
 				<div class="form-group">
 				<label>ID Produksi Pertama</label>
 				<input readonly type="text" class="form-control"  value="<?php echo $no_trans ; ?>"  >
 			</div>
 		</div>
+		<div class="col-xs-2">
+				<div class="form-group">
+				<label>ID Cek Kualitas</label>
+				<input readonly type="text" class="form-control"  value="<?php echo $no_ck ; ?>"  >
+			</div>
+		</div>
 
-			<div class="col-xs-3">
+			<div class="col-xs-2">
 				<div class="form-group">
 				<label>ID Pembelian Bahan Baku</label>
 				<input readonly type="text" class="form-control"  value="<?php echo $no_trans_pembb ; ?>"  >
@@ -45,7 +51,7 @@
 			<div class="col-xs-2">
 				<div class="form-group">
 				<label>Jumlah Produksi</label>
-				<input readonly type="text" class="form-control"  value="<?php echo $jmlprod; ?> buah"  >
+				<input readonly type="text" class="form-control"  value="<?php echo $jmlprod; ?> <?php echo $satuan?>"  >
 			</div>
 		</div>
 			
@@ -146,9 +152,7 @@
 				$jumlah = $data['jumlah'];
 				$no_prod = 'PR_005';
 			?>
-			<tr>
-				<th colspan="3">Biaya Bahan Penolong</th>
-			</tr>
+			
 			<tr>
 				<th colspan="3">Biaya Tenaga Kerja</th>
 			</tr>

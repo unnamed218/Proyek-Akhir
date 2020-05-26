@@ -146,11 +146,12 @@
                                      ?>
 
                                  <li><a href="<?php echo site_url();?>/c_transaksi/lihat_pemb">Pembelian Bahan Baku</a></li>
-                                 <li><a href="<?php echo site_url();?>/c_transaksi/lihat_produksi_ke1">Produksi Pertama</a></li>
+                                 <li><a href="<?php echo site_url();?>/c_transaksi/lihat_ck">Cek Kualitas</a></li>
+                                 <li><a href="<?php echo site_url();?>/c_transaksi/lihat_produksi_ke1">Produksi ke IPS</a></li>
                                  <li><a href="<?php echo site_url();?>/c_transaksi/lihat_pembagian">Pembagian</a></li>
                                  <li><a href="<?php echo site_url();?>/c_transaksi/lihat_tp">Target Produksi</a></li>
                                  <li><a href="<?php echo site_url();?>/c_transaksi/lihat_pembp">Pembelian Bahan Penolong</a></li>
-                                 <li><a href="<?php echo site_url();?>/c_transaksi/lihat_produksi_ke2">Produksi Kedua</a></li>
+                                 <li><a href="<?php echo site_url();?>/c_transaksi/lihat_produksi_ke2">Produksi Olahan</a></li>
                                  <li><a href="<?php echo site_url();?>/c_transaksi/lihat_penjs">Penjualan IPS</a></li>
                                  <li><a href="<?php echo site_url();?>/c_transaksi/lihat_penjt">Penjualan Toko</a></li>
                                    <?php
@@ -364,4 +365,14 @@
         format: 'YYYY-MM-DD'
     });
  </script>
+
+  <script src="jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('#tester').keyup(function () {
+          // setiap karakter yang diketik akan langsung dihapus   
+          this.value = this.value.replace(/[^1-9.]/g, '');
+        });
+      });
+    </script>
 </html>

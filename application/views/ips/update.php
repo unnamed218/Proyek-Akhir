@@ -27,6 +27,26 @@
 		</div>
 		<?php echo form_error('nama_ips'); ?>
 	</div>
+
+	<div class="form-group">
+		<div class="row">
+			<div class="col-xs-4">
+				<label>No. Telepon</label>
+				<input type="text" class="form-control" name="notel" value="<?php echo $data['notel'] ; ?>" >
+			</div>
+		</div>
+		<?php echo form_error('notel'); ?>
+	</div>
+
+	<div class="form-group">
+		<div class="row">
+			<div class="col-xs-4">
+				<label>Alamat</label>
+				<input type="text" class="form-control" name="alamat" value="<?php echo $data['alamat'] ; ?>" >
+			</div>
+		</div>
+		<?php echo form_error('alamat'); ?>
+	</div>
 	
 		<input type="submit" name="submit" class="btn btn-primary" value="Simpan">
 
