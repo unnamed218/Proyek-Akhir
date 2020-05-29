@@ -76,7 +76,7 @@
 	</div>
 </div>
 <?php 
-}elseif($cek == '1'){
+}elseif($cek == '1' OR $cek =='2'){
 ?>
 
 <div class="x_panel">

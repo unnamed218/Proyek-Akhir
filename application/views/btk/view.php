@@ -1,10 +1,10 @@
 <html>
-	<!-- <head><center><h3><b>Master Data BTK</b></h3></center></head>
+	<!-- <head><center><h3><b>Master Data BTKL</b></h3></center></head>
 	<hr> -->
 	<body>
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar BTK</b></h3>
+    <h3 class="panel-title"><b>Daftar BTKL</b></h3>
   </div>
   	 <div class="x_content">
   	 		<a href = "<?php echo site_url()."/c_masterdata/form_btk"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
@@ -12,7 +12,7 @@
 		 	<thead>
 			<tr class="headings">
 				<th style="width: 2px;">No</th>
-				<th>ID BTK</th>
+				<th>ID BTKL</th>
 				<th>Bulan</th>
 				<th>Tahun</th>
 				<th>Jumlah Tenaga Kerja</th>
@@ -42,7 +42,7 @@
 							</span></a>
 							</td>
 							<!--<td align="center">
-							<a class="btn btn-warning" href="isi_edit_btk/<?php echo $data['no_btk']; ?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a>
+							<a class="btn btn-warning" href="isi_edit_BTKL/<?php echo $data['no_BTKL']; ?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a>
 					</td>-->
 
 						</tr>

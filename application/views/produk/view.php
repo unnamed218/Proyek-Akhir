@@ -14,7 +14,7 @@
 				<th style="width: 2px;">No</th>
 				<th>ID Produk</th>
 				<th>Nama Produk</th>
-				<th>Stok</th>
+				
 				<th>Harga</th>
 				<th>Satuan</th>
 				<th>Aksi</th>

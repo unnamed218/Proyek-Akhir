@@ -1,19 +1,19 @@
 <html>
 	<head>
-		<title>Master Data BTK</title>
+		<title>Master Data BTKL</title>
 	</head>
-	<!-- <center><h3><b>Master Data BTK</h3></b></center>
+	<!-- <center><h3><b>Master Data BTKL</h3></b></center>
 	<hr> -->
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Form BTK</b></h3>
+    <h3 class="panel-title"><b>Form BTKL</b></h3>
   </div>
   	 <div class="x_content">
   	 	
 	<body>
 		<form method = "POST" action = "<?php echo site_url('c_masterdata/tambah_btk');?>">
 			<div class="form-group">
-			  <label>ID BTK</label>
+			  <label>ID BTKL</label>
 			  <input type = "text" name = "no_btk" class = "form-control" value="<?php echo $id?>" readonly>
 			
 			</div>
@@ -21,15 +21,15 @@
 			  <label>Bulan</label>
 			  <select name="bulan" class="form-control">
 					<option value="*" disabled selected>Pilih Bulan</option>
-					<option value="1">Januari</option>
-					<option value="2">Februari</option>
-					<option value="3">Maret</option>
-					<option value="4">April</option>
-					<option value="5">Mei</option>
-					<option value="6">Juni</option>
-					<option value="7">Juli</option>
-					<option value="8" >Agustus</option>
-					<option value="9" >September</option>
+					<option value="01">Januari</option>
+					<option value="02">Februari</option>
+					<option value="03">Maret</option>
+					<option value="04">April</option>
+					<option value="05">Mei</option>
+					<option value="06">Juni</option>
+					<option value="07">Juli</option>
+					<option value="08" >Agustus</option>
+					<option value="09" >September</option>
 					<option value="10" >Oktober</option>
 					<option value="11" >November</option>
 					<option value="12" >Desember</option>
@@ -65,7 +65,7 @@
 			  <?php echo form_error('jumlah_pgw'); ?>
 			</div>
 			<div class="form-group">
-			  <label>Tarif Tenaga Kerja (per orang/bulan)</label>
+			  <label>Total Tarif Tenaga Kerja</label>
 			  <input type = "text" name = "tarif" class = "form-control">
 			
 			  <?php echo form_error('tarif'); ?>

@@ -58,7 +58,7 @@
 
                 <div>
                   <!-- <h1 style="font-size: 35px"> KPSBU!</h1> -->
-                  <p>©2019</p>
+            
                 </div>
               </div>
             </form>

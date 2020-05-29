@@ -123,18 +123,98 @@
 			<tr>
 				<th colspan="3">Biaya Bahan Baku</th>
 			</tr>
-			
 			<tr>
-				<th colspan="3">Biaya Bahan Penolong</th>
+				<?php
+			$no=1;
+			$bbbb = 0;
+				foreach($bbb as $data){
+					$biaya = $data['jumlah_bom'] * $data['harga'];
+					echo "
+							<td>".$data['nama_bb']."</td>
+							
+
+							<td>".format_rp($biaya)."</td>
+							
+							<td>".format_rp($biaya / $jumlah)."</td>"; 
+							$bbbb = $bbbb + $biaya?>
+					<?php
+					$no++;
+				}
+			?>
 			</tr>
+			<!-- ///////////////////////////////////////////////////////////////////////////////-->
 			<tr>
 				<th colspan="3">Biaya Tenaga Kerja</th>
 			</tr>
 			<tr>
+				<td>Biaya Tenaga Kerja</td>
+				<td><?php echo format_rp(round($btk))?> </td>
+				<td><?php echo format_rp(round($btk / $jumlah))?></td>
+			</tr>
+			<!-- ///////////////////////////////////////////////////////////////////////////////-->
+			<tr>
 				<th colspan="3">Biaya Operasional Pabrik</th>
 			</tr>
 			<tr>
-				<th colspan="3">Biaya Produksi</th>
+				<td colspan="3">Biaya Operasional Pabrik></td>
+			</tr>
+			<tr>
+
+					<?php
+
+			$no=1;
+			$bbop = 0;
+				foreach($bop as $data){
+
+					echo "
+					<tr>
+							<td>".$data['nama_jbop']."</td>
+							
+
+							<td>".format_rp(ROUND($data['harga'] / $hari))."</td>
+							
+							<td>".format_rp(ROUND(($data['harga']/ $hari)/$jumlah))."</td>
+							<tr>"; 
+							$bbop = $bbop + ($data['harga'] / $hari); ?>
+					<?php
+					$no++;
+				}
+			?>
+			</tr>
+			<tr>
+				<td colspan="3">Biaya Bahan Penolong</td>
+			</tr>
+			
+					<?php
+			$no=1;
+			$bbp = 0;
+				foreach($bp as $data){
+					
+					
+					echo "
+					<tr>
+							<td>".$data['nama_bp']."</td>
+							
+
+							<td>".format_rp($data['biaya'])."</td>
+							
+							<td>".format_rp($data['biaya'] / $jumlah)."</td>
+							<tr>"; 
+							$bbp = $bbp + $data['biaya'] ?>
+					<?php
+					$no++;
+				}
+			?>
+			<!-- ///////////////////////////////////////////////////////////////////////////////-->
+			<?php 
+			//total biaya produksi
+			$biaya_produksi = round(($bbop) + ($btk) + ($bbp) + ($bbbb));
+			$biaya_produksi_satuan = round($biaya_produksi / $jumlah); ?>
+			<tr>
+				<th>Biaya Produksi</th>
+				<th><?php echo format_rp(round($biaya_produksi))?> </th>
+				<th><?php echo format_rp(round($biaya_produksi_satuan)) ?> </th>
+
 			</tr>
 
 			</tbody>
@@ -157,7 +237,6 @@
 </div>
 
 	</div>
-
 
 
 </div>

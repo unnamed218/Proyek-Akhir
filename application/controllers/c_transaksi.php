@@ -802,7 +802,7 @@ group by no_bbp";
       $data['no_tp'] = $no_tp;
       $data['no_prod'] = $no_prod;
 
-    
+   
 
       //nama produk
       $this->db->where('no_produk', $no_prod);
@@ -834,6 +834,49 @@ group by no_bbp";
       
       //biaya biaya
       //bahan baku
+      $query2 = "SELECT nama_bb, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp
+                  FROM detail_target_produksi a
+                  JOIN produk b ON a.no_produk = b.no_produk
+                  JOIN bom c ON c.no_produk = b.no_produk
+                  JOIN bahan_baku d ON d.no_bb = c.no_bbp 
+                  WHERE a.no_tp = '$no_tp' AND a.no_produk = '$no_prod' AND c.no_bbp = 'BB_001'";
+      $data['bbb'] = $this->db->query($query2)->result_array();
+
+      //bahan penolong
+      $query3 = "SELECT nama_bp, sum(a.jumlah) * c.jumlah * d.harga as biaya, d.harga, d.satuan, c.no_bbp
+                  FROM detail_target_produksi a
+                  JOIN produk b ON a.no_produk = b.no_produk
+                  JOIN bom c ON c.no_produk = b.no_produk
+                  JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
+                  WHERE a.no_tp = '$no_tp' AND NOT c.no_bbp = 'BB_001' AND a.no_produk = '$no_prod'
+                  group by no_bbp";
+      $data['bp'] = $this->db->query($query3)->result_array();
+
+
+      //biaya tenaga kerja
+      $this->db->where('no_trans', $id);
+      $tgl = $this->db->get('produksi_ke2')->row()->tgl_trans;
+      $bulan1 = substr($tgl, 5,2);
+      $tahun1 = substr($tgl, 0,4);
+
+      $this->db->where('bulan', $bulan1);
+      $this->db->where('tahun', $tahun1);
+      $btk = $this->db->get('btk')->row()->tarif;
+      $kalender = CAL_GREGORIAN;
+      $hari = cal_days_in_month($kalender, $bulan1, $tahun1);
+      $data['hari'] = $hari;
+      $data['btk'] = $btk / $hari;
+
+     
+      $this->db->where('bulan', $bulan1);
+      $this->db->where('tahun', $tahun1);
+      $this->db->select('a.no_bop,nama_jbop, harga');
+      $this->db->from('bop a');
+      $this->db->join('detail_bop b', 'a.no_bop = b.no_bop');
+      $this->db->join('jenis_bop c', 'c.no_jbop = b.no_jbop');
+      $data['bop'] = $this->db->get()->result_array();
+
+
 
       //cek selesai produksi
       $this->db->where('no_trans', $id);
@@ -842,6 +885,7 @@ group by no_bbp";
 
       
       $this->template->load('template', 'prod2/update', $data);
+      // var_dump($data['btkperhari']);
    }
 
 

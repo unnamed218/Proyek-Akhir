@@ -92,9 +92,10 @@
                                  <li><a href="<?php echo site_url();?>/c_masterdata/lihat_peternak">Peternak</a></li>
                                  <li><a href="<?php echo site_url();?>/c_masterdata/lihat_supp_bp">Supplier Bahan Penolong</a></li>
                                  <li><a href="<?php echo site_url();?>/c_masterdata/lihat_produk">Produk</a></li>
+                                 <li><a href="<?php echo site_url();?>/c_masterdata/lihat_jbop">Jenis BOP</a></li>
                                  <li><a href="<?php echo site_url();?>/c_masterdata/lihat_bom">BOM</a></li>
                                  <li><a href="<?php echo site_url();?>/c_masterdata/lihat_bop">BOP</a></li>
-                                 <li><a href="<?php echo site_url();?>/c_masterdata/lihat_btk">BTK</a></li>
+                                 <li><a href="<?php echo site_url();?>/c_masterdata/lihat_btk">BTKL</a></li>
                                  <li><a href="<?php echo site_url();?>/c_masterdata/lihat_ips">Konsumen IPS</a></li>
                                  <?php 
                                     elseif( $this->session->userdata('level')=="produksi1"):
@@ -102,7 +103,7 @@
                                   <li><a href="<?php echo site_url();?>/c_masterdata/lihat_bb">Bahan Baku</a></li>
                                   <li><a href="<?php echo site_url();?>/c_masterdata/lihat_bom">BOM</a></li>
                                  <li><a href="<?php echo site_url();?>/c_masterdata/lihat_bop">BOP</a></li>
-                                 <li><a href="<?php echo site_url();?>/c_masterdata/lihat_btk">BTK</a></li>
+                                 <li><a href="<?php echo site_url();?>/c_masterdata/lihat_btk">BTKL</a></li>
                                  <li><a href="<?php echo site_url();?>/c_masterdata/lihat_peternak">Peternak</a></li>
                                  <?php
                                     elseif( $this->session->userdata('level')=="produksi2"):
@@ -111,7 +112,7 @@
                                     <li><a href="<?php echo site_url();?>/c_masterdata/lihat_supp_bp">Supplier Bahan Penolong</a></li>
                                    <li><a href="<?php echo site_url();?>/c_masterdata/lihat_bom">BOM</a></li>
                                  <li><a href="<?php echo site_url();?>/c_masterdata/lihat_bop">BOP</a></li>
-                                 <li><a href="<?php echo site_url();?>/c_masterdata/lihat_btk">BTK</a></li>
+                                 <li><a href="<?php echo site_url();?>/c_masterdata/lihat_btk">BTKL</a></li>
                                   <?php
                                     elseif( $this->session->userdata('level')=="penjualan"):
                                      ?>

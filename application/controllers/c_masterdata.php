@@ -1082,6 +1082,9 @@ class c_masterdata extends CI_controller{
    
    public function isi_edit_bop($id)
    {
+
+
+         $x['jenis_bop'] = $this->db->get('jenis_bop')->result_array();
          $this->db->where('no_bop', $id);
          $tahun = $this->db->get('bop')->row()->tahun; //Mengambil tahun saat ini
 
@@ -1090,20 +1093,19 @@ class c_masterdata extends CI_controller{
          $this->db->where('no_bop', $id);
          $bulan = $this->db->get('bop')->row()->bulan; //Mengambil bulan saat ini
          $tgl_hari = $tahun."-".$bulan."-01";
-
-         // $this->db->select('nama_bop, harga, DAY(LAST_DAY(CONCAT(tahun,"-",bulan))) hari');
-         // $this->db->where('b.nama_bop', $id);
-         // $this->db->join('bop a', 'a.nama_bop = b.nama_bop');
-         // $x['result'] = $this->db->get('detail_bop b')->result_array();
-        $query = "SELECT b.nama_bop, harga, DAY(LAST_DAY(CONCAT(tahun,'-',bulan,'-01'))) as hari
+         
+        $query = "SELECT b.no_jbop, a.no_bop, c.nama_jbop, harga, DAY(LAST_DAY(CONCAT(tahun,'-',bulan,'-01'))) as hari
          FROM bop a 
          JOIN detail_bop b ON b.no_bop = a.no_bop
-         WHERE b.nama_bop LIKE '".$id."'
+         JOIN jenis_bop c ON c.no_jbop = b.no_jbop
+         WHERE a.no_bop LIKE '".$id."'
+         ORDER BY b.no_jbop ASC
       ";
          $x['result'] = $this->db->query($query)->result_array();
+         
          $x['data'] = $this->m_masterdata->edit_data('bop', "no_bop = '$id'")->row_array();
          $this->template->load('template', 'bop/update', $x);
-         // var_dump($this->db->query($query)->result_array());
+         // var_dump($x['result']);
        
       
    }
@@ -1113,24 +1115,25 @@ class c_masterdata extends CI_controller{
          $config = array(
             
             array(
-               'field' => 'nama_bop',
+               'field' => 'no_jbop',
                'label' => 'Nama BOP',
                'rules' => 'required',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!'
                )
-            ),
-            array(
-               'field' => 'harga',
-               'label' => 'Harga (bulanan)',
-               'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 11 huruf!'
-               )
             )
+            // ,
+            // array(
+            //    'field' => 'harga',
+            //    'label' => 'Harga (bulanan)',
+            //    'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
+            //    'errors' => array(
+            //       'required' => '%s tidak boleh kosong!',
+            //       'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
+            //       'min_length' => '%s minimal 3 huruf!',
+            //       'max_length' => '%s maksimal 11 huruf!'
+            //    )
+            // )
          );
          $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
          $this->form_validation->set_rules($config);
@@ -1140,22 +1143,22 @@ class c_masterdata extends CI_controller{
             $this->isi_edit_bop($id);
          } else {
             $no_bop   = $_POST['no_bop'];
-            $nama_bop = $_POST['nama_bop'];
+            $no_jbop = $_POST['no_jbop'];
             $harga   = $_POST['harga'];
             
             $data = array(
                'no_bop' => $no_bop,
                'harga' => $harga,
-               'nama_bop' => $nama_bop
+               'no_jbop' => $no_jbop
             );
 
-            $this->db->where(array('no_bop' => $_POST['no_bop'], 'nama_bop' => $_POST['nama_bop']));
+            $this->db->where(array('no_bop' => $_POST['no_bop'], 'no_jbop' => $_POST['no_jbop']));
             $cek =  $this->db->get('detail_bop')->num_rows();
             if($cek == 0 ){
             $this->db->insert('detail_bop', $data);
             }else{
-            $this->db->set('harga_bulan', $_POST['harga'], FALSE);
-            $this->db->where(array('no_bop' => $_POST['no_bop'], 'nama_bop' => $_POST['nama_bop']));
+            $this->db->set('harga', $_POST['harga'], FALSE);
+            $this->db->where(array('no_bop' => $_POST['no_bop'], 'no_jbop' => $_POST['no_jbop']));
             $this->db->update('detail_bop');
             }
             redirect('c_masterdata/isi_edit_bop/'.$no_bop.'');
@@ -1168,7 +1171,7 @@ class c_masterdata extends CI_controller{
    public function hapus_bop($id,$id2){
       $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=0");
          $this->db->where('no_bop',$id);
-         $this->db->where('harga', $id2);
+         $this->db->where('no_jbop', $id2);
          $this->db->delete('detail_bop');
          $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=1");
       
@@ -1595,6 +1598,127 @@ class c_masterdata extends CI_controller{
          $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=1");
       
             redirect('c_masterdata/isi_edit_bom/'.$id.'');
+   }
+
+
+   //Jenis BOP
+
+    public function lihat_jbop()
+   {
+      
+         
+         $data['result'] = $this->db->get('jenis_bop')->result_array();
+         $this->template->load('template', 'jenis_bop/view', $data);
+       
+   }
+   public function form_jbop()
+   {
+      
+         
+         $query1   = "SELECT  MAX(RIGHT(no_jbop,3)) as kode FROM jenis_bop";
+         $abc      = $this->db->query($query1);
+         $no_trans = "";
+         if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+               $tmp = ((int) $k->kode) + 1;
+               $kd  = sprintf("%03s", $tmp);
+            }
+         } else {
+            $kd = "001";
+         }
+         $no_trans   = "JBOP_" . $kd;
+         $data['id'] = $no_trans;
+         $this->template->load('template', 'jenis_bop/form', $data);
+       
+   }
+   
+   public function tambah_jbop()
+   {
+      
+         
+         $config = array(
+            
+            array(
+               'field' => 'nama_jbop',
+               'label' => 'Nama Bahan Baku',
+               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[jenis_bop.nama_jbop]',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!',
+                  'min_length' => '%s minimal 3 huruf!',
+                  'max_length' => '%s maksimal 30 huruf!',
+                  'customAlpha' => '%s hanya boleh berupa huruf!',
+                  'is_unique' => '%s sudah ada di database!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $this->form_jbop();
+         } else {
+            $data = array(
+               'no_jbop' => $_POST['no_jbop'],
+               'nama_jbop' => $_POST['nama_jbop']
+            );
+            $this->db->insert('jenis_bop', $data);
+           
+            redirect('c_masterdata/lihat_jbop');
+         }
+       
+      
+   }
+   
+   public function isi_edit_jbop($id)
+   {
+      
+         
+         
+         $x['data'] = $this->m_masterdata->edit_data('jenis_bop', "no_jbop = '$id'")->row_array();
+         $this->template->load('template', 'jenis_bop/update', $x);
+       
+      
+   }
+   public function edit_jbop()
+   {
+      
+         $config = array(
+            
+            array(
+               'field' => 'nama_jbop',
+               'label' => 'Nama Bahan Baku',
+               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[jenis_bop.nama_jbop]',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!',
+                  'min_length' => '%s minimal 3 huruf!',
+                  'max_length' => '%s maksimal 30 huruf!',
+                  'customAlpha' => '%s hanya boleh berupa huruf!',
+                  'is_unique' => '%s sudah ada di database!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $id = $_POST['no_jbop'];
+            $this->isi_edit_jbop($id);
+         } else {
+            $no_jbop   = $_POST['no_jbop'];
+            $nama_jbop = $_POST['nama_jbop'];
+            
+            
+            $data = array(
+               'nama_jbop' => $nama_jbop
+            );
+            
+            $this->db->where('no_jbop', $no_jbop);
+            $this->m_masterdata->update_data('jenis_bop', $data);
+            redirect('c_masterdata/lihat_jbop');
+            
+         }
+         
+       
    }
 
 

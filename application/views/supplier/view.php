@@ -14,6 +14,8 @@
 				<th style="width: 2px;">No</th>
 				<th>ID Supplier</th>
 				<th>Nama Supplier</th>
+				<th>No. Telepon</th>
+				<th>Alamat</th>
 				<th>Aksi</th>
 			</tr>
 		</thead>
