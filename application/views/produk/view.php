@@ -14,8 +14,6 @@
 				<th style="width: 2px;">No</th>
 				<th>ID Produk</th>
 				<th>Nama Produk</th>
-				
-				<th>Harga</th>
 				<th>Satuan</th>
 				<th>Aksi</th>
 			</tr>
@@ -29,7 +27,6 @@
 						<tr><td>$no</td>
 							<td>".$data['no_produk']."</td>
 							<td>".$data['nama_produk']."</td>
-							<td>".format_rp($data['harga'])."</td>
 							<td>".$data['satuan']."</td>
 
 							" ?>

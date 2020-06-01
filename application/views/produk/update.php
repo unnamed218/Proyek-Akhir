@@ -27,15 +27,7 @@
 		</div>
 		<?php echo form_error('nama_produk'); ?>
 	</div>
-	<div class="form-group">
-		<div class="row">
-			<div class="col-xs-4">
-				<label>Harga</label>
-				<input type="text" class="form-control" name="harga" value="<?php echo $data['harga'] ; ?>" >
-			</div>
-		</div>
-		<?php echo form_error('harga'); ?>
-	</div>
+	
 	<div class="form-group">
 		<div class="row">
 			<div class="col-xs-4">

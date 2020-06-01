@@ -17,7 +17,7 @@ class c_masterdata extends CI_controller{
   public function lihat_coa()
    {
       
-         
+         $this->db->order_by('no_coa ASC');
          $data['result'] = $this->db->get('coa')->result_array();
          $this->template->load('template', 'coa/view', $data);
        
@@ -602,7 +602,7 @@ class c_masterdata extends CI_controller{
             array(
                'field' => 'nama_produk',
                'label' => 'Nama Produk',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[produk.nama_produk]',
+               'rules' => 'required|min_length[3]|max_length[30]|is_unique[produk.nama_produk]',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!',
                   'min_length' => '%s minimal 3 huruf!',
@@ -614,15 +614,6 @@ class c_masterdata extends CI_controller{
              array(
                'field' => 'satuan',
                'label' => 'Satuan',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
-            ),
-
-             array(
-               'field' => 'harga',
-               'label' => 'Harga',
                'rules' => 'required',
                'errors' => array(
                   'required' => 'Inputan Salah'
@@ -639,7 +630,6 @@ class c_masterdata extends CI_controller{
                'no_produk' => $_POST['no_produk'],
                'nama_produk' => $_POST['nama_produk'],
                'stok' => 0,
-               'harga' => $_POST['harga'],
                'satuan' => $_POST['satuan']
             );
             $this->db->insert('produk', $data);
@@ -684,15 +674,6 @@ class c_masterdata extends CI_controller{
                'errors' => array(
                   'required' => 'Inputan Salah'
                )
-            ),
-
-             array(
-               'field' => 'harga',
-               'label' => 'Harga',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
             )
        
             
@@ -712,8 +693,7 @@ class c_masterdata extends CI_controller{
             $data = array(
                'nama_produk' => $nama_bb,
                'stok' => $stok,
-               'satuan' => $_POST['satuan'],
-               'harga' => $_POST['harga']
+               'satuan' => $_POST['satuan']
             );
             
             $this->db->where('no_produk', $no_bb);

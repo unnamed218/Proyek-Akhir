@@ -68,6 +68,7 @@
 		 	<thead>
 			<tr class="headings">
 				<th>Bahan Baku</th>
+				<th>Kebutuhan</th>
 				<th>Jumlah</th>
 				<th>Satuan</th>
 				<th>Harga</th>
@@ -83,7 +84,8 @@
 					echo "
 							<tr>
 							<td>".$data['nama_bb']."</td>
-							<td>".($data['jumlah']*$data['jumlahbb'])."</td>
+							<td>".$data['jumlah']."</td>
+							<td>".$data['jumlah']*$jmlprod."</td>
 							<td>".$data['satuan']."</td>
 							<td align='right'>".format_rp($data['harga'])."</td>
 						
@@ -100,7 +102,7 @@
 				}
 			?>
 			<tr>
-				<td colspan="4" align="center">Total</td>
+				<td colspan="5" align="center">Total</td>
 				<td align="right"><?php echo format_rp($total) ?></td>
 			</tr>
 			</tbody>
@@ -137,15 +139,15 @@
 					echo "
 							<tr>
 							<td>".$data['nama_bb']."</td>
-							<td>".format_rp(($data['jumlahbb']*$data['jumlah'])*$data['harga'])."</td>
-							<td>".format_rp($data['harga'])."</td>"; ?>
+							<td>".format_rp(round(($data['jumlahbb']*$data['jumlah'])*$data['harga']))."</td>
+							<td>".format_rp(round($data['harga']))."</td>"; ?>
 							
 
 						</tr>
 						
 					<?php
 					$subtotal = $data['harga'] * $data['jumlah'];
-					$total=($data['jumlahbb']*$data['jumlah'])*$data['harga'];
+					$total= round(($data['jumlahbb']*$data['jumlah'])*$data['harga']);
 					$no++;
 				}
 				$id = $no_trans;
@@ -157,10 +159,47 @@
 				<th colspan="3">Biaya Tenaga Kerja</th>
 			</tr>
 			<tr>
+				<td>Biaya Tenaga Kerja</td>
+				<td><?php echo format_rp(round($btk))?> </td>
+				<td><?php echo format_rp(round($btk / $jumlah))?></td>
+				<?php $bbtk = round($btk); ?>
+			</tr>
+			<tr>
 				<th colspan="3">Biaya Operasional Pabrik</th>
 			</tr>
 			<tr>
-				<th colspan="3">Biaya Produksi</th>
+				<td colspan="3">Biaya Operasional Pabrik></td>
+			</tr>
+			<tr>
+
+					<?php
+
+			$no=1;
+			$bbop = 0;
+				foreach($bop as $data){
+
+					echo "
+					<tr>
+							<td>".$data['nama_jbop']."</td>
+							
+
+							<td>".format_rp(ROUND($data['harga'] / $hari))."</td>
+							
+							<td>".format_rp(ROUND(($data['harga']/ $hari)/$jumlah))."</td>
+							<tr>"; 
+							$bbop = round($bbop + ($data['harga'] / $hari)); ?>
+					<?php
+					$no++;
+				}
+			?>
+			</tr>
+			<?php 
+			$biaya_produksi = round($bbop + $bbtk + $total);
+			?>
+			<tr>
+				<th>Biaya Produksi</th>
+				<th><?php echo format_rp($biaya_produksi) ?></th>
+				<th><?php echo format_rp($biaya_produksi / $jmlprod) ?> </th> 
 			</tr>
 
 			</tbody>
@@ -177,7 +216,7 @@
 <div class="col-md-1">
   	 	<div style="align-items: : : right;">
 	<!-- <a href = "<?php echo site_url()."/c_transaksi/selesai_produksi_ke1/$id/$total/$jumlah/$no_prod"?>" class="btn btn-dark" role="button">Produksi</a> -->
-		<a class="btn btn-dark" role="button" <?php if($cek == '0'){?> href = "<?php echo site_url()."/c_transaksi/selesai_produksi_ke1/$id/$total/$jmlprod/$no_prod"?>" <?php }else{?> hidden <?php } ?>>Produksi</a>
+		<a class="btn btn-dark" role="button" <?php if($cek == '0'){?> href = "<?php echo site_url()."/c_transaksi/selesai_produksi_ke1/$id/$total/$jmlprod/$no_prod/$bbtk/$bbop"?>" <?php }else{?> hidden <?php } ?>>Produksi</a>
 </div>
 </div>
 

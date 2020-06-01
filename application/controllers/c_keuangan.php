@@ -72,7 +72,7 @@ class c_keuangan extends CI_Controller
 				// var_dump($cek);
 			}else{
 				date_default_timezone_set('Asia/Jakarta');
-				$no_akun = '111';
+				$no_akun = '1111';
 				$bulan1 = date('m');
 				$tahun1 = date('Y');
 				$cek = date('m-d-Y', mktime(0,0,0,1,$bulan1-1,$tahun1));

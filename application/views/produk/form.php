@@ -24,13 +24,7 @@
 			  <?php echo form_error('nama_produk'); ?>
 			
 			</div>
-			<div class="form-group">
-			  <label>Harga</label>
-			  <input type = "text" name = "harga" class = "form-control">
-			  
-			  <?php echo form_error('harga'); ?>
 			
-			</div>
 			<div class="form-group">
 			  <label>Satuan</label>
 			  <select name="satuan" class="form-control">

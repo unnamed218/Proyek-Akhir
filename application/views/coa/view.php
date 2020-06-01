@@ -14,7 +14,6 @@
 		 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">
-				<th style="width: 2px;">No</th>
 				<th>No COA</th>
 				<th>Nama COA</th>
 				<!-- <th>Jenis COA</th> -->
@@ -25,7 +24,6 @@
 			$no=1;
 				foreach($result as $data){
 					echo "
-						<tr><td align='center'>$no</td>
 							<td>".$data['no_coa']."</td>
 							<td>".$data['nama_coa']."</td>
 							

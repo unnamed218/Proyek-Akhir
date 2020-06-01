@@ -41,12 +41,7 @@
 				<label>Bahan Baku</label>
 				<input readonly type="text" class="form-control"  value="Susu Sapi"  >
 				<input readonly type="hidden" class="form-control"  value="BB_001" name="no_bb">
-				<?php 
-				$this->db->where('no_bb', 'BB_001');
-				$harga = $this->db->get('bahan_baku')->row()->harga;
-				?>
-				<input readonly type="hidden" class="form-control"  value="5000" name="<?php $harga;?>">
-				
+			
 
 			</div>
 		</div>
@@ -203,6 +198,7 @@
 		 	<thead>
 			<tr class="headings">
 				<th>Nama Bahan</th>
+				<th>Nama Peternak</th>
 				<th>Jumlah</th>
 				<th>Harga</th>
 				<th>Subtotal</th>
@@ -219,6 +215,7 @@
 					echo "
 							<tr>
 							<td>".$data['nama_bb']."</td>
+							<td>".$data['nama_peternak']."</td>
 							<td>".$data['jumlah']." ".$data['satuan']."</td>
 							<td align='right'>".format_rp($data['harga'])."</td>
 						
@@ -235,7 +232,7 @@
 				}
 			?>
 			<tr>
-				<td colspan="3" align="center">Total</td>
+				<td colspan="4" align="center">Total</td>
 				<td align="right"><?php echo format_rp($total) ?></td>
 			</tr>
 			</tbody>

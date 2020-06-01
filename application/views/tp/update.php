@@ -190,7 +190,7 @@
 							$nama = substr($data['no_bbp'],0,2);
 							if($nama == 'BB'){ echo "
 							<td>Bahan Baku</td> ";
-						}else{
+						}elseif($nama == 'BP'){
 							echo "<td>Bahan Penolong</td>";
 						}
 						echo "
@@ -217,7 +217,7 @@
 	<?php if($status == '0'){
 		if($this->session->userdata('level') == 'produksi2' OR $this->session->userdata('level') == 'admin'){?>
 	<center>
-		<a href = "<?php echo site_url()."/c_transaksi/selesai_tp/$id"?>" class="btn btn-info" role="button">Selesai Belanja</a>
+		<a href = "<?php echo site_url()."/c_transaksi/selesai_tp/$id"?>" class="btn btn-info" role="button">Selesai</a>
 	</center>
 <?php }
 		}else{ ?>

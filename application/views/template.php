@@ -201,6 +201,12 @@
                                     <li><a href="<?php echo site_url();?>/c_keuangan/lap_pemb">Laporan Pembelian Bahan Baku</a></li>
                                     <li><a href="<?php echo site_url();?>/c_keuangan/lap_pembp">Laporan Pembelian Bahan Penolong</a></li>
                                     <li><a href="<?php echo site_url();?>/c_keuangan/lap_penjs">Laporan Penjualan IPS</a></li>
+                                    <li><a href="<?php echo site_url();?>/c_keuangan/lap_penjt">Laporan Penjualan Toko</a></li>
+                                    <li><a href="<?php echo site_url();?>/c_keuangan/lap_bp_ips">Laporan Biaya Produksi IPS</a></li>
+                                    <li><a href="<?php echo site_url();?>/c_keuangan/lap_bp_olahan">Laporan Biaya Produksi Olahan</a></li>
+                                    <li><a href="<?php echo site_url();?>/c_keuangan/lap_ks_bb">Kartu Persediaan Bahan Baku</a></li>
+                                    <li><a href="<?php echo site_url();?>/c_keuangan/lap_ks_bp">Kartu Persediaan Bahan Penolong</a></li>
+                                    <li><a href="<?php echo site_url();?>/c_keuangan/lap_ks_prod">Kartu Persediaan Produk</a></li>
                                      <?php
                                     elseif( $this->session->userdata('level')=="produksi1"):
                                      ?>

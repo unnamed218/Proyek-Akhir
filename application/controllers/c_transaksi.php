@@ -80,19 +80,27 @@ class c_transaksi extends CI_controller{
    }
 
    public function tambah_pemb1(){
-      $data = array('no_trans' => $_POST['no_trans'],
+       $data = array('no_trans' => $_POST['no_trans'],
                   'no_bb' => $_POST['no_bb'],
                   'jumlah' => $_POST['jumlah'],
                   'subtotal' => $_POST['jumlah']*$_POST['harga'],
                   'no_peternak' => $_POST['no_peternak']);
-      $this->db->insert('detail_pembelian_bb', $data);
 
-    $this->db->set('stok', "stok +".$_POST['jumlah']."",FALSE);
+       $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_bb' => $_POST['no_bb'], 'no_peternak' => $_POST['no_peternak']));
+            $cek =  $this->db->get('detail_pembelian_bb')->num_rows();
+            if($cek == 0 ){
+            $this->db->insert('detail_pembelian_bb', $data);
+             $this->db->set('stok', "stok +".$_POST['jumlah']."",FALSE);
     $this->db->where('no_bb', $_POST['no_bb']);
     $this->db->update('bahan_baku');
+            }else{
+            $this->db->set('jumlah', "jumlah + ".$_POST['jumlah']."", FALSE);
+             $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_bb' => $_POST['no_bb'], 'no_peternak' => $_POST['no_peternak']));
+            $this->db->update('detail_pembelian_bb');
+   }
 
     redirect('c_transaksi/isi_edit_pemb/'.$_POST['no_trans'].'');
-   }
+}
 
    public function selesai_pemb($id,$total){
       $this->db->set('total', $total);
@@ -117,6 +125,7 @@ class c_transaksi extends CI_controller{
    
       //jumlah bahan baku 
       $this->db->where('b.no_trans', $id);
+      $this->db->select_sum('jumlah');
       $this->db->join('detail_pembelian_bb a', 'a.no_trans = b.no_trans_pembb');
       $data['jumlah'] = $this->db->get('cek_kualitas b')->row()->jumlah;
 
@@ -198,8 +207,8 @@ class c_transaksi extends CI_controller{
 
       $total = $harga * $_POST['lulus'];
 
-       $this->m_keuangan->GenerateJurnal('112', $id, 'd', $total);
-      $this->m_keuangan->GenerateJurnal('111', $id, 'k', $total);
+       $this->m_keuangan->GenerateJurnal('1112', $id, 'd', $total);
+      $this->m_keuangan->GenerateJurnal('1111', $id, 'k', $total);
       redirect('c_transaksi/isi_edit_ck/'.$id.'');
    }
 
@@ -244,6 +253,30 @@ class c_transaksi extends CI_controller{
       $this->db->group_by('b.no_bb');
 
       $data['bom'] = $this->db->get()->result_array();  
+
+        //biaya tenaga kerja
+      $this->db->where('no_trans', $id);
+      $tgl = $this->db->get('produksi_ke1')->row()->tgl_trans;
+      $bulan1 = substr($tgl, 5,2);
+      $tahun1 = substr($tgl, 0,4);
+
+      $this->db->where('bulan', $bulan1);
+      $this->db->where('tahun', $tahun1);
+      $btk = $this->db->get('btk')->row()->tarif;
+      $kalender = CAL_GREGORIAN;
+      $hari = cal_days_in_month($kalender, $bulan1, $tahun1);
+      $data['hari'] = $hari;
+      $data['btk'] = $btk / $hari;
+
+     
+     //BIAYA BOP
+      $this->db->where('bulan', $bulan1);
+      $this->db->where('tahun', $tahun1);
+      $this->db->select('a.no_bop,nama_jbop, harga');
+      $this->db->from('bop a');
+      $this->db->join('detail_bop b', 'a.no_bop = b.no_bop');
+      $this->db->join('jenis_bop c', 'c.no_jbop = b.no_jbop');
+      $data['bop'] = $this->db->get()->result_array();
     
      //jumlah produksi
 
@@ -296,26 +329,36 @@ class c_transaksi extends CI_controller{
       redirect('c_transaksi/lihat_produksi_ke1');
    }
 
-   public function selesai_produksi_ke1($id,$bbb,$jumlah,$no_prod){
+   public function selesai_produksi_ke1($id,$bbb,$jumlah,$no_prod,$btk,$bop){
       
       $this->db->set('status', '1');
       $this->db->where('no_trans', $id);
       $this->db->update('produksi_ke1');
 
       //input ke detail produksi ke 1
+      $totalbiaya = $bbb+$btk+$bop;
       $data = array('no_trans' => $id,
                'no_produk' => $no_prod,
                'bbb' => $bbb,
-               'btk' => '0',
-               'bop' => '0',
+               'btk' => $btk,
+               'bop' => $bop,
                'jumlah' => $jumlah );
       $this->db->insert('detail_produksi_ke1', $data);
 
-      //input ke stok produk
+
+      //jurnal pemakaian
+        $this->m_keuangan->GenerateJurnal('5111', $id, 'd', $bbb);
+      $this->m_keuangan->GenerateJurnal('5112', $id, 'd', $btk);
+       $this->m_keuangan->GenerateJurnal('5113', $id, 'd', $bop);
+       $this->m_keuangan->GenerateJurnal('1112', $id, 'k', $bbb);
+       $this->m_keuangan->GenerateJurnal('5311', $id, 'k', $btk);
+       $this->m_keuangan->GenerateJurnal('5312', $id, 'k', $bop);
 
         $this->db->set('stok', "stok + ".$jumlah."", FALSE);
       $this->db->where('no_bdp', 'BDP_001');
       $this->db->update('bahan_dalam_proses');
+
+
 
 
       redirect('c_transaksi/isi_edit_produksi_ke1/'.$id.'');
@@ -407,7 +450,8 @@ class c_transaksi extends CI_controller{
       $this->db->where('no_trans', $_POST['no_trans']);
       $this->db->update('pembagian');
 
-      $produksi = 100 - $_POST['jual'];
+      // $produksi = 100 - $_POST['jual'];
+      $produksi = $_POST['jumlah'] - $_POST['jual'];
 
       //input ke detail pembagian
       $data = array( 'no_trans' => $_POST['no_trans'],
@@ -416,16 +460,64 @@ class c_transaksi extends CI_controller{
       $this->db->insert('detail_pembagian', $data);
 
       //update ke stok produk
-      $jual = 0;
-      $jual = $_POST['jumlah'] * ($_POST['jual'] / 100);
-      $this->db->set('stok', "stok - ".$jual."", FALSE);
+      
+      $this->db->set('stok', "stok - ".$_POST['jual']."", FALSE);
       $this->db->where('no_bdp', 'BDP_001');
       $this->db->update('bahan_dalam_proses');
 
       //update stok produk
-      $this->db->set('stok', "stok + ".$jual."", FALSE);
-      $this->db->where('no_produk', 'PR_005');
+      $this->db->set('stok', "stok + ".$_POST['jual']."", FALSE);
+      $this->db->like('no_produk', 'Susu Sapi', 'before');
       $this->db->update('produk');
+
+
+      /////
+      $this->db->where('no_trans', $_POST['no_prod']);
+      $bbb = $this->db->get('detail_produksi_ke1')->row()->bbb;
+
+      $this->db->where('no_trans', $_POST['no_prod']);
+      $btk = $this->db->get('detail_produksi_ke1')->row()->btk;
+
+      $this->db->where('no_trans', $_POST['no_prod']);
+      $bop = $this->db->get('detail_produksi_ke1')->row()->bop;
+
+      ///bbb dalam proses
+      $bbb1 = round(($produksi/$_POST['jumlah'])*$bbb);
+
+      ///bbb jadi
+      $bbb2 = round(($_POST['jual']/$_POST['jumlah'])*$bbb);
+
+     ///bbb dalam proses
+      $btk1 = round(($produksi/$_POST['jumlah'])*$btk);
+
+      ///bbb jadi
+      $btk2 = round(($_POST['jual']/$_POST['jumlah'])*$btk);
+
+      ///bbb dalam proses
+      $bop1 = round(($produksi/$_POST['jumlah'])*$bop);
+
+      ///bbb jadi
+      $bop2 = round(($_POST['jual']/$_POST['jumlah'])*$bop);
+
+      //total dalam proses
+      $pbdp = $bbb1 + $btk1 + $bop1;
+      $pbj = $bbb2 + $btk2 + $bop2;
+
+
+
+
+
+        //jurnal persediaan dalam proses
+        $this->m_keuangan->GenerateJurnal('1114', $id, 'd', $pbdp);
+      $this->m_keuangan->GenerateJurnal('5111', $id, 'k', $bbb1);
+       $this->m_keuangan->GenerateJurnal('5112', $id, 'k', $btk1);
+       $this->m_keuangan->GenerateJurnal('5113', $id, 'k', $bop1);
+
+       //jurnal persediaan jadi
+       $this->m_keuangan->GenerateJurnal('1115', $id, 'd', $pbj);
+       $this->m_keuangan->GenerateJurnal('5111', $id, 'k', $bbb2);
+       $this->m_keuangan->GenerateJurnal('5112', $id, 'k', $btk2);
+       $this->m_keuangan->GenerateJurnal('5113', $id, 'k', $bop2);
 
 
       redirect('c_transaksi/isi_edit_pembagian/'.$id.'');
@@ -520,14 +612,8 @@ class c_transaksi extends CI_controller{
          
          $x['data'] = $this->m_masterdata->edit_data('target_produksi', "no_tp = '$id'")->row_array();
 
-         // $this->db->select('jumlah*produksi/100 as jumlah');
-         // $this->db->from('target_produksi a');
-         // $this->db->join('pembagian b', 'a.no_trans_pembagian = b.no_trans');
-         // $this->db->join('detail_produksi_ke1 c', 'c.no_trans = b.no_trans_produksi1');
-         // $this->db->where('a.no_tp', $id);
-         // $x['jumlah'] = $this->db->get()->row()->jumlah;
 
-         $query3 = "SELECT jumlah*produksi/100 as jumlah
+         $query3 = "SELECT produksi as jumlah
                   FROM target_produksi a
                   JOIN pembagian b ON a.no_trans_pembagian = b.no_trans
                   JOIN detail_produksi_ke1 c ON c.no_trans = b.no_trans_produksi1
@@ -535,7 +621,7 @@ class c_transaksi extends CI_controller{
                   WHERE a.no_tp = '$id'";
           $x['jumlah'] = $this->db->query($query3)->row()->jumlah;
     
-
+         $this->db->or_not_like('nama_produk', 'Susu Sapi', 'none');
          $x['result'] = $this->db->get('produk')->result_array(); 
          
          $this->db->where('a.no_tp', $id);
@@ -812,17 +898,32 @@ group by no_bbp";
       $this->db->where('no_tp', $no_tp);
       $this->db->where('no_produk', $no_prod);
       $data['jumlah'] = $this->db->get('detail_target_produksi')->row()->jumlah;
+
+      //jumlah produk yang di produksi
+       $query = "SELECT COUNT(jumlah) as jumlah, sum(jumlah) as total
+               FROM produksi_ke2 a
+               JOIN detail_target_produksi b ON a.no_tp = b.no_tp
+               WHERE a.no_trans = '$id'";
+       $jml_produk = $this->db->query($query)->row()->total;
+       $data['jml_produk'] = $jml_produk;
+       $presentase = ((($data['jumlah'] / $jml_produk) * 100) / 100);
+       $data['presentase'] = $presentase;
+
+       //bom bbb
+       $this->db->where('no_tp', $no_tp);
+       $id_pembagian = $this->db->get('target_produksi')->row()->no_trans_pembagian;
+
+       $this->db->where('id_jurnal', $id_pembagian);
+       $this->db->where('a.no_coa', '1114');
+       $this->db->select('nama_coa, nominal');
+       $this->db->from('jurnal a');
+       $this->db->join('coa b', 'a.no_coa = b.no_coa');
+       $data['bombbb'] = $this->db->get()->row_array();
       
       //bom
       
-       $query1 =   "SELECT nama_bb, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp
-                  FROM detail_target_produksi a
-                  JOIN produk b ON a.no_produk = b.no_produk
-                  JOIN bom c ON c.no_produk = b.no_produk
-                  JOIN bahan_baku d ON d.no_bb = c.no_bbp 
-                  WHERE a.no_tp = '$no_tp' AND a.no_produk = '$no_prod'
-                  UNION
-                  SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp
+       $query1 =   "
+                  SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp,c.jumlah
                   FROM detail_target_produksi a
                   JOIN produk b ON a.no_produk = b.no_produk
                   JOIN bom c ON c.no_produk = b.no_produk
@@ -834,14 +935,7 @@ group by no_bbp";
       
       //biaya biaya
       //bahan baku
-      $query2 = "SELECT nama_bb, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp
-                  FROM detail_target_produksi a
-                  JOIN produk b ON a.no_produk = b.no_produk
-                  JOIN bom c ON c.no_produk = b.no_produk
-                  JOIN bahan_baku d ON d.no_bb = c.no_bbp 
-                  WHERE a.no_tp = '$no_tp' AND a.no_produk = '$no_prod' AND c.no_bbp = 'BB_001'";
-      $data['bbb'] = $this->db->query($query2)->result_array();
-
+     
       //bahan penolong
       $query3 = "SELECT nama_bp, sum(a.jumlah) * c.jumlah * d.harga as biaya, d.harga, d.satuan, c.no_bbp
                   FROM detail_target_produksi a
@@ -865,9 +959,10 @@ group by no_bbp";
       $kalender = CAL_GREGORIAN;
       $hari = cal_days_in_month($kalender, $bulan1, $tahun1);
       $data['hari'] = $hari;
-      $data['btk'] = $btk / $hari;
+      $data['btk'] = ($btk / $hari) *$presentase;
 
      
+     //BIAYA BOP
       $this->db->where('bulan', $bulan1);
       $this->db->where('tahun', $tahun1);
       $this->db->select('a.no_bop,nama_jbop, harga');
@@ -886,6 +981,7 @@ group by no_bbp";
       
       $this->template->load('template', 'prod2/update', $data);
       // var_dump($data['btkperhari']);
+      // var_dump( $presentase);
    }
 
 
@@ -926,29 +1022,45 @@ group by no_bbp";
       redirect('c_transaksi/lihat_produksi_ke2');
    }
 
-   public function selesai_produksi_ke2($id,$bbb,$jumlah,$no_prod){
+   public function selesai_produksi_ke2($bbb,$btk,$bop,$bp,$id,$no_tp,$no_prod,$jumlah){
       
       $this->db->set('status', '1');
       $this->db->where('no_trans', $id);
       $this->db->update('produksi_ke1');
 
       //input ke detail produksi ke 1
+   
       $data = array('no_trans' => $id,
                'no_produk' => $no_prod,
                'bbb' => $bbb,
-               'btk' => '0',
-               'bop' => '0',
+               'btk' => $btk,
+               'bop' => $bop,
+               'bp'  => $bp,
                'jumlah' => $jumlah );
-      $this->db->insert('detail_produksi_ke1', $data);
+      $this->db->insert('detail_produksi_ke2', $data);
 
+      //total bop + bp
+      $bbop = $bp + $bop;
       //input ke stok produk
 
-        $this->db->set('stok', "stok + ".$jumlah."", FALSE);
+        $this->db->set('stok', "stok - ".$jumlah."", FALSE);
       $this->db->where('no_bdp', 'BDP_001');
       $this->db->update('bahan_dalam_proses');
 
+      //jurnal pemakaian
+      $this->m_keuangan->GenerateJurnal('5112', $id, 'd', $btk);
+       $this->m_keuangan->GenerateJurnal('5113', $id, 'd', $bbop);
+       $this->m_keuangan->GenerateJurnal('5311', $id, 'k', $btk);
+       $this->m_keuangan->GenerateJurnal('5312', $id, 'k', $bbop);
 
-      redirect('c_transaksi/isi_edit_produksi_ke1/'.$id.'');
+       $pbj = $bbb + $btk + $bbop;
+       //jurnal persediaan jadi
+       $this->m_keuangan->GenerateJurnal('1115', $id, 'd', $pbj);
+       $this->m_keuangan->GenerateJurnal('1114', $id, 'k', $bbb);
+       $this->m_keuangan->GenerateJurnal('5112', $id, 'k', $btk);
+       $this->m_keuangan->GenerateJurnal('5113', $id, 'k', $bbop);
+
+      redirect('c_transaksi/isi_edit_produksi_ke2/'.$id.'');
    }
 
    //PENJUALAN
@@ -1201,5 +1313,6 @@ group by no_bbp";
    }
 
 
+   
 
  }

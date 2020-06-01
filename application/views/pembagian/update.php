@@ -41,8 +41,9 @@
 <form method = "POST" action = "<?php echo site_url('c_transaksi/selesai_pembagian');?>">
 	<div class="row">
 	<div class="form-group">
-			<input readonly type="hidden" class="form-control"  name ="no_trans" value="<?php echo $no_trans ; ?>"  >
-			<input readonly type="hidden" class="form-control"  name = "jumlah" value="<?php echo $jumlah?>"  >
+			<input readonly type="text" class="form-control"  name ="no_trans" value="<?php echo $no_trans ; ?>"  >
+			<input readonly type="text" class="form-control"  name = "jumlah" value="<?php echo $jumlah?>"  >
+			<input readonly type="text" class="form-control"  name = "no_prod" value="<?php echo $prod?>"  >
 				<div class="col-xs-4">
 				<div class="form-group">
 				<label>Bahan Baku</label>
@@ -51,7 +52,7 @@
 		</div>
 			<div class="col-xs-4">
 				<div class="form-group">
-				<label>Jual (0-100%)</label>
+				<label>Dijual ke IPS</label>
 				<input type="text" class="form-control"  name="jual" min="1" step="1"  onkeypress=" return hanyaAngka(event)" oninput="validity.valid||(value='');">
 			</div>
 		</div>
@@ -136,10 +137,9 @@
 		<table  class="table table-striped table-bordered table-hover jambo_table" >
 		 	<thead>
 			<tr class="headings">
-				<th>Jual</th>
-				<th>Jumlah</th>
+				<th>Dijual ke IPS</th>	
 				<th>Produksi</th>
-				<th>Jumlah</th>
+				<th>Total</th>
 			<!-- 	<th>Supplier</th>
 				<th>Aksi</th> -->
 			</tr>
@@ -149,13 +149,12 @@
 			$no=1;
 			$total = 0;
 				foreach($detail as $data){
-					
+					$total = $data['produksi'] + $data['jual'];
 					echo "
 							<tr>
-							<td>".$data['jual']." %</td>
-							<td>".($data['jual'] / 100) * $data['jumlah']."</td>
-							<td>".$data['produksi']." %</td>
-							<td>".($data['produksi'] / 100) * $data['jumlah']."</td>"; ?>
+							<td>".$data['jual']." </td>
+							<td>".$data['produksi']."</td>
+							<td>".$total." </td>"; ?>
 							
 
 						</tr>
