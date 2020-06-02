@@ -442,7 +442,17 @@ class c_keuangan extends CI_Controller
 	}
 
 	
-	
+	public function lap_pemby(){
+
+		if(isset($_POST['bulan'], $_POST['tahun'])){
+   			$this->db->where('MONTH(tgl_trans)', $_POST['bulan']);
+   			$this->db->where('YEAR(tgl_trans)', $_POST['tahun']);
+   			$data['bulan'] = $_POST['bulan'];
+   			$data['tahun'] = $_POST['tahun'];
+   		}
+		$data['result'] = $this->db->get('pembayaran')->result_array();
+		$this->template->load('template','pemby/report', $data);
+	}
 	
 
 

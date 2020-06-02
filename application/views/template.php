@@ -155,6 +155,7 @@
                                  <li><a href="<?php echo site_url();?>/c_transaksi/lihat_produksi_ke2">Produksi Olahan</a></li>
                                  <li><a href="<?php echo site_url();?>/c_transaksi/lihat_penjs">Penjualan IPS</a></li>
                                  <li><a href="<?php echo site_url();?>/c_transaksi/lihat_penjt">Penjualan Toko</a></li>
+                                 <li><a href="<?php echo site_url();?>/c_transaksi/lihat_pemby">Pembayaran Beban</a></li>
                                    <?php
                                     elseif( $this->session->userdata('level')=="produksi1"):
                                      ?>
@@ -200,6 +201,7 @@
                                     <li><a href="<?php echo site_url();?>/c_keuangan/view_bukubesar">Buku Besar</a></li>
                                     <li><a href="<?php echo site_url();?>/c_keuangan/lap_pemb">Laporan Pembelian Bahan Baku</a></li>
                                     <li><a href="<?php echo site_url();?>/c_keuangan/lap_pembp">Laporan Pembelian Bahan Penolong</a></li>
+                                    <li><a href="<?php echo site_url();?>/c_keuangan/lap_pemby">Laporan Pembayaran Beban</a></li>
                                     <li><a href="<?php echo site_url();?>/c_keuangan/lap_penjs">Laporan Penjualan IPS</a></li>
                                     <li><a href="<?php echo site_url();?>/c_keuangan/lap_penjt">Laporan Penjualan Toko</a></li>
                                     <li><a href="<?php echo site_url();?>/c_keuangan/lap_bp_ips">Laporan Biaya Produksi IPS</a></li>

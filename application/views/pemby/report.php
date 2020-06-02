@@ -1,7 +1,7 @@
 	<!DOCTYPE html>
 	<html>
 	<head>
-		<title>Laporan Pembelian Bahan Baku</title>
+		<title>Laporan Pembayaran Beban</title>
 	</head>
 	<body>
 		<?php  $namabulan = array(
@@ -23,12 +23,12 @@
 	<hr> -->
 	<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar Pembelian Bahan Baku</b></h3>
+    <h3 class="panel-title"><b>Daftar Pembayaran Beban</b></h3>
   </div>
   	 <div class="x_content">
   	 	<div class="row">
   	 		<div class="col-sm-6">
-		<form class = 'form-inline' method = "POST" class = "form-inline" action = "<?php echo site_url().'/c_keuangan/lap_pemb';?>">
+		<form class = 'form-inline' method = "POST" class = "form-inline" action = "<?php echo site_url().'/c_keuangan/lap_pemby';?>">
 		
 
 				<label>Pilih Bulan :</label> 
@@ -87,7 +87,7 @@
   	 	<div style="font-size: 25px">
   	 	KPSBU
   	 </div>
-  	 <div style="font-size: 20px">Laporan Pembelian Bahan Baku</div>
+  	 <div style="font-size: 20px">Laporan Pembayaran Beban</div>
   
   	<?php if(isset($bulan, $tahun)){ ?>
   	 <div style="font-size: 15px">
