@@ -1,13 +1,13 @@
 <html>
-	<!-- <head><center><h3><b>Master Data Penjualan IPS</b></h3></center></head>
+	<!-- <head><center><h3><b>Master Data Pembelian Bahan Baku</b></h3></center></head>
 	<hr> -->
 	<body>
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar Penjualan IPS</b></h3>
+    <h3 class="panel-title"><b>Daftar Pembelian Bahan Baku</b></h3>
   </div>
   	 <div class="x_content">
-  	 		<a href = "<?php echo site_url()."/c_transaksi/form_penjs"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
+  	 		<a href = "<?php echo site_url()."/c_transaksi/form_pemb"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
   	 	 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">
@@ -28,15 +28,15 @@
 							<td>".$data['tgl_trans']."</td>
 							" ?>
 							<td>
-							<a href="isi_edit_penjs/<?php echo $data['no_trans']; ?>" >
-										
+							<a href="isi_edit_pemb/<?php echo $data['no_trans']; ?>">
+							
 							<span class="fa-stack">
 							  <i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
 							 <span class="glyphicon glyphicon-pencil fa-stack-1x" aria-hidden="true" style="color:white"></span>
 							</span> </a>
 							</td>
 							<!--<td align="center">
-							<a class="btn btn-warning" href="isi_edit_penjs/<?php echo $data['no_trans']; ?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a>
+							<a class="btn btn-warning" href="isi_edit_pemb/<?php echo $data['no_pemb']; ?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a>
 					</td>-->
 
 						</tr>
@@ -49,7 +49,6 @@
 		</table>
 
 	
-		
-		
+	
 	</body>
 </html>

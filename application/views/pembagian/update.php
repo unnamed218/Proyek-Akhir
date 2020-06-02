@@ -44,6 +44,8 @@
 			<input readonly type="text" class="form-control"  name ="no_trans" value="<?php echo $no_trans ; ?>"  >
 			<input readonly type="text" class="form-control"  name = "jumlah" value="<?php echo $jumlah?>"  >
 			<input readonly type="text" class="form-control"  name = "no_prod" value="<?php echo $prod?>"  >
+			<input readonly type="text" class="form-control"  name = "tgl_trans" value="<?php echo $tgl?>"  >
+
 				<div class="col-xs-4">
 				<div class="form-group">
 				<label>Bahan Baku</label>
