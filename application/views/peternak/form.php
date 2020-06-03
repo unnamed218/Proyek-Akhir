@@ -24,6 +24,22 @@
 			  <?php echo form_error('nama_peternak'); ?>
 			
 			</div>
+
+			<div class="form-group">
+			  <label>No. Telepon</label>
+			  <input type = "text" name = "notel" class = "form-control">
+			  
+			  <?php echo form_error('notel'); ?>
+			
+			</div>
+
+			<div class="form-group">
+			  <label>Alamat</label>
+			  <input type = "text" name = "alamat" class = "form-control">
+			  
+			  <?php echo form_error('alamat'); ?>
+			
+			</div>
 		
 			
 			  <hr>

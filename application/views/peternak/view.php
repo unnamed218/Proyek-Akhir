@@ -14,6 +14,8 @@
 				<th style="width: 2px;">No</th>
 				<th>ID Peternak</th>
 				<th>Nama Peternak</th>
+				<th>No. Telepon</th>
+				<th>Alamat</th>
 				<th>Aksi</th>
 			</tr>
 		</thead>
@@ -25,7 +27,9 @@
 
 						<tr><td>$no</td>
 							<td>".$data['no_peternak']."</td>
-							<td>".$data['nama_peternak']."</td>" ?>
+							<td>".$data['nama_peternak']."</td>
+							<td>".$data['notel']."</td>
+							<td>".$data['alamat']."</td>" ?>
 							<td>
 							<a href="isi_edit_peternak/<?php echo $data['no_peternak']; ?>">
 								

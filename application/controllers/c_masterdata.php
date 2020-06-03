@@ -754,6 +754,23 @@ class c_masterdata extends CI_controller{
                   'customAlpha' => '%s hanya boleh berupa huruf!',
                   'is_unique' => '%s sudah ada di database!'
                )
+            ),
+            array(
+               'field' => 'notel',
+               'label' => 'No. Telepon',
+               'rules' => 'required|is_natural',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!',
+                  'is_natural' => '%s harus angka!'
+               )
+            ),
+            array(
+               'field' => 'alamat',
+               'label' => 'Alamat',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
             )
          );
          $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
@@ -764,7 +781,10 @@ class c_masterdata extends CI_controller{
          } else {
             $data = array(
                'no_peternak' => $_POST['no_peternak'],
-               'nama_peternak' => $_POST['nama_peternak']
+               'nama_peternak' => $_POST['nama_peternak'],
+               'notel' => $_POST['notel'],
+               'alamat' => $_POST['alamat']
+
             );
             $this->db->insert('peternak', $data);
           
@@ -799,6 +819,23 @@ class c_masterdata extends CI_controller{
                   'max_length' => '%s maksimal 30 huruf!',
                   'customAlpha' => '%s hanya boleh berupa huruf!'
                )
+            ),
+            array(
+               'field' => 'notel',
+               'label' => 'No. Telepon',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!',
+                  'is_natural' => '%s harus angka!'
+               )
+            ),
+            array(
+               'field' => 'alamat',
+               'label' => 'Alamat',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
             )
        
             
@@ -815,7 +852,9 @@ class c_masterdata extends CI_controller{
             $nama_peternak = $_POST['nama_peternak'];
             
             $data = array(
-               'nama_peternak' => $nama_peternak
+               'nama_peternak' => $nama_peternak,
+               'notel' => $_POST['notel'],
+               'alamat' => $_POST['alamat']
             );
             
             $this->db->where('no_peternak', $no_peternak);
