@@ -37,6 +37,7 @@
 
 <form method = "POST" action = "<?php echo site_url('c_transaksi/selesai_ck');?>">
 	<input readonly type="hidden" class="form-control"  value="<?php echo $no_trans ; ?>" name="no_trans">
+	<input readonly type="hidden" class="form-control"  value="<?php echo $tgl ; ?>" name="tgl_trans">
 	<div class="row">
 	<div class="form-group">
 			<div class="col-xs-6">
@@ -76,7 +77,7 @@
 	</div>
 </div>
 <?php 
-}elseif($cek == '1' OR $cek =='2'){
+}elseif($cek != '0'){
 ?>
 
 <div class="x_panel">

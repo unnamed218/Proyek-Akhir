@@ -28,7 +28,7 @@
 							<td>".$data['tgl_trans']."</td>
 							" ?>
 							<td>
-							<a href="isi_edit_penjs/<?php echo $data['no_trans']; ?>" >
+							<a href="isi_edit_penjs/<?php echo $data['no_trans'];?>/<?php echo $data['no_trans_pembg']?>" >
 										
 							<span class="fa-stack">
 							  <i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>

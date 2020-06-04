@@ -14,7 +14,7 @@
 		<div class="row">
 			<div class="col-xs-4">
 				<label>ID Jenis BOP</label>
-				<input readonly type="text" class="form-control" name="no_bb" value="<?php echo $data['no_bb'] ; ?>"  >
+				<input readonly type="text" class="form-control" name="no_jbop" value="<?php echo $data['no_jbop'] ; ?>"  >
 			</div>
 		</div>
 	</div>
@@ -22,10 +22,10 @@
 		<div class="row">
 			<div class="col-xs-4">
 				<label>Nama Jenis BOP</label>
-				<input type="text" class="form-control" name="nama_bb" value="<?php echo $data['nama_bb'] ; ?>" >
+				<input type="text" class="form-control" name="nama_jbop" value="<?php echo $data['nama_jbop'] ; ?>" >
 			</div>
 		</div>
-		<?php echo form_error('nama_bb'); ?>
+		<?php echo form_error('nama_jbop'); ?>
 	</div>
 	
 		<input type="submit" name="submit" class="btn btn-primary" value="Simpan">

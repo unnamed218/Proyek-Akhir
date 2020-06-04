@@ -6,7 +6,7 @@
 
 <div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Detail Produksi Pertama</b></h3>
+    <h3 class="panel-title"><b>Transaksi Produksi IPS</b></h3>
   </div>
   	 <div class="x_content">
 <div>
@@ -44,7 +44,7 @@
 			<div class="col-xs-2">
 				<div class="form-group">
 				<label>Produk</label>
-				<input readonly type="text" class="form-control"  value="Susu Sapi setelah diolah"  >
+				<input readonly type="text" class="form-control"  value="Susu Sapi"  >
 			</div>
 		</div>
 
@@ -152,7 +152,7 @@
 				}
 				$id = $no_trans;
 				$jumlah = $data['jumlah'];
-				$no_prod = 'PR_005';
+				$no_prod = 'PR_001';
 			?>
 			
 			<tr>
@@ -168,7 +168,7 @@
 				<th colspan="3">Biaya Operasional Pabrik</th>
 			</tr>
 			<tr>
-				<td colspan="3">Biaya Operasional Pabrik></td>
+				<td colspan="3">Biaya Operasional Pabrik</td>
 			</tr>
 			<tr>
 
@@ -199,7 +199,7 @@
 			<tr>
 				<th>Biaya Produksi</th>
 				<th><?php echo format_rp($biaya_produksi) ?></th>
-				<th><?php echo format_rp($biaya_produksi / $jmlprod) ?> </th> 
+				<th><?php echo format_rp(round($biaya_produksi / $jmlprod)) ?> </th> 
 			</tr>
 
 			</tbody>
