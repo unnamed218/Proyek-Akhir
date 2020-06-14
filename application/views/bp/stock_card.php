@@ -122,17 +122,10 @@
 				$no++;
 				$cek = substr($data['no_trans'],0,4);
 				if($cek == 'PMBP'){
-				$maka = 'Pemb. BP';
+				$maka = 'Pembelian BP';
 				}else{
 				$maka = 'Produksi Olahan';
 				}
-			
-			$unitpmb = $unitpmb + $data['jumlah'];
-			$totalpmb = $totalpmb + $data['total_pmb'];
-			$unitprod = $unitprod + $data['jumlah_bahan_baku'];
-			$totalprod = $totalprod + $data['subtotal_pmk'];
-			$unitsaldo = $unitsaldo + $data['unit'];
-			$totalsaldo = $totalsaldo + $data['total'];
 
 
 				echo "
