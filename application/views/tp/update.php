@@ -10,6 +10,7 @@
   	 <div class="x_content">
 <div>
 	
+	<?php if (isset($error)){ echo "<div class='alert alert-danger'><li>".$error."</li></div>"; }?>
 		<div class="row">
 	<div class="form-group">
 			<div class="col-xs-3">
@@ -51,6 +52,7 @@
 		?>
 			<form method="POST" action="<?php echo site_url().'/c_transaksi/edit_tp'; ?>">
 			<input readonly type="hidden" class="form-control" name="no_tp" value="<?php echo $data['no_tp'] ; ?>"  >
+			<input readonly type="hidden" class="form-control" name="produksi" value="<?php echo $jumlah ; ?>"  >
 	<div class="form-group">
 			<div class="col-xs-6">
 				<div class="form-group">
@@ -90,7 +92,11 @@
 	<div class="form-group">
 		<center>
 	<a href = "<?php echo site_url()."/c_transaksi/lihat_tp"?>" class="btn btn-default" role="button">Kembali</a>
+	<?php if($cek < $jumlah){?>
 <input type="submit" name="submit" class="btn btn-primary" value="Simpan">
+	<?php }else{?>
+		<a href="#" class="btn btn-primary" disabled="disabled" role="button">Simpan</a>
+	<?php } ?>
 </center>
 
 	</form>
@@ -214,12 +220,15 @@
 	</div>
 
 
-	<?php if($status == '0'){
-		if($this->session->userdata('level') == 'produksi2' OR $this->session->userdata('level') == 'admin'){?>
+	<?php if($status == '0'){ ?>
 	<center>
+		<?php if($cek == $jumlah){?>
 		<a href = "<?php echo site_url()."/c_transaksi/selesai_tp/$id"?>" class="btn btn-info" role="button">Selesai</a>
 	</center>
-<?php }
+<?php }else{ ?>
+		<a href = "#" class="btn btn-info" disabled="disabled" role="button">Selesai</a>
+
+<?php } 	
 		}else{ ?>
 
 	<a href = "<?php echo site_url()."/c_transaksi/lihat_tp"?>" class="btn btn-default" role="button">Kembali</a>

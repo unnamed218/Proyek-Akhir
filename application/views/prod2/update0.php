@@ -89,6 +89,8 @@
 
 		</table>
 
+	<a href = "<?php echo site_url()."/c_transaksi/lihat_produksi_ke2"?>" class="btn btn-default" role="button">Kembali</a>
+
 
 		
 	</div>

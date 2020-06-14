@@ -162,7 +162,7 @@
 				<th colspan="3">Biaya Operasional Pabrik</th>
 			</tr>
 			<tr>
-				<td colspan="3">Biaya Operasional Pabrik></td>
+				<td colspan="3">Biaya Operasional Pabrik</td>
 			</tr>
 			<tr>
 
@@ -239,7 +239,7 @@
 <div class="col-md-1">
   	 	<div style="align-items: : : right;">
 	<!-- <a href = "<?php echo site_url()."/c_transaksi/selesai_produksi_ke2/$id/$total/$jumlah/$no_prod"?>" class="btn btn-dark" role="button">Produksi</a> -->
-		<a class="btn btn-dark" role="button" <?php if($cek == '0'){?> href = "<?php echo site_url()."/c_transaksi/selesai_produksi_ke2/$bbbb/$bbtk/$bbop/$bbp/$no_trans/$no_tp/$no_prod/$jumlah "?>" <?php }else{?> hidden <?php } ?>>Produksi</a>
+		<a class="btn btn-dark" role="button" <?php if($cek == NULL){?> href = "<?php echo site_url()."/c_transaksi/selesai_produksi_ke2/$bbbb/$bbtk/$bbop/$bbp/$no_trans/$no_tp/$no_prod/$jumlah "?>" <?php }else{?> hidden <?php } ?>>Produksi</a>
 </div>
 </div>
 

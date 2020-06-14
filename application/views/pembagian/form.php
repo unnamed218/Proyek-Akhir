@@ -23,7 +23,7 @@
 			</div>
 
 			<div class="form-group">
-				<label>ID Produksi Pertama</label>
+				<label>ID Produksi IPS</label>
 						<select name = "no_trans_produksi1" class = "form-control">
 							    <option value="#" disabled selected>Pilih Produksi</option>
 								<?php				
@@ -32,6 +32,7 @@
 															}
 								?>
 						</select>
+			  <?php echo form_error('no_trans_produksi1'); ?>
 	
 				</div>
 			  

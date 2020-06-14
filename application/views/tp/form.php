@@ -30,9 +30,9 @@
                         </div>
                     </div>
             
+			  <?php echo form_error('tgl_tp'); ?>
             </div>
 			  
-			  <?php echo form_error('tgl_tp'); ?>
 			
 				  <div class="form-group">
 				<label>ID Pembagian</label>
@@ -45,6 +45,7 @@
 								?>
 						</select>
 	
+			  <?php echo form_error('no_trans_pembagian'); ?>
 				</div>
 			
 			  <hr>

@@ -4,7 +4,7 @@
 	<body>
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar Produksi Pertama</b></h3>
+    <h3 class="panel-title"><b>Daftar Produksi IPS</b></h3>
   </div>
   	 <div class="x_content">
   	 		<a href = "<?php echo site_url()."/c_transaksi/form_produksi_ke1"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>

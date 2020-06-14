@@ -56,16 +56,15 @@
 							<tr>
 							<td>".$data['nama_produk']."</td>
 							<td>".$data['jumlah']." ".$data['satuan']."</td>
-							<td align='right'>".format_rp($data['harga'])."</td>
 						
 							
-							<td align='right'>".format_rp($data['harga']*$data['jumlah'])."</td>"; ?>
+							<td align='right'>".format_rp($data['jumlah'])."</td>"; ?>
 							
 
 						</tr>
 						
 					<?php
-					$total=$total+($data['harga']*$data['jumlah']);
+					$total=$total+($data['jumlah']);
 					$no++;
 				}
 			?>

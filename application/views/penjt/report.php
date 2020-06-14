@@ -1,7 +1,7 @@
 	<!DOCTYPE html>
 	<html>
 	<head>
-		<title>Laporan Pembelian Penjualan IPS</title>
+		<title>Laporan Penjualan Toko</title>
 	</head>
 	<body>
 		<?php  $namabulan = array(
@@ -19,16 +19,16 @@
       '11' => 'November',
       '12' => 'Desember'
     );?>
-	<!-- 	<center><h3><b>Laporan Pembelian</b></h3></center>
+	<!-- 	<center><h3><b>Laporan </b></h3></center>
 	<hr> -->
 	<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar Pembelian Penjualan IPS</b></h3>
+    <h3 class="panel-title"><b>Daftar Penjualan Toko</b></h3>
   </div>
   	 <div class="x_content">
   	 	<div class="row">
   	 		<div class="col-sm-6">
-		<form class = 'form-inline' method = "POST" class = "form-inline" action = "<?php echo site_url().'/c_keuangan/lap_pemb';?>">
+		<form class = 'form-inline' method = "POST" class = "form-inline" action = "<?php echo site_url().'/c_keuangan/lap_penjs';?>">
 		
 
 				<label>Pilih Bulan :</label> 
@@ -87,7 +87,7 @@
   	 	<div style="font-size: 25px">
   	 	KPSBU
   	 </div>
-  	 <div style="font-size: 20px">Laporan Penjualan IPS</div>
+  	 <div style="font-size: 20px">Laporan Penjualan Toko</div>
   
   	<?php if(isset($bulan, $tahun)){ ?>
   	 <div style="font-size: 15px">
@@ -105,8 +105,7 @@
 		<td>Total Transaksi</td>
 	</tr>
 </thead>
-<tbody>
-	<?php
+<tbody> <?php
 		$total=0;
 				foreach($result as $data){
 						echo"

@@ -23,7 +23,7 @@
 			</div>
 
 			<div class="form-group">
-			  <label>No Target Produksi</label>
+			  <label>ID Target Produksi</label>
 			    <select name = "no_tp" class = "form-control">
 			    <option value="#" disabled selected>Pilih Target Produksi</option>
 				<?php

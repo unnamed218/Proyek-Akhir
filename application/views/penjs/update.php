@@ -9,7 +9,7 @@
   </div>
   	 <div class="x_content">
 <div>
-	
+	<?php if (isset($error)){ echo "<div class='alert alert-danger'><li>".$error."</li></div>"; }?>
 		<div class="row">
 	<div class="form-group">
 			<div class="col-xs-3">
@@ -63,6 +63,7 @@
 			<input readonly type="hidden" class="form-control" name="tgl_trans" value="<?php echo $tgl ; ?>"  >
 			<input readonly type="hidden" class="form-control" name="harga" value="<?php echo $harga_satuan ; ?>"  >
 			<input readonly type="hidden" class="form-control" name="no_produk" value="<?php echo $no_produk?>"  >
+			<input readonly type="hidden" class="form-control" name="jumlah1" value="<?php echo $jumlah?>"  >
 
 
 
@@ -79,7 +80,7 @@
 				<div class="form-group">
 			  <label>Nama Konsumen IPS</label>
 			    <select name = "no_ips" class = "form-control">
-			    <option value="#" disabled selected>Pilih Produk</option>
+			    <option value="#" disabled selected>Pilih Konsumen</option>
 				<?php
 				
 					foreach($ips as $data){
@@ -112,8 +113,13 @@
 	</div>
 	<div class="form-group">
 		<center>
-	<a href = "<?php echo site_url()."/c_transaksi/lihat_tp"?>" class="btn btn-default" role="button">Kembali</a>
+	<a href = "<?php echo site_url()."/c_transaksi/lihat_penjs"?>" class="btn btn-default" role="button">Kembali</a>
+	<?php if($cek_jml == $jumlah){?>
+
+	<a href = "#" class="btn btn-primary" role="button" disabled="disabled">Simpan</a>
+<?php }else { ?>
 <input type="submit" name="submit" class="btn btn-primary" value="Simpan">
+<?php }?>
 </center>
 
 	</form>
@@ -192,12 +198,13 @@
 	
 
 
-	<?php if($status == '0'){
-		if($this->session->userdata('level') == 'produksi2' OR $this->session->userdata('level') == 'admin'){?>
+	<?php if($status == '0'){ ?>
+		
 	<center>
-		<a href = "<?php echo site_url()."/c_transaksi/selesai_penjs/$id/$total/$jumlah "?>" class="btn btn-info" role="button">Selesai</a>
+		
+		<a <?php if($cek_jml == $jumlah){?>href = "<?php echo site_url()."/c_transaksi/selesai_penjs/$id/$total/$jumlah/$tgl "?>" <?php }else{?> disabled="disabled" <?php }?> class="btn btn-info" role="button">Selesai</a>
 	</center>
-<?php }
+<?php 
 		}else{ ?>
 
 	<a href = "<?php echo site_url()."/c_transaksi/lihat_penjs"?>" class="btn btn-default" role="button">Kembali</a>

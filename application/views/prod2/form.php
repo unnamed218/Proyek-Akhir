@@ -1,19 +1,19 @@
 <html>
 	<head>
-		<title>Transaksi Produksi Kedua</title>
+		<title>Transaksi Produksi Olahan</title>
 	</head>
-	<!-- <center><h3><b>Transaksi Produksi Kedua</h3></b></center>
+	<!-- <center><h3><b>Transaksi Produksi Olahan</h3></b></center>
 	<hr> -->
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Form Produksi Kedua</b></h3>
+    <h3 class="panel-title"><b>Form Produksi Olahan</b></h3>
   </div>
   	 <div class="x_content">
   	 	
 	<body>
 		<form method = "POST" action = "<?php echo site_url('c_transaksi/tambah_produksi_ke2');?>">
 			<div class="form-group">
-			  <label>ID Produksi Kedua</label>
+			  <label>ID Produksi Olahan</label>
 			  <input type = "text" name = "no_trans" class = "form-control" value="<?php echo $id?>" readonly>
 			
 			</div>
@@ -32,6 +32,7 @@
 															}
 								?>
 						</select>
+			  <?php echo form_error('no_tp'); ?>
 	
 				</div>
 			

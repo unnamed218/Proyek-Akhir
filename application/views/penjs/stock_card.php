@@ -10,23 +10,14 @@
   </div>
   	 <div class="x_content">
   	 	<div class="row">
-  	 		<div class="col-md-3">
+  	 		<!-- <div class="col-md-3">
+  	 <a href = "<?php echo site_url()."/c_transaksi/form_pemb1"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Pembelian</a>&nbsp <a href = "<?php echo site_url()."/c_transaksi/form_pemakaian"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Pemakaian</a>
+  	</div>   -->            
   	
-  	</div>              
-  	
-  	 	<form align ="center" method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_bb' ?> " class="form-inline">
+  	 	<form  method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_prod' ?> " class="form-inline">
   	 		
 		<div class="col-md-9">
-			  <!-- <label>Nama Bahan Baku &nbsp&nbsp&nbsp</label> -->
-			   <label>Bahan Baku :</label>
-			  <select name="no_bb" class="form-control">
-			  	<option value="#" disabled selected>Pilih Bahan Baku</option>
-			 	 <?php
-				foreach($bahan_baku as $data){
-				echo "<option value = ".$data['no_bb'].">".$data['nama_bb']."</option>";
-					}
-				?>
-			  </select>
+			
 			  <label>Tanggal Awal :</label>
 		<input type = "date" name="tgl_awal" class = "form-control" required="">
 		<label>Tanggal Akhir :</label>
@@ -37,7 +28,7 @@
 </div>
 	</form>
 </div>
-<div class="row" style="margin-top: 10px; margin-left: 180px">
+<!-- <div class="row" style="margin-top: 10px; margin-left: 180px">
 	<div class="col-md-9">
 	</div>
 	<div class="col-md-3">
@@ -50,7 +41,7 @@
 	<a href="<?php echo site_url()."/c_transaksi/view_trans"?>" class="btn btn-dark" role="button">Kembali</a>
 	<?php endif ?> 
 	</div>
-</div>
+</div> -->
 <hr>
 <p>
   	 <center><b>
@@ -60,7 +51,7 @@
   
   	  <?php if(isset($awal, $akhir)){?>
   	 <div style="font-size: 15px">
-  	 	<?php echo $awal?> s/d <?php echo $akhir; }?>
+  	 	Periode <?php echo $awal?> s/d <?php echo $akhir; }?>
   	 </div>
 </b>
 </center>
@@ -69,14 +60,14 @@
 <div class="row">
 		<div class="col-sm-6">
 			<div class="form-group">
-			<label>Nama Bahan Baku</label>
-			<input type="text" class="form-control" value="<?php echo $bahan_baku1['nama_bb']?>" readonly>
+			<label>Nama Produk</label>
+			<input type="text" class="form-control" value="<?php echo $produk1['nama_produk']?>" readonly>
 		</div>
 	</div>
 	<div class="col-sm-6">
 			<div class="form-group">
-			<label>Satuan Bahan Baku</label>
-			<input type="text" class="form-control" value="<?php echo $bahan_baku1['satuan']?>" readonly>
+			<label>Satuan Produk</label>
+			<input type="text" class="form-control" value="<?php echo $produk1['satuan']?>" readonly>
 		</div>
 	</div>
 </div>
@@ -86,10 +77,10 @@
 			<tr class="headings">
 				<th rowspan="2"> <center>No</center></th>
 				<th rowspan="2">Tanggal</th>
-				<th rowspan="2">Kode</th>
+				<th rowspan="2">ID Trans</th>
 				<th rowspan="2">Keterangan</th>
-				<th colspan="3">Penerimaan</th>
-				<th colspan="3">Pengeluaran</th>
+				<th colspan="3">Produksi</th>
+				<th colspan="3">Penjualan</th>
 				<th colspan="3">Saldo</th>
 				
 						</tr>
@@ -114,11 +105,11 @@
 			foreach($result as $data){
 				
 				$no++;
-				$cek = substr($data['id_trans'],0,3);
-				if($cek == 'PMB'){
-				$maka = 'Pembelian';
+				$cek = substr($data['no_trans'],0,5);
+				if($cek == 'PROD1'){
+				$maka = 'Produksi IPS';
 				}else{
-				$maka = 'Pemakaian';
+				$maka = 'Penjualan IPS';
 				}
 			
 			
@@ -127,7 +118,7 @@
 				echo "
 			<td>$no</td>
 			<td>".$data['tgl_trans']."</td>
-			<td>".$data['id_trans']."</td>
+			<td>".$data['no_trans']."</td>
 			<td>".$maka."</td>
 			<td>".$data['jumlah']."</td>
 			<td align='right'>".format_rp($data['rata'])."</td>
@@ -146,10 +137,6 @@
 			$unit = 0;
 			$unitpmb = 0;
 			$unitpmk = 0 ;
-			$totalpmb = $totalpmb;;
-			$totalpmk = $totalpmk + $data['subtotal_pmk'];
-			$unitpmb = $unitpmb + $data['jumlah'];
-			$unitpmk = $unitpmk + $data['jumlah_bahan_baku'];
 	echo "
 	</tr>
 		";	}

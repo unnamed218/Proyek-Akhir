@@ -80,6 +80,34 @@ class c_transaksi extends CI_controller{
    }
 
    public function tambah_pemb1(){
+          $config = array(
+            
+            array(
+               'field' => 'jumlah',
+               'label' => 'Jumlah',
+               'rules' => 'required|is_natural_no_zero',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!',
+                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!'
+               )
+            ),
+            array(
+               'field' => 'no_peternak',
+               'label' => 'Nama Peternak',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $id = $_POST['no_trans'];
+            $this->isi_edit_pemb($id);
+         } else {
+            
 
       $this->db->where('no_bb', $_POST['no_bb']);
       $harga = $this->db->get('bahan_baku')->row()->harga;
@@ -114,6 +142,7 @@ class c_transaksi extends CI_controller{
    }
 
     redirect('c_transaksi/isi_edit_pemb/'.$_POST['no_trans'].'');
+ }
 }
 
    public function selesai_pemb($id,$total){
@@ -122,7 +151,7 @@ class c_transaksi extends CI_controller{
       $this->db->where('no_trans', $id);
       $this->db->update('pembelian_bb');
 
-      redirect('c_transaksi/isi_edit_pemb/'.$id.'');
+      redirect('c_transaksi/lihat_pemb');
    }
 
     //Cek kualitas
@@ -190,6 +219,24 @@ class c_transaksi extends CI_controller{
    }
 
    public function tambah_ck(){
+       $config = array(
+         
+            array(
+               'field' => 'no_trans_pembb',
+               'label' => 'ID Transaksi Pembelian',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $this->form_ck();
+         } else {
+            
       $data = array('no_trans' => $_POST['no_trans'],
                'tgl_trans' => $_POST['tgl_trans'],
                'status' => '0',
@@ -201,8 +248,29 @@ class c_transaksi extends CI_controller{
       $this->db->update('pembelian_bb');
       redirect('c_transaksi/lihat_ck');
    }
+   }
 
    public function selesai_ck(){
+       $config = array(
+         
+            array(
+               'field' => 'lulus',
+               'label' => 'Lulus Uji Lab',
+               'rules' => 'required|is_natural_no_zero',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!',
+                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $id = $_POST['no_trans'];
+            $this->isi_edit_ck($id);
+         } else {
+            if($_POST['lulus'] <= $_POST['jumlah']){
       $id = $_POST['no_trans'];
       $gagal = $_POST['jumlah'] - $_POST['lulus'];
       $data = array('no_trans' => $_POST['no_trans'],
@@ -245,7 +313,43 @@ class c_transaksi extends CI_controller{
                      'unit' => $_POST['lulus'],
                      'total' => $total);
        $this->db->insert('kartu_stok_bb', $data1);
-      redirect('c_transaksi/isi_edit_ck/'.$id.'');
+      redirect('c_transaksi/lihat_ck');
+   }else{
+       $data['error'] = 'Lulus Uji Lab melebihi jumlah pembelian bahan baku!';
+      $id = $_POST['no_trans'];
+      $data['no_trans'] = $id;
+      $this->db->where('no_trans', $id);
+      $data['tgl'] = $this->db->get('cek_kualitas')->row()->tgl_trans;
+   
+      //jumlah bahan baku 
+      $this->db->where('b.no_trans', $id);
+      $this->db->select_sum('jumlah');
+      $this->db->join('detail_pembelian_bb a', 'a.no_trans = b.no_trans_pembb');
+      $data['jumlah'] = $this->db->get('cek_kualitas b')->row()->jumlah;
+
+        //satuan bahan baku 
+      $this->db->where('b.no_trans', $id);
+      $this->db->join('detail_pembelian_bb a', 'a.no_trans = b.no_trans_pembb');
+      $this->db->join('bahan_baku c', 'c.no_bb = a.no_bb');
+      $data['satuan'] = $this->db->get('cek_kualitas b')->row()->satuan;
+
+       // $data['cek_selesai'] = $this->db->query($query1)->num_rows();
+      $this->db->where('no_trans', $id);
+      $data['cek_selesai'] = $this->db->get('detail_cek_kualitas')->num_rows();
+
+       $this->db->where('no_trans', $id);
+      $this->db->select('status');
+      $data['cek'] = $this->db->get('cek_kualitas')->row()->status;
+
+      //-------------------------------------------------------------------------------//
+      //detail
+      $this->db->where('no_trans', $id);
+      $data['detail'] = $this->db->get('detail_cek_kualitas')->result_array();
+
+
+      $this->template->load('template', 'ck/update', $data);
+   }
+   }
    }
 
 
@@ -286,10 +390,12 @@ class c_transaksi extends CI_controller{
 
       
       //bom
-      $this->db->select('a.jumlah, b.nama_bb, b.harga, b.satuan, c.jumlah as jumlahbb');
+      $this->db->select('a.jumlah, b.nama_bb, b.harga, b.satuan, e.lulus as jumlahbb');
       $this->db->from('bom a');
       $this->db->join('bahan_baku b', 'a.no_bbp = b. no_bb');
       $this->db->join('detail_pembelian_bb c', 'b.no_bb = c.no_bb');
+      $this->db->join('cek_kualitas d', 'd.no_trans_pembb = c.no_trans ');
+      $this->db->join('detail_cek_kualitas e', 'e.no_trans = d.no_trans');
       $this->db->where('c.no_trans', $pembb);
       $this->db->group_by('b.no_bb');
 
@@ -355,6 +461,23 @@ class c_transaksi extends CI_controller{
    }
 
    public function tambah_produksi_ke1(){
+       $config = array(
+         
+            array(
+               'field' => 'no_trans_ck',
+               'label' => 'ID Transaksi Cek Kualitas',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $this->form_produksi_ke1();
+         } else {
       $data = array('no_trans' => $_POST['no_trans'],
                'tgl_trans' => $_POST['tgl_trans'],
                'status' => '0',
@@ -365,6 +488,7 @@ class c_transaksi extends CI_controller{
       $this->db->set('status', '2');
       $this->db->update('cek_kualitas');
       redirect('c_transaksi/lihat_produksi_ke1');
+   }
    }
 
    public function selesai_produksi_ke1($id,$bbb,$jumlah,$no_prod,$btk,$bop){
@@ -404,33 +528,29 @@ class c_transaksi extends CI_controller{
       $this->db->update('bahan_baku');
 
 
-        //--------------kartu stok---------------------------------
-      //----------------pengurang bahan baku dulu-----------------
-      // $this->db->where('no_trans', $no_trans);
-      // $this->db->select('a.no_trans, tgl_trans, no_bp');
-      // $this->db->select_sum('subtotal as total, jumlah as unit');
-      // $this->db->from('pembelian_bp a');
-      // $this->db->join('detail_pembelian_bp b', 'a.no_trans = b.no_trans');
-      // $this->db->group_by('no_bp');
-      // $list = $this->db->get()->result_array();
-    
-         # code...
       $this->db->where('no_trans', $id);
       $tgl_trans = $this->db->get('produksi_ke1')->row()->tgl_trans;
 
+      $data2 = array('no_trans' => $id,
+                     'tgl_trans' => $tgl_trans,
+                     'no_bb' => 'BB_001',
+                     'unit' => $jumlah,
+                     'total' => $bbb);
+       $this->db->insert('detail_pemakaian_bb', $data2);
+       //
       $this->db->where('no_bb', 'BB_001');
       $harga = $this->db->get('bahan_baku')->row()->harga;
       $total = $harga * $jumlah;
       $data1 = array('no_trans' => $id,
                      'tgl_trans' => $tgl_trans,
                      'no_bb' => 'BB_001',
-                     'unit' => $jumlah,
-                     'total' => $total);
+                     'unit' => 0,
+                     'total' => 0);
        $this->db->insert('kartu_stok_bb', $data1);
       
    
 
-      redirect('c_transaksi/isi_edit_produksi_ke1/'.$id.'');
+      redirect('c_transaksi/lihat_produksi_ke1');
    }
 
 
@@ -500,7 +620,25 @@ class c_transaksi extends CI_controller{
          $this->template->load('template', 'pembagian/form', $data);
    }
 
-   public function tambah_pembagian(){
+   public function tambah_pembagian(){  
+    
+
+      $config = array(
+            array(
+               'field' => 'no_trans_produksi1',
+               'label' => 'ID Transaksi Produksi IPS',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $this->form_pembagian();
+         } else {
       $data = array('no_trans' => $_POST['no_trans'],
                'tgl_trans' => $_POST['tgl_trans'],
                'status' => '0',
@@ -512,21 +650,46 @@ class c_transaksi extends CI_controller{
       $this->db->update('produksi_ke1');
       redirect('c_transaksi/lihat_pembagian');
    }
+   }
 
    public function selesai_pembagian(){
+
+        $config = array(
+            array(
+               'field' => 'jual',
+               'label' => 'Penjualan ke IPS',
+               'rules' => 'required|is_natural',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!',
+                  'is_natural' => '%s hanya boleh angka!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $id = $_POST['no_trans'];
+            $tgl = $_POST['tgl_trans'];
+            $no_produk = $_POST['no_prod'];
+            $this->isi_edit_pembagian($id);
+         } else {
       $id = $_POST['no_trans'];
+      $tgl = $_POST['tgl_trans'];
+      $no_produk = $_POST['no_prod'];
+      if($_POST['jual'] <= $_POST['jumlah']){
       $this->db->set('status', '1');
       $this->db->where('no_trans', $_POST['no_trans']);
       $this->db->update('pembagian');
 
       // $produksi = 100 - $_POST['jual'];
-      $produksi = $_POST['jumlah'] - $_POST['jual']
-;
+      $produksi = $_POST['jumlah'] - $_POST['jual'];
       //input ke detail pembagian
       $data = array( 'no_trans' => $_POST['no_trans'],
                      'jual' => $_POST['jual'],
                      'produksi' => $produksi );
       $this->db->insert('detail_pembagian', $data);
+
 
       //update ke stok produk
       
@@ -539,6 +702,11 @@ class c_transaksi extends CI_controller{
       $this->db->like('no_produk', 'Susu Sapi', 'none');
       $this->db->update('produk');
 
+      //update kartu stok jual
+      $this->db->set('stok_jual', $_POST['jual'] , FALSE);
+      $this->db->set('jumlah_kartu_stok', $_POST['jual'] , FALSE);
+      $this->db->where('no_trans', $_POST['no_prod']);
+      $this->db->update('detail_produksi_ke1');
 
       /////
       $this->db->where('no_trans', $_POST['no_prod']);
@@ -585,7 +753,51 @@ class c_transaksi extends CI_controller{
        $this->m_keuangan->GenerateJurnal('5113', $id, 'k', $bop2);
 
 
-      redirect('c_transaksi/isi_edit_pembagian/'.$id.'');
+      //tambah stok di kartu stok penjualan ips
+       $data1 = array('no_trans' => $id,
+                     'tgl_trans' => $tgl,
+                     'no_produk' => 'PR_001',
+                     'unit' => $_POST['jual'],
+                     'total' => $pbj);
+         $this->db->insert('kartu_stok_penj_ips', $data1);
+
+
+      redirect('c_transaksi/lihat_pembagian');
+   }else{
+      $data['error'] = 'Penjualan ke IPS telah melebihi batasan!';
+      $data['id'] = $id;
+      $data['no_trans'] = $id; 
+      $this->db->where('no_trans', $id);
+      $data['tgl'] = $this->db->get('pembagian')->row()->tgl_trans;
+
+      $this->db->where('no_trans', $id);
+      $data['prod'] = $this->db->get('pembagian')->row()->no_trans_produksi1;
+
+      $this->db->where('no_trans', $data['prod']);
+      $data['jumlah'] = $this->db->get('detail_produksi_ke1')->row()->jumlah;
+
+      //detail
+      $this->db->select('jual,produksi,jumlah');
+      $this->db->from('detail_pembagian a');
+      $this->db->join('pembagian b', 'a.no_trans = b.no_trans');
+      $this->db->join('detail_produksi_ke1 c', 'c.no_trans = b.no_trans_produksi1');
+      $this->db->where('a.no_trans', $id);
+      $data['detail'] = $this->db->get()->result_array();
+
+      $this->db->where('no_trans', $id);
+      $data['cek'] = $this->db->get('pembagian')->row()->status; 
+
+        $this->db->where('e.no_trans', $id);
+        $this->db->join('produksi_ke1 a', 'a.no_trans = e.no_trans_produksi1');
+       $this->db->join('cek_kualitas b', 'b.no_trans = a.no_trans_ck');
+       $this->db->join('detail_pembelian_bb c', 'c.no_trans = b.no_trans_pembb');
+       $this->db->join('bahan_baku d', 'd.no_bb = c.no_bb');
+      $data['satuan'] = $this->db->get('pembagian e')->row()->satuan;
+
+      
+      $this->template->load('template', 'pembagian/update', $data);
+   }
+   } 
    }
 
 
@@ -640,6 +852,14 @@ class c_transaksi extends CI_controller{
                'errors' => array(
                   'required' => '%s tidak boleh kosong!'
                )
+            ),
+            array(
+               'field' => 'no_trans_pembagian',
+               'label' => 'ID Transaksi Pembagian',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
             )
          );
          $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
@@ -687,7 +907,11 @@ class c_transaksi extends CI_controller{
           $x['jumlah'] = $this->db->query($query3)->row()->jumlah;
     
          $this->db->or_not_like('nama_produk', 'Susu Sapi', 'none');
-         $x['result'] = $this->db->get('produk')->result_array(); 
+         $this->db->select('a.no_produk, a.nama_produk, satuan');
+         $this->db->from('produk a');
+         $this->db->join('bom b', 'a.no_produk = b.no_produk');
+         $this->db->group_by('a.no_produk');
+         $x['result'] = $this->db->get()->result_array(); 
          
          $this->db->where('a.no_tp', $id);
          $this->db->select('a.no_produk, nama_produk, jumlah, a.no_tp, satuan, c.status');
@@ -714,14 +938,16 @@ WHERE a.no_tp = '$id' AND NOT c.no_bbp = 'BB_001'
 group by no_bbp";
       $x['result2'] = $this->db->query($query1)->result_array();
          $x['id'] = $id;
+         $this->db->where('no_tp', $id);
+         $this->db->select_sum('jumlah');
+         $x['cek'] = $this->db->get('detail_target_produksi')->row()->jumlah;
          $this->template->load('template', 'tp/update', $x);
        
       
    }
 
 
-   public function edit_tp()
-   {
+   public function edit_tp(){
       
          $config = array(
             
@@ -739,7 +965,7 @@ group by no_bbp";
                'label' => 'Jumlah',
                'rules' => 'required',
                'errors' => array(
-                  'required' => 'Inputan Salah'
+                  'required' => '%s tidak boleh kosong!'
                )
             )
          );
@@ -751,37 +977,89 @@ group by no_bbp";
             $this->isi_edit_tp($id);
          } else {
             $id = $_POST['no_tp'];
+            $this->db->where('no_tp', $id);
+            $this->db->select_sum('jumlah');
+            $jml = $this->db->get('detail_target_produksi')->row()->jumlah;
+            $cek_jml = $jml + $_POST['jumlah'];
+             
+
+              if($cek_jml <= $_POST['produksi']){
             $data = array(
                'no_tp' => $_POST['no_tp'],
                'no_produk' => $_POST['no_produk'],
                'jumlah' => $_POST['jumlah']
             );
-
-            if($this->session->userdata('level') == 'produksi1'){
-                $this->db->insert('detail_target_produksi', $data);
-
-               $this->db->where('no_tp', $id);
-               $this->db->set('status', '1');
-               $this->db->update('target_produksi');
-
-            redirect('c_transaksi/lihat_tp');
-            }else{
-            
             $this->db->where(array('no_tp' => $_POST['no_tp'], 'no_produk' => $_POST['no_produk']));
             $cek =  $this->db->get('detail_target_produksi')->num_rows();
             if($cek == 0 ){
             $this->db->insert('detail_target_produksi', $data);
-            $this->isi_edit_tp($id);
+          
             }else{
             $this->db->set('jumlah', "jumlah + ".$_POST['jumlah']."", FALSE);
             $this->db->where(array('no_tp' => $_POST['no_tp'], 'no_produk' => $_POST['no_produk']));
             $this->db->update('detail_target_produksi');
-            redirect('c_transaksi/lihat_tp');
             
          }
+           $this->isi_edit_tp($id);
+        }else{
+         $id = $_POST['no_tp'];
+         $this->db->where('no_tp', $id);
+         $this->db->select('status');
+         $x['status'] = $this->db->get('target_produksi')->row()->status;
+         
+         
+         $x['data'] = $this->m_masterdata->edit_data('target_produksi', "no_tp = '$id'")->row_array();
+
+
+         $query3 = "SELECT produksi as jumlah
+                  FROM target_produksi a
+                  JOIN pembagian b ON a.no_trans_pembagian = b.no_trans
+                  JOIN detail_produksi_ke1 c ON c.no_trans = b.no_trans_produksi1
+                  JOIN detail_pembagian d ON d.no_trans = b.no_trans
+                  WHERE a.no_tp = '$id'";
+          $x['jumlah'] = $this->db->query($query3)->row()->jumlah;
+    
+         $this->db->or_not_like('nama_produk', 'Susu Sapi', 'none');
+         $this->db->select('a.no_produk, a.nama_produk, satuan');
+         $this->db->from('produk a');
+         $this->db->join('bom b', 'a.no_produk = b.no_produk');
+         $this->db->group_by('a.no_produk');
+         $x['result'] = $this->db->get()->result_array(); 
+         
+         $this->db->where('a.no_tp', $id);
+         $this->db->select('a.no_produk, nama_produk, jumlah, a.no_tp, satuan, c.status');
+         $this->db->from('detail_target_produksi a');
+         $this->db->join('produk b', 'a.no_produk = b.no_produk');
+         $this->db->join('target_produksi c', 'a.no_tp = c.no_tp');
+         $this->db->order_by('no');
+         $x['result1'] = $this->db->get()->result_array();
+
+         //ISI BOM 
+      $query1 =   "SELECT nama_bb, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp
+                  FROM detail_target_produksi a
+                  JOIN produk b ON a.no_produk = b.no_produk
+                  JOIN bom c ON c.no_produk = b.no_produk
+                  JOIN bahan_baku d ON d.no_bb = c.no_bbp 
+                  WHERE a.no_tp = '$id'
+         UNION
+         SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp
+         FROM detail_target_produksi a
+         JOIN produk b ON a.no_produk = b.no_produk
+         JOIN bom c ON c.no_produk = b.no_produk
+         JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
+         WHERE a.no_tp = '$id' AND NOT c.no_bbp = 'BB_001'
+         group by no_bbp";
+      $x['result2'] = $this->db->query($query1)->result_array();
+         $x['id'] = $id;
+         $this->db->where('no_tp', $id);
+         $this->db->select_sum('jumlah');
+         $x['cek'] = $this->db->get('detail_target_produksi')->row()->jumlah;
+         $x['error'] = 'Jumlah Target Produksi melebihi jumlah produksi!';
+         $this->template->load('template', 'tp/update', $x);
+        }
       }
     }
- }
+ 
 
  	public function hapus_tp($id,$id2){
       $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=0");
@@ -831,6 +1109,23 @@ group by no_bbp";
    }
 
    public function tambah_pembp(){
+       $config = array(
+            
+            array(
+               'field' => 'no_tp',
+               'label' => 'ID Target Produksi',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $this->form_pembp();
+         } else {
    	$data = array('no_trans' => $_POST['no_trans'],
    				'tgl_trans' => $_POST['tgl_trans'],
    				'status' => '0',
@@ -843,13 +1138,33 @@ group by no_bbp";
    	$this->db->update('target_produksi');
    	redirect('c_transaksi/lihat_pembp');
    }
+   }
 
      public function tambah_pembp1(){
+       $config = array(
+            
+            array(
+               'field' => 'no_supp_bp',
+               'label' => 'Nama Supplier',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $id = $_POST['no_trans'];
+            $this->isi_edit_pembp($id);
+         } else {
       $data = array('no_trans' => $_POST['no_trans'],
                   'no_bp' => $_POST['no_bp'],
                   'jumlah' => $_POST['jumlah'],
                   'subtotal' => $_POST['jumlah']*$_POST['harga'],
-                  'no_supp_bp' => $_POST['no_supp_bp']);
+                  'no_supp_bp' => $_POST['no_supp_bp'],
+                  'jumlah_kartu_stok' => $_POST['jumlah']);
       $this->db->insert('detail_pembelian_bp', $data);
 
     $this->db->set('stok', "stok +".$_POST['jumlah']."",FALSE);
@@ -857,6 +1172,7 @@ group by no_bbp";
     $this->db->update('bahan_penolong');
 
     redirect('c_transaksi/isi_edit_pembp/'.$_POST['no_trans'].'');
+ }
    }
 
    public function selesai_pembp($id,$total){
@@ -877,20 +1193,24 @@ group by no_bbp";
       $list = $this->db->get()->result_array();
       foreach ($list as $data) {
          # code...
-
+         $harga = $data['total'] / $data['unit'];
            $data1 = array('no_trans' => $data['no_trans'],
                      'tgl_trans' => $data['tgl_trans'],
                      'no_bp' => $data['no_bp'],
-                     'unit' => $data['unit'],
-                     'total' => $data['total']);
+                     'unit1' => $data['unit'],
+                     'harga1' => $harga,
+                     'total1' => $data['total'],
+                     'unit3' => $data['unit'],
+                     'harga3' => $harga,
+                     'total3' => $data['total'],);
        $this->db->insert('kartu_stok_bp', $data1);
       }
     
-      redirect('c_transaksi/isi_edit_pembp/'.$id.'');
+      redirect('c_transaksi/lihat_pembp');
    }
 
    public function isi_edit_pembp($id){
-      $data['id'] = $id;
+      $data['id'] = $id;   
       $this->db->where('no_trans', $id);
       $data['no_trans'] = $this->db->get('pembelian_bp')->row()->no_trans;
       $this->db->where('no_trans', $id);
@@ -904,7 +1224,7 @@ group by no_bbp";
    JOIN bahan_penolong d ON d.no_bp = c.no_bbp
    WHERE a.no_trans = '$id' AND c.no_bbp NOT IN
    (SELECT no_bp FROM detail_pembelian_bp WHERE no_trans = '$id')
-   GROUP BY nama_bp";
+   GROUP BY no_bp";
       $data['result1'] = $this->db->query($query1)->result_array();
       $this->db->where('no_trans', $id);
       $this->db->select('status');
@@ -1021,7 +1341,7 @@ group by no_bbp";
       //bahan baku
      
       //bahan penolong
-      $query3 = "SELECT nama_bp, sum(a.jumlah) * c.jumlah * d.harga as biaya, d.harga, d.satuan, c.no_bbp
+      $query3 = "SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah, c.no_bbp,d.satuan,c.no_bbp,c.jumlah, (sum(a.jumlah) * c.jumlah)*d.harga as biaya 
                   FROM detail_target_produksi a
                   JOIN produk b ON a.no_produk = b.no_produk
                   JOIN bom c ON c.no_produk = b.no_produk
@@ -1058,8 +1378,9 @@ group by no_bbp";
 
 
       //cek selesai produksi
-      $this->db->where('no_trans', $id);
-      $data['cek'] = $this->db->get('detail_produksi_ke2')->num_rows();
+      $this->db->where('no_tp', $no_tp);
+      $this->db->where('no_produk', $no_prod);
+      $data['cek'] = $this->db->get('detail_target_produksi')->row()->status;
 
 
       
@@ -1094,6 +1415,24 @@ group by no_bbp";
    }
 
    public function tambah_produksi_ke2(){
+       $config = array(
+            
+            array(
+               'field' => 'no_tp',
+               'label' => 'ID Target Produksi',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            
+            $this->form_produksi_ke2();
+         } else {
       $data = array('no_trans' => $_POST['no_trans'],
                'tgl_trans' => $_POST['tgl_trans'],
                'status' => '0',
@@ -1105,23 +1444,40 @@ group by no_bbp";
       $this->db->update('target_produksi');
       redirect('c_transaksi/lihat_produksi_ke2');
    }
+   }
 
    public function selesai_produksi_ke2($bbb,$btk,$bop,$bp,$id,$no_tp,$no_prod,$jumlah){
       
       $this->db->set('status', '1');
+      $this->db->where('no_tp', $no_tp);
+      $this->db->where('no_produk', $no_prod);
+      $this->db->update('detail_target_produksi');
+
+      $query4 = "SELECT * FROM detail_target_produksi
+                  WHERE status IS NULL AND no_tp = '$no_tp'";
+      $cektp = $this->db->query($query4)->num_rows();
+
+      if($cektp == 0){
+          $this->db->set('status', '1');
       $this->db->where('no_trans', $id);
       $this->db->update('produksi_ke2');
+      }
+      
+         $this->db->where('no_trans', $id);
+       $tgl =$this->db->get('produksi_ke2')->row()->tgl_trans;
 
 
       //input ke detail produksi ke 1
    
       $data = array('no_trans' => $id,
+               'tgl_trans' => $tgl,
                'no_produk' => $no_prod,
                'bbb' => $bbb,
                'btk' => $btk,
                'bop' => $bop,
                'bp'  => $bp,
-               'jumlah' => $jumlah );
+               'jumlah' => $jumlah,
+               'jumlah_kartu_stok' => $jumlah );
       $this->db->insert('detail_produksi_ke2', $data);
 
       //total bop + bp
@@ -1131,6 +1487,85 @@ group by no_bbp";
         $this->db->set('stok', "stok - ".$jumlah."", FALSE);
       $this->db->where('no_bdp', 'BDP_001');
       $this->db->update('bahan_dalam_proses');
+
+      //update stok di produk
+
+      $this->db->set('stok', "stok + ".$jumlah."", FALSE);
+      $this->db->where('no_produk', $no_prod );
+      $this->db->update('produk');
+
+      //update stok bahan penolong
+        $query3 = "SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah, c.no_bbp,d.satuan,c.no_bbp, (sum(a.jumlah) * c.jumlah)*d.harga as biaya 
+                  FROM detail_target_produksi a
+                  JOIN produk b ON a.no_produk = b.no_produk
+                  JOIN bom c ON c.no_produk = b.no_produk
+                  JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
+                  WHERE a.no_tp = '$no_tp' AND NOT c.no_bbp = 'BB_001' AND a.no_produk = '$no_prod'
+                  group by no_bbp";
+      $cekbp = $this->db->query($query3)->result_array();
+      foreach ($cekbp as $data) {
+        
+         # code...
+         $this->db->set('stok', "stok - ".$data['jumlah']."", FALSE);
+      $this->db->where('no_bp', $data['no_bbp'] );
+      $this->db->update('bahan_penolong');
+      $pengurang = $data['jumlah'];
+      $jumlah11 = $data['jumlah'];
+      $biaya = $data['biaya'];
+      $no_bp = $data['no_bbp'];
+      $query4 = "SELECT * FROM detail_pembelian_bp a
+                  WHERE jumlah_kartu_stok > 0 AND
+                  no_bp = '$no_bp'
+                  ORDER BY no ASC";
+      $row = $this->db->query($query4)->result_array();
+
+          foreach($row as $row) {
+
+          $no  = $row['no'];
+          $stok = $row['jumlah_kartu_stok'];
+          $harga = $row['subtotal'] / $row['jumlah'];
+          if($pengurang > 0) { 
+              $temp = $pengurang;
+              $pengurang = $pengurang - $stok;
+              if($pengurang > 0) {      
+                  $stok_update = 0;
+              }else{
+                  $stok_update = $stok - $temp;
+              }
+
+
+            $this->db->set('jumlah_kartu_stok', $stok_update);
+            $this->db->where('no_bp', $no_bp);
+            $this->db->where('no', $no);
+            $this->db->update('detail_pembelian_bp');
+
+      //pemakaian bp
+       $data5 = array('no_trans' => $id,
+                     'tgl_trans' => $tgl,
+                     'no_bp' => $no_bp,
+                     'unit' => $jumlah11,
+                     'total' => $biaya
+                     );
+       $this->db->insert('detail_pemakaian_bp', $data5);
+
+       //kartu stok bp
+       $harga11 = $biaya /$jumlah11;
+       $harga12 = $harga11 * $stok_update;
+       $total_stok_bp = ($biaya / $jumlah11) * $stok_update;
+       $data6 = array('no_trans' => $id,
+                     'tgl_trans' => $tgl,
+                     'no_bp' => $no_bp,
+                     'unit2' => $jumlah11,
+                     'harga2' => $harga11,
+                     'total2' => $biaya,
+                     'unit3' => $stok_update,
+                     'harga3' => $harga12,
+                     'total3' => $total_stok_bp);
+       $this->db->insert('kartu_stok_bp', $data6);
+       }
+      }
+     
+      }
 
       //jurnal pemakaian
       $this->m_keuangan->GenerateJurnal('5112', $id, 'd', $btk);
@@ -1145,7 +1580,17 @@ group by no_bbp";
        $this->m_keuangan->GenerateJurnal('5112', $id, 'k', $btk);
        $this->m_keuangan->GenerateJurnal('5113', $id, 'k', $bbop);
 
-      redirect('c_transaksi/isi_edit_produksi_ke2/'.$id.'');
+        //kartu stok penj toko
+       $data1 = array('no_trans' => $id,
+                     'tgl_trans' => $tgl,
+                     'no_produk' => $no_prod,
+                     'unit' => $jumlah,
+                     'total' => $pbj);
+       $this->db->insert('kartu_stok_penj', $data1);
+
+     
+
+      redirect('c_transaksi/isi_edit_produksi_ke2/'.$id.'/'.$no_tp.'/'.$no_prod.'');
    }
 
    //PENJUALAN
@@ -1172,7 +1617,7 @@ group by no_bbp";
          $data['id'] = $no_trans;
          $id = $no_trans;
 
-         $this->db->where('status', '2');
+         $this->db->where('status_penjs', NULL);
          $this->db->select('jual, a.no_trans, status,tgl_trans');
          $this->db->from('pembagian a');
          $this->db->join('detail_pembagian b', 'a.no_trans = b.no_trans');
@@ -1182,6 +1627,215 @@ group by no_bbp";
 
    public function isi_edit_penjs($id,$id_pembg){
       $data['id'] = $id;
+      $this->db->where('no_trans', $id);
+      $data['no_trans'] = $this->db->get('penjualan_ips')->row()->no_trans;
+      $this->db->where('no_trans', $id);
+      $data['tgl'] = $this->db->get('penjualan_ips')->row()->tgl_trans;
+      $data['id_pembg'] = $id_pembg;
+
+      $this->db->like('nama_produk', 'Susu Sapi', 'before');
+      $data['satuan'] = $this->db->get('produk')->row()->satuan;
+
+      //jumlah yg bisa dijual
+      $this->db->where('no_trans', $id_pembg);
+      $data['jumlah'] = $this->db->get('detail_pembagian')->row()->jual;
+
+      $this->db->where('no_trans', $id);
+      $this->db->select_sum('jumlah');
+      $data['cek_jml'] = $this->db->get('detail_penjualan_ips')->row()->jumlah;
+
+      //harga jual
+      $this->db->where('no_trans', $id_pembg);
+      $id_prod1 = $this->db->get('pembagian')->row()->no_trans_produksi1;
+
+      $query = "SELECT (bbb + btk + bop) as biaya, jual, produksi
+               FROM pembagian a
+               JOIN detail_pembagian b ON a.no_trans = b.no_trans
+               JOIN detail_produksi_ke1 c ON a.no_trans_produksi1 = c.no_trans
+               WHERE a.no_trans = '$id_pembg'";
+      $data['list'] = $this->db->query($query)->row_array();
+
+      //nyari no produk di produksinyaaa
+      $this->db->where('no_trans', $id_prod1);
+      $data['no_produk'] = $this->db->get('detail_produksi_ke1')->row()->no_produk;
+
+      //status
+      $this->db->where('no_trans', $id);
+      $data['status'] = $this->db->get('penjualan_ips')->row()->status;
+
+      //ips
+      $data['ips'] = $this->db->get('konsumen_ips')->result_array();
+
+      //detail
+
+      $this->db->where('no_trans',$id);
+      $this->db->select('nama_ips, jumlah,subtotal,');
+      $this->db->from('detail_penjualan_ips a');
+      $this->db->join('konsumen_ips b', 'a.no_ips = b.no_ips');
+      $data['detail'] = $this->db->get()->result_array();
+
+      $this->template->load('template', 'penjs/update', $data);
+      // var_dump($data['list']);
+   }
+
+
+   public function tambah_penjs0(){
+       $config = array(
+            
+            array(
+               'field' => 'no_trans_pembg',
+               'label' => 'ID Pembagian',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            
+            $this->form_penjs();
+         } else {
+      $data = array('no_trans' => $_POST['no_trans'],
+               'tgl_trans' => $_POST['tgl_trans'],
+               'status' => '0',
+               'total' => '0',
+               'no_trans_pembg' => $_POST['no_trans_pembg']);
+      $this->db->insert('penjualan_ips', $data);
+
+            $this->db->set('status_penjs', '1');
+            $this->db->where('no_trans', $_POST['no_trans_pembg']);
+            $this->db->update('pembagian');
+
+      redirect('c_transaksi/lihat_penjs');
+   }
+   }
+
+  
+
+   public function tambah_penjs(){
+        $config = array(
+            
+            array(
+               'field' => 'no_ips',
+               'label' => 'Nama Konsumen IPS',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            ),
+            
+            array(
+               'field' => 'jumlah',
+               'label' => 'Jumlah',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+
+           $id_pembg = $_POST['id_pembg'];
+            $id = $_POST['no_trans'];
+            $this->isi_edit_penjs($id,$id_pembg);
+         } else {
+            $id = $_POST['no_trans'];
+            //       $data = array(
+            //    'no_trans' => $_POST['no_trans'],
+            //    'no_produk' => $_POST['no_produk'],
+            //    'jumlah' => $_POST['jumlah'],
+            //    'harga' => '0',
+            //    'subtotal' => '0',
+            //    'no_ips' => $_POST['no_ips']
+            // ); 
+            //          $this->db->insert('detail_penjualan_ips', $data);
+            $this->db->where('no_trans', $id);
+            $this->db->select_sum('jumlah');
+            $cekk = $this->db->get('detail_penjualan_ips')->row()->jumlah;
+
+            $total_jml = $cekk + $_POST['jumlah'];
+
+         if($total_jml <= $_POST['jumlah1']){
+
+
+           $id_pembg = $_POST['id_pembg'];
+            $id = $_POST['no_trans'];
+
+               $pengurang = $_POST['jumlah'];
+            $kode_bahan = $_POST['no_produk'];
+
+         $query111 = "SELECT * FROM detail_produksi_ke1
+               WHERE no_produk = '$kode_bahan' AND 
+               jumlah_kartu_stok > 0 
+               ORDER by no ASC";
+         $row = $this->db->query($query111)->result_array();
+
+          foreach($row as $row) {
+
+          $tgl  = $row['no'];
+          $stok = $row['jumlah_kartu_stok'];
+          $biaya = $row['bbb'] + $row['btk'] + $row['bop'];
+          $margin = ($biaya*($row['stok_jual']/$row['jumlah'])) * 1.3;
+          $harga = $margin / $row['stok_jual'];
+          if($pengurang > 0) { 
+              $temp = $pengurang;
+              $pengurang = $pengurang - $stok;
+              if($pengurang > 0) {      
+                  $stok_update = 0;
+              }else{
+                  $stok_update = $stok - $temp;
+              }
+              // $sql = "UPDATE detail_penjualan SET stok = $stok_update WHERE kode_bahan = '$kode_bahan' AND tgl_masuk = '$tgl'";
+               // $sql = "UPDATE barang SET stok = $stok_update WHERE nama = '$barang' AND tgl = '$tgl'";
+            $this->db->set('jumlah_kartu_stok', $stok_update);
+            $this->db->where('no_produk', $kode_bahan);
+            $this->db->where('no', $tgl);
+            $this->db->update('detail_produksi_ke1');
+
+         
+            $_POST['subtotal'] = $_POST['jumlah'] * $harga;
+            $subtotal = $_POST['jumlah'] * $harga;
+            $cek12345 = array(
+               'no_trans' => $_POST['no_trans'],
+               'no_produk' => 'PR_001',
+               'jumlah' => $_POST['jumlah'],
+               'harga' => $harga,
+               'subtotal' => $subtotal,
+               'no_ips' => $_POST['no_ips'],
+               'jumlah_kartu_stok' => $stok_update
+            ); 
+
+            $this->db->where('no_trans', $id);
+            $this->db->where('no_ips', $_POST['no_ips']);
+            $cekcek = $this->db->get('detail_penjualan_ips')->num_rows();
+            if($cekcek == 0){
+               $this->db->insert('detail_penjualan_ips', $cek12345);
+            }else{
+              $this->db->set('jumlah', "jumlah + ".$_POST['jumlah']."", FALSE);
+             $this->db->set('subtotal', "subtotal +".$_POST['subtotal']."", FALSE);
+            $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_ips' => $_POST['no_ips']));
+            $this->db->update('detail_penjualan_ips');
+            }
+
+        
+
+          }
+
+      }
+              $this->isi_edit_penjs($id, $id_pembg);
+
+           }else{
+            $data['error'] = 'Jumlah penjualan melebihi stok!';
+             $id_pembg = $_POST['id_pembg'];
+            $id = $_POST['no_trans'];
+
+            $data['id'] = $id;
       $this->db->where('no_trans', $id);
       $data['no_trans'] = $this->db->get('penjualan_ips')->row()->no_trans;
       $this->db->where('no_trans', $id);
@@ -1217,6 +1871,10 @@ group by no_bbp";
       //ips
       $data['ips'] = $this->db->get('konsumen_ips')->result_array();
 
+      //cek jml
+       $this->db->where('no_trans', $id);
+      $this->db->select_sum('jumlah');
+      $data['cek_jml'] = $this->db->get('detail_penjualan_ips')->row()->jumlah;
       //detail
 
       $this->db->where('no_trans',$id);
@@ -1225,106 +1883,53 @@ group by no_bbp";
       $this->db->join('konsumen_ips b', 'a.no_ips = b.no_ips');
       $data['detail'] = $this->db->get()->result_array();
 
-     
-  
-
-    
-
-    
       $this->template->load('template', 'penjs/update', $data);
-      // var_dump($data['list']);
-   }
 
-
-   public function tambah_penjs0(){
-      $data = array('no_trans' => $_POST['no_trans'],
-               'tgl_trans' => $_POST['tgl_trans'],
-               'status' => '0',
-               'total' => '0',
-               'no_trans_pembg' => $_POST['no_trans_pembg']);
-      $this->db->insert('penjualan_ips', $data);
-
-      redirect('c_transaksi/lihat_penjs');
-   }
-
-  
-
-   public function tambah_penjs(){
-        $config = array(
-            
-            array(
-               'field' => 'no_ips',
-               'label' => 'Nama Konsumen IPS',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            ),
-            
-            array(
-               'field' => 'jumlah',
-               'label' => 'Jumlah',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
-            )
-         );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_trans'];
-            $this->isi_edit_penjs($id);
-         } else {
-           $id = $_POST['no_trans'];
-           $id_pembg = $_POST['id_pembg'];
-
-            $_POST['subtotal'] = $_POST['harga'] * $_POST['jumlah'];
-            $data = array(
-               'no_trans' => $_POST['no_trans'],
-               'no_produk' => $_POST['no_produk'],
-               'jumlah' => $_POST['jumlah'],
-               'subtotal' => $_POST['subtotal'],
-               'no_ips' => $_POST['no_ips']
-            );
-            $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_produk' => $_POST['no_produk'], 'no_ips' => $_POST['no_ips']));
-            $cek =  $this->db->get('detail_penjualan_ips')->num_rows();
-            if($cek == 0 ){
-            $this->db->insert('detail_penjualan_ips', $data);
-            $this->isi_edit_penjs($id, $id_pembg);
-            }else{
-            $this->db->set('jumlah', "jumlah + ".$_POST['jumlah']."", FALSE);
-            $this->db->set('subtotal', "subtotal +".$_POST['subtotal']."", FALSE);
-            $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_produk' => $_POST['no_produk'], 'no_ips' => $_POST['no_ips']));
-            $this->db->update('detail_penjualan_ips');
-            $this->isi_edit_penjs($id, $id_pembg);
-            
-         }
-         
+           }
        
          }
    }
 
-   public function selesai_penjs($id, $total, $jumlah){
-
+   public function selesai_penjs($id, $total, $jumlah, $tgl){
 
       $this->db->set('status', "1", FALSE);
       $this->db->set('total', $total);
       $this->db->where('no_trans', $id);
       $this->db->update('penjualan_ips');
 
-         
-
+       $fix_total = $total * (100/130);  
+       $bebanadm = $jumlah * 750;
+       $bebanpms = $jumlah * 750;
+       $ttlbbn = $bebanadm + $bebanpms;
        $this->m_keuangan->GenerateJurnal('1111', $id, 'd', $total);
       $this->m_keuangan->GenerateJurnal('4111', $id, 'k', $total);
+       $this->m_keuangan->GenerateJurnal('5211', $id, 'd', $bebanadm);
+      $this->m_keuangan->GenerateJurnal('5212', $id, 'd', $bebanpms);
+       $this->m_keuangan->GenerateJurnal('1111', $id, 'k', $ttlbbn);
+       $this->m_keuangan->GenerateJurnal('6111', $id, 'd', $fix_total);
+      $this->m_keuangan->GenerateJurnal('1115', $id, 'k', $fix_total);
+
 
       //ngurang produk
       $this->db->set('stok', "stok - ".$jumlah."", FALSE);
             $this->db->like('nama_produk', 'Susu Sapi', 'none');
             $this->db->update('produk');
 
-      //kartu stok
+      $this->db->where('no_trans', $id);
+      $list = $this->db->get('detail_penjualan_ips')->result_array();
+      foreach ($list as $data) {
+         # code...
+         $total = ($data['subtotal'] *(100/130) ) *($data['jumlah_kartu_stok'] / $data['jumlah']);
+
+         $data1 = array('no_trans' => $id,
+                        'tgl_trans' => $tgl,
+                        'no_produk' => $data['no_produk'],
+                        'unit' => $data['jumlah_kartu_stok'],
+                        'total' => $total);
+         $this->db->insert('kartu_stok_penj_ips', $data1);
+      }
+
+    
       redirect('c_transaksi/lihat_penjs');   
 
    }
@@ -1359,7 +1964,7 @@ group by no_bbp";
       $data['total'] = $this->db->get('detail_penjualan_toko')->row()->subtotal;
       $data['barang'] = $this->db->get('produk')->result_array();
       $this->db->where('no_trans', $id);
-      $this->db->select('nama_produk, a.jumlah, subtotal, harga, satuan');
+      $this->db->select('nama_produk, a.jumlah,harga, subtotal, satuan');
       $this->db->from('detail_penjualan_toko a');
       $this->db->join('produk b', 'a.no_produk = b.no_produk');
       $data['detail'] = $this->db->get()->result_array();
@@ -1388,30 +1993,70 @@ group by no_bbp";
           
             $this->form_penjt();
          } else {
-            $this->db->where('no_produk', $_POST['no_produk']);
-            $this->db->select('harga');
-            $harga = $this->db->get('produk')->row()->harga;
-            $_POST['subtotal'] = $harga * $_POST['jumlah'];
+ 
+       
+               $pengurang = $_POST['jumlah'];
+            $kode_bahan = $_POST['no_produk'];
+
+         $query111 = "SELECT * FROM detail_produksi_ke2 
+               WHERE no_produk = '$kode_bahan' AND 
+               jumlah_kartu_stok > 0 
+               ORDER by no ASC";
+         $row = $this->db->query($query111)->result_array();
+
+          foreach($row as $row) {
+
+          $tgl  = $row['no'];
+          $stok = $row['jumlah_kartu_stok'];
+          $biaya = $row['bbb'] + $row['btk'] + $row['bop'] + $row['bp'];
+          $harga = $biaya / $row['jumlah'];
+          $margin = $biaya * 1.3;
+          if($pengurang > 0) { 
+              $temp = $pengurang;
+              $pengurang = $pengurang - $stok;
+              if($pengurang > 0) {      
+                  $stok_update = 0;
+              }else{
+                  $stok_update = $stok - $temp;
+              }
+              // $sql = "UPDATE detail_penjualan SET stok = $stok_update WHERE kode_bahan = '$kode_bahan' AND tgl_masuk = '$tgl'";
+               // $sql = "UPDATE barang SET stok = $stok_update WHERE nama = '$barang' AND tgl = '$tgl'";
+            $this->db->set('jumlah_kartu_stok', $stok_update);
+            $this->db->where('no_produk', $kode_bahan);
+            $this->db->where('no', $tgl);
+            $this->db->update('detail_produksi_ke2');
+
+         
+            $jumlah1 = $row['jumlah'] - $stok_update;
+            $_POST['subtotal'] = $jumlah1 * $harga;
             $data = array(
                'no_trans' => $_POST['no_trans'],
                'no_produk' => $_POST['no_produk'],
-               'jumlah' => $_POST['jumlah'],
-               'subtotal' => $_POST['subtotal']
-            );
-            $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_produk' => $_POST['no_produk']));
-            $cek =  $this->db->get('detail_penjualan_tp')->num_rows();
+               'jumlah' => $jumlah1,
+               'harga' => $harga,
+               'subtotal' => $_POST['subtotal'],
+               'cek_stok_penj' => $stok_update
+            );   
+          
+
+            $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_produk' => $_POST['no_produk'], 'harga' => $harga));
+            $cek =  $this->db->get('detail_penjualan_toko')->num_rows();
             if($cek == 0 ){
             $this->db->insert('detail_penjualan_toko', $data);
-            $this->form_penjt();
             }else{
-            $this->db->set('jumlah', "jumlah + ".$_POST['jumlah']."", FALSE);
+            $this->db->set('jumlah', "jumlah + ".$stok_update."", FALSE);
              $this->db->set('subtotal', "subtotal +".$_POST['subtotal']."", FALSE);
-            $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_produk' => $_POST['no_produk']));
+            $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_produk' => $_POST['no_produk'], 'harga' => $harga));
             $this->db->update('detail_penjualan_toko');
-            redirect('c_transaksi/form_penjt');
+
             
          }
-         
+        
+          }
+
+      }
+              //    
+                 redirect('c_transaksi/form_penjt');    
        
          }
    }
@@ -1422,9 +2067,42 @@ group by no_bbp";
                      'total' => $total,
                      'status' => '1' );
       $this->db->insert('penjualan_toko', $data);
+  $fix_total = $total * (100/130);  
+       $bebanadm = $jumlah * 750;
+       $bebanpms = $jumlah * 750;
+       $ttlbbn = $bebanadm + $bebanpms;
+     
+      $fix_total = $total * (100/130);
+       $this->m_keuangan->GenerateJurnal('1111', $id, 'd', $total);
+      $this->m_keuangan->GenerateJurnal('4111', $id, 'k', $total);
+      $this->m_keuangan->GenerateJurnal('5211', $id, 'd', $bebanadm);
+      $this->m_keuangan->GenerateJurnal('5212', $id, 'd', $bebanpms);
+       $this->m_keuangan->GenerateJurnal('1111', $id, 'k', $ttlbbn);
+       $this->m_keuangan->GenerateJurnal('6111', $id, 'd', $fix_total);
+      $this->m_keuangan->GenerateJurnal('1115', $id, 'k', $fix_total);
 
-       $this->m_keuangan->GenerateJurnal('111', $id, 'd', $total);
-      $this->m_keuangan->GenerateJurnal('411', $id, 'k', $total);
+
+      $this->db->where('b.no_trans', $id);
+      $this->db->from('penjualan_toko a');
+      $this->db->join('detail_penjualan_toko b', 'a.no_trans = b.no_trans');
+      $this->db->or_not_like('status', '1', 'none');
+      $list = $this->db->get()->result_array();
+
+      foreach ($list as $data) {
+         # code...
+         $id = $data['b.no_trans'];
+         $tgl = $data['tgl_trans'];
+         $no_produk = $data['no_produk'];
+         $total = $data['cek_stok_penj'] * round($data['harga']);
+         $data = array('no_trans' => $id,
+                     'tgl_trans' =>$tgl,   
+                     'no_produk' => $no_produk,
+                     'unit' => $data['cek_stok_penj'],
+                     'total' => $total);
+         $this->db->insert('kartu_stok_penj', $data);
+
+      }
+
       redirect('c_transaksi/lihat_penjt');
 
    }

@@ -44,6 +44,12 @@
 			<button type="submit" class="btn btn-success">Tambah</button>
 		</form>
 		<hr>
+			<div class="form-group" >
+			  <label>Total Transaksi</label>
+			  <input readonly type = "text" class = "form-control" value = "<?php echo format_rp($total);?>">
+			</div>
+		<hr>
+
 		<table  class="table table-striped table-bordered table-hover jambo_table" >
 		 	<thead>
 			<tr class="headings">
@@ -71,10 +77,7 @@
 		</tbody>
 			
 		</table>
-		<div class="form-group" >
-			  <label>Total Transaksi</label>
-			  <input readonly type = "text" class = "form-control" value = "<?php echo format_rp($total);?>">
-			</div>
+	
 		<a <?php if($detail == TRUE){?>href = "<?php echo site_url()."/c_transaksi/selesai_penjt/$id/$total"?>" <?php }else{ ?> disabled="disabled" <?php } ?> class="btn btn-info" role="button">Selesai Belanja</a>
 			<a href = "<?php echo site_url()."/c_transaksi/lihat_penjt"?>" type="button" class="btn btn-default">Kembali</a>
 		</form>

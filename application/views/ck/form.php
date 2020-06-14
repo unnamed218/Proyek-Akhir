@@ -32,6 +32,8 @@
 															}
 								?>
 						</select>
+						
+			  <?php echo form_error('no_trans_pembb'); ?>
 	
 				</div>
 			

@@ -1,13 +1,13 @@
 <html>
-	<!-- <head><center><h3><b>Master Data Penjualan IPS</b></h3></center></head>
+	<!-- <head><center><h3><b>Master Data Penjualan Toko</b></h3></center></head>
 	<hr> -->
 	<body>
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar Penjualan IPS</b></h3>
+    <h3 class="panel-title"><b>Daftar Penjualan Toko</b></h3>
   </div>
   	 <div class="x_content">
-  	 		<a href = "<?php echo site_url()."/c_transaksi/form_penjs"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
+  	 		<a href = "<?php echo site_url()."/c_transaksi/form_penjt"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
   	 	 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">
@@ -28,7 +28,7 @@
 							<td>".$data['tgl_trans']."</td>
 							" ?>
 							<td>
-							<a href="isi_edit_penjs/<?php echo $data['no_trans']; ?>" >
+							<a href="isi_edit_penjt/<?php echo $data['no_trans']; ?>" >
 										
 							<span class="fa-stack">
 							  <i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>

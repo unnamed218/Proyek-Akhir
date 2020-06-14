@@ -12,6 +12,7 @@
   </div>
   	 <div class="x_content">
 <div>
+	<?php if (isset($error)){ echo "<div class='alert alert-danger'><li>".$error."</li></div>"; }?>
 	
 		<div class="row">
 	<div class="form-group">
@@ -54,14 +55,16 @@
 		</div>
 			<div class="col-xs-4">
 				<div class="form-group">
-				<label>Dijual ke IPS</label>
+				<label>Penjualan ke IPS</label>
 				<input type="text" class="form-control"  name="jual" min="1" step="1"  onkeypress=" return hanyaAngka(event)" oninput="validity.valid||(value='');">
+			  <?php echo form_error('jual'); ?>
 			</div>
 		</div>
 			<div class="col-xs-4">
 				<div class="form-group">
 				<label>Dari</label>
 				<input readonly type="text" class="form-control"  value="<?php echo $jumlah?> <?php echo $satuan?>"  >
+				<input readonly type="hidden" class="form-control"  value="<?php echo $jumlah?>"  name="jumlah">;
 			</div>
 		</div>
 		
@@ -177,7 +180,7 @@
 		<a href="lihat_BOM" class="btn btn-default">Back</a>
 		<input type="button" class="btn btn-default" value="Back" onClick=history.go(-1);> -->
 	</div>
-	<a href = "<?php echo site_url()."/c_transaksi/lihat_pembagian"?>" class="btn btn-default" role="button">Kembali</a>
+	<a href = "<?php echo site_url()."c_transaksi/lihat_pembagian"?>" class="btn btn-default" role="button">Kembali</a>
 
 	</div>
 	</div>

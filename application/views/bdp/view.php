@@ -1,10 +1,10 @@
 <html>
-	<!-- <head><center><h3><b>Master Data Bahan Dalam Proses</b></h3></center></head>
+	<!-- <head><center><h3><b>Master Data Produk Dalam Proses</b></h3></center></head>
 	<hr> -->
 	<body>
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar Bahan Dalam Proses</b></h3>
+    <h3 class="panel-title"><b>Daftar Produk Dalam Proses</b></h3>
   </div>
   	 <div class="x_content">
   	 		<a href = "<?php echo site_url()."/c_masterdata/form_bdp"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
@@ -12,8 +12,8 @@
 		 	<thead>
 			<tr class="headings">
 				<th style="width: 2px;">No</th>
-				<th>ID Bahan Dalam Proses</th>
-				<th>Nama Bahan Dalam Proses</th>
+				<th>ID Produk Dalam Proses</th>
+				<th>Nama Produk Dalam Proses</th>
 				<th>Stok</th>
 				<th>Satuan</th>
 				<th>Aksi</th>

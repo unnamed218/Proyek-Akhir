@@ -6,7 +6,7 @@
 
 <div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Transaksi Produksi IPS</b></h3>
+    <h3 class="panel-title"><b><?php if($cek != '0'){?>Detail <?php } ?>Transaksi Produksi IPS</b></h3>
   </div>
   	 <div class="x_content">
 <div>
@@ -90,7 +90,7 @@
 							<td align='right'>".format_rp($data['harga'])."</td>
 						
 							
-							<td align='right'>".format_rp($data['harga']*$data['jumlah'])."</td>"; ?>
+							<td align='right'>".format_rp($data['harga']*$data['jumlah']*$jmlprod)."</td>"; ?>
 							
 
 						</tr>
@@ -161,7 +161,7 @@
 			<tr>
 				<td>Biaya Tenaga Kerja</td>
 				<td><?php echo format_rp(round($btk))?> </td>
-				<td><?php echo format_rp(round($btk / $jumlah))?></td>
+				<td><?php echo format_rp(round($btk / $jmlprod))?></td>
 				<?php $bbtk = round($btk); ?>
 			</tr>
 			<tr>
@@ -185,7 +185,7 @@
 
 							<td>".format_rp(ROUND($data['harga'] / $hari))."</td>
 							
-							<td>".format_rp(ROUND(($data['harga']/ $hari)/$jumlah))."</td>
+							<td>".format_rp(ROUND(($data['harga']/ $hari)/$jmlprod))."</td>
 							<tr>"; 
 							$bbop = round($bbop + ($data['harga'] / $hari)); ?>
 					<?php

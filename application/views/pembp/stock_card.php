@@ -14,16 +14,16 @@
   	
   	</div>              
   	
-  	 	<form align ="center" method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_bb' ?> " class="form-inline">
+  	 	<form align ="center" method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_bp' ?> " class="form-inline">
   	 		
 		<div class="col-md-9">
-			  <!-- <label>Nama Bahan Baku &nbsp&nbsp&nbsp</label> -->
-			   <label>Bahan Baku :</label>
-			  <select name="no_bb" class="form-control">
-			  	<option value="#" disabled selected>Pilih Bahan Baku</option>
+			  <!-- <label>Nama Bahan Penolong &nbsp&nbsp&nbsp</label> -->
+			   <label>Bahan Penolong :</label>
+			  <select name="no_bp" class="form-control">
+			  	<option value="#" disabled selected>Pilih Bahan Penolong</option>
 			 	 <?php
-				foreach($bahan_baku as $data){
-				echo "<option value = ".$data['no_bb'].">".$data['nama_bb']."</option>";
+				foreach($bahan_penolong as $data){
+				echo "<option value = ".$data['no_bp'].">".$data['nama_bp']."</option>";
 					}
 				?>
 			  </select>
@@ -69,14 +69,14 @@
 <div class="row">
 		<div class="col-sm-6">
 			<div class="form-group">
-			<label>Nama Bahan Baku</label>
-			<input type="text" class="form-control" value="<?php echo $bahan_baku1['nama_bb']?>" readonly>
+			<label>Nama Bahan Penolong</label>
+			<input type="text" class="form-control" value="<?php echo $bahan_penolong1['nama_bp']?>" readonly>
 		</div>
 	</div>
 	<div class="col-sm-6">
 			<div class="form-group">
-			<label>Satuan Bahan Baku</label>
-			<input type="text" class="form-control" value="<?php echo $bahan_baku1['satuan']?>" readonly>
+			<label>Satuan Bahan Penolong</label>
+			<input type="text" class="form-control" value="<?php echo $bahan_penolong1['satuan']?>" readonly>
 		</div>
 	</div>
 </div>
@@ -114,11 +114,11 @@
 			foreach($result as $data){
 				
 				$no++;
-				$cek = substr($data['id_trans'],0,3);
-				if($cek == 'PMB'){
-				$maka = 'Pembelian';
+				$cek = substr($data['no_trans'],0,4);
+				if($cek == 'PMBP'){
+				$maka = 'Pemb. BP';
 				}else{
-				$maka = 'Pemakaian';
+				$maka = 'Produksi Olahan';
 				}
 			
 			
@@ -127,7 +127,7 @@
 				echo "
 			<td>$no</td>
 			<td>".$data['tgl_trans']."</td>
-			<td>".$data['id_trans']."</td>
+			<td>".$data['no_trans']."</td>
 			<td>".$maka."</td>
 			<td>".$data['jumlah']."</td>
 			<td align='right'>".format_rp($data['rata'])."</td>

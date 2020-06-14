@@ -13,6 +13,7 @@
   	 <div class="x_content">
 <div>
 	
+	<?php if (isset($error)){ echo "<div class='alert alert-danger'><li>".$error."</li></div>"; }?>
 		<div class="row">
 	<div class="form-group">
 			<div class="col-xs-6">
@@ -50,6 +51,7 @@
 				<div class="form-group">
 				<label>Lulus Uji Lab</label>
 				<input type="number" class="form-control" name="lulus">
+			  <?php echo form_error('lulus'); ?>
 			</div>
 		</div>
 			<div class="col-xs-3">

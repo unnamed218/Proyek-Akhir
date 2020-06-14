@@ -1,24 +1,24 @@
 <html>
 	<head>
-		<title>Master Data Bahan Dalam Proses</title>
+		<title>Master Data Produk Dalam Proses</title>
 	</head>
-	<!-- <center><h3><b>Master Data Bahan Dalam Proses</h3></b></center>
+	<!-- <center><h3><b>Master Data Produk Dalam Proses</h3></b></center>
 	<hr> -->
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Form Bahan Dalam Proses</b></h3>
+    <h3 class="panel-title"><b>Form Produk Dalam Proses</b></h3>
   </div>
   	 <div class="x_content">
   	 	
 	<body>
 		<form method = "POST" action = "<?php echo site_url('c_masterdata/tambah_bdp');?>">
 			<div class="form-group">
-			  <label>ID Bahan Dalam Proses</label>
+			  <label>ID Produk Dalam Proses</label>
 			  <input type = "text" name = "no_bdp" class = "form-control" value="<?php echo $id?>" readonly>
 			
 			</div>
 			<div class="form-group">
-			  <label>Nama Bahan Dalam Proses</label>
+			  <label>Nama Produk Dalam Proses</label>
 			  <input type = "text" name = "nama_bdp" class = "form-control">
 			  
 			  <?php echo form_error('nama_bdp'); ?>

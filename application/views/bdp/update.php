@@ -5,7 +5,7 @@
 
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><center><b>Edit Bahan Dalam Proses</b></center></h3>
+    <h3 class="panel-title"><center><b>Edit Produk Dalam Proses</b></center></h3>
   </div>
   	 <div class="x_content">
 <div>
@@ -13,7 +13,7 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-xs-4">
-				<label>ID Bahan Dalam Proses</label>
+				<label>ID Produk Dalam Proses</label>
 				<input readonly type="text" class="form-control" name="no_bdp" value="<?php echo $data['no_bdp'] ; ?>"  >
 			</div>
 		</div>
@@ -21,7 +21,7 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-xs-4">
-				<label>Nama Bahan Dalam Proses</label>
+				<label>Nama Produk Dalam Proses</label>
 				<input type="text" class="form-control" name="nama_bdp" value="<?php echo $data['nama_bdp'] ; ?>" >
 			</div>
 		</div>

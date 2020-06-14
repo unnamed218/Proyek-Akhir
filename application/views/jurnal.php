@@ -57,7 +57,7 @@
 			<th style="width:2px">No</th>
 			<th>Tanggal</th>
 
-			<th style="width:2px">Sumber</th>
+			<th style="width:2px">ID Trans</th>
 			<th>Keterangan</th>
 			<th style="width:2px">Ref</th>
 			<th>Debit</th>

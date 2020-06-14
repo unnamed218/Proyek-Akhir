@@ -52,6 +52,7 @@
 				<div class="form-group">
 				<label>Jumlah</label>
 				<input type="number" class="form-control" name="jumlah" >
+			  <?php echo form_error('jumlah'); ?>
 				</div>
 			</div>
 			
@@ -66,7 +67,8 @@
 															}
 								?>
 						</select>
-	
+			  <?php echo form_error('no_peternak'); ?>
+					
 				</div>
 			</div>
 			

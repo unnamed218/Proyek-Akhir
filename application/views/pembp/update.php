@@ -77,6 +77,7 @@
 										}
 									?>
 								  </select>
+								  <?php echo form_error('no_supp_bp'); ?>
 			
 							</td>
 							<td>

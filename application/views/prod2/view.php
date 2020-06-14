@@ -1,10 +1,10 @@
 <html>
-	<!-- <head><center><h3><b>Master Data Produksi Kedua</b></h3></center></head>
+	<!-- <head><center><h3><b>Master Data Produksi Olahan</b></h3></center></head>
 	<hr> -->
 	<body>
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar Produksi Kedua</b></h3>
+    <h3 class="panel-title"><b>Daftar Produksi Olahan</b></h3>
   </div>
   	 <div class="x_content">
   	 		<a href = "<?php echo site_url()."/c_transaksi/form_produksi_ke2"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>

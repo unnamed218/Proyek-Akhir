@@ -205,7 +205,7 @@ class c_keuangan extends CI_Controller
 	}
 
 
-	//laporan pembelian bahan penolong
+	//laporan penjualan ips
 	public function lap_penjs(){
 		 
    		if(isset($_POST['bulan'], $_POST['tahun'])){
@@ -218,6 +218,20 @@ class c_keuangan extends CI_Controller
 		$this->template->load('template','penjs/report', $data);
 		
 	}
+
+	public function lap_penjt(){
+		 
+   		if(isset($_POST['bulan'], $_POST['tahun'])){
+   			$this->db->where('MONTH(tgl_trans)', $_POST['bulan']);
+   			$this->db->where('YEAR(tgl_trans)', $_POST['tahun']);
+   			$data['bulan'] = $_POST['bulan'];
+   			$data['tahun'] = $_POST['tahun'];
+   		}
+		$data['result'] = $this->db->get('penjualan_toko')->result_array();
+		$this->template->load('template','penjt/report', $data);
+		
+	}
+
 
 	//laporan biaya produksi IPS
 
@@ -305,7 +319,7 @@ class c_keuangan extends CI_Controller
 		public function lap_bp_olahan(){
 
 			
-		$query = "SELECT a.no_trans, tgl_trans, sum(bbb) as bbb, sum(btk) as btk, sum(bop) as bop, sum(bp) as bp
+		$query = "SELECT a.no_trans, a.tgl_trans, sum(bbb) as bbb, sum(btk) as btk, sum(bop) as bop, sum(bp) as bp
 				FROM produksi_ke2 a
 				JOIN detail_produksi_ke2 b ON a.no_trans = b.no_trans
 				GROUP BY a.no_trans";
@@ -456,6 +470,254 @@ class c_keuangan extends CI_Controller
 	
 
 
+	public function lap_ks_prod(){
+		 if(isset($_POST['no_produk'])){
+       $no = $_POST['no_produk'];
+       $awal = $_POST['tgl_awal'];
+       $akhir = $_POST['tgl_akhir'];
+        $data['no'] = $no;
+        $data['awal'] = $awal;
+        $data['akhir'] = $akhir;
+     
+        $this->db->where('no_produk', $no);
+        $data['produk1'] = $this->db->get('produk')->row_array();
+        $data['produk'] = $this->db->get('produk')->result_array();
+     $query1 = "SELECT a.tgl_trans, a.no_trans, ifnull((z.jumlah), '0') as jumlah, 
+                    ifnull(round((z.bbb+z.btk+z.bop+z.bp)/z.jumlah), '0') as rata, 
+                    ifnull(((z.bbb+z.btk+z.bop+z.bp)),'0') as total_pmb,  
+                    ifnull((c.jumlah),'0') as jumlah_bahan_baku, 
+                    ifnull((c.harga),'0') as harga_satuan, 
+                    ifnull((c.subtotal),'0') as subtotal_pmk, 
+                    ifnull((a.unit),'0') as unit, 
+                    ifnull((a.total),'0') as total, 
+                    ifnull(round(a.total/a.unit), '0') as ratatotal 
+                    FROM kartu_stok_penj a 
+LEFT JOIN detail_produksi_ke2 z ON z.no_trans = a.no_trans
+RIGHT JOIN produk x ON x.no_produk = a.no_produk
+LEFT JOIN detail_penjualan_toko c ON c.no_trans = a.no_trans
+
+WHERE a.no_produk = '$no_produk' AND tgl_trans >= '$awal' AND tgl_trans <= '$akhir'
+GROUP BY a.no, a.no_produk, a.no_trans";
+
+        $data['result'] = $this->db->query($query1)->result_array();
+        $this->template->load('template','penjt/stock_card',$data);
+      }else{
+        $no = 'PR_002';
+      
+        $this->db->where('no_produk', $no);
+        $data['produk1'] = $this->db->get('produk')->row_array();
+        $data['produk'] = $this->db->get('produk')->result_array();
+     $query1 = "SELECT a.tgl_trans, a.no_trans, ifnull((z.jumlah), '0') as jumlah, 
+                    ifnull(round((z.bbb+z.btk+z.bop+z.bp)/z.jumlah), '0') as rata, 
+                    ifnull(((z.bbb+z.btk+z.bop+z.bp)),'0') as total_pmb,  
+                    ifnull((c.jumlah),'0') as jumlah_bahan_baku, 
+                    ifnull((c.harga),'0') as harga_satuan, 
+                    ifnull((c.subtotal),'0') as subtotal_pmk, 
+                    ifnull((a.unit),'0') as unit, 
+                    ifnull((a.total),'0') as total, 
+                    ifnull(round(a.total/a.unit), '0') as ratatotal 
+                    FROM kartu_stok_penj a 
+LEFT JOIN detail_produksi_ke2 z ON z.no_trans = a.no_trans
+RIGHT JOIN produk x ON x.no_produk = a.no_produk
+LEFT JOIN detail_penjualan_toko c ON c.no_trans = a.no_trans
+
+WHERE a.no_produk = 'PR_002' 
+GROUP BY a.no, a.no_produk, a.no_trans";
+
+
+        $data['result'] = $this->db->query($query1)->result_array();
+        $this->template->load('template','penjt/stock_card',$data);
+      }
+	}
+
 	
+
+	public function lap_ks_prod1(){
+		 if(isset($_POST['tgl_awal'], $_POST['tgl_akhir'])){
+       $no = 'PR_001';
+       $awal = $_POST['tgl_awal'];
+       $akhir = $_POST['tgl_akhir'];
+        $data['no'] = $no;
+        $data['awal'] = $awal;
+        $data['akhir'] = $akhir;
+     
+        $this->db->where('no_produk', $no);
+        $data['produk1'] = $this->db->get('produk')->row_array();
+        $data['produk'] = $this->db->get('produk')->result_array();
+     $query1 = "SELECT a.tgl_trans, a.no_trans, ifnull((z.stok_jual), '0') as jumlah, 
+                    ifnull(round(((z.bbb+z.btk+z.bop)* (z.stok_jual /z.jumlah))/z.stok_jual), '0') as rata, 
+                    ifnull(round(((z.bbb+z.btk+z.bop)* (z.stok_jual /z.jumlah))),'0') as total_pmb,  
+                    ifnull(sum(c.jumlah),'0') as jumlah_bahan_baku, 
+                    ifnull(sum(c.subtotal)/sum(c.jumlah),'0') as harga_satuan, 
+                    ifnull(sum(c.subtotal),'0') as subtotal_pmk, 
+                    ifnull((a.unit),'0') as unit, 
+                    ifnull((a.total),'0') as total, 
+                    ifnull(round(a.total/a.unit), '0') as ratatotal 
+                    FROM kartu_stok_penj_ips a 
+LEFT JOIN pembagian e ON e.no_trans = a.no_trans
+LEFT JOIN detail_produksi_ke1 z ON z.no_trans = e.no_trans_produksi1
+RIGHT JOIN produk x ON x.no_produk = a.no_produk
+LEFT JOIN detail_penjualan_ips c ON c.no_trans = a.no_trans
+LEFT JOIN pembagian d ON d.no_trans_produksi1 = z.no_trans
+WHERE a.no_produk = 'PR_001' AND tgl_trans >= '$awal' AND tgl_trans <= '$akhir'
+GROUP BY a.no, a.no_produk, a.no_trans";
+
+        $data['result'] = $this->db->query($query1)->result_array();
+        $this->template->load('template','penjs/stock_card',$data);
+      }else{
+        $no = 'PR_002';
+      
+        $this->db->where('no_produk', $no);
+        $data['produk1'] = $this->db->get('produk')->row_array();
+        $data['produk'] = $this->db->get('produk')->result_array();
+     $query1 = "SELECT a.tgl_trans, a.no_trans, ifnull((z.stok_jual), '0') as jumlah, 
+                    ifnull(round(((z.bbb+z.btk+z.bop)* (z.stok_jual /z.jumlah))/z.stok_jual), '0') as rata, 
+                    ifnull(round(((z.bbb+z.btk+z.bop)* (z.stok_jual /z.jumlah))),'0') as total_pmb,  
+                    ifnull(c.jumlah,'0') as jumlah_bahan_baku, 
+                    ifnull(c.subtotal/c.jumlah,'0') as harga_satuan, 
+                    ifnull(c.subtotal,'0') as subtotal_pmk, 
+                    ifnull((a.unit),'0') as unit, 
+                    ifnull((a.total),'0') as total, 
+                    ifnull(round(a.total/a.unit), '0') as ratatotal 
+                    FROM kartu_stok_penj_ips a 
+LEFT JOIN pembagian e ON e.no_trans = a.no_trans
+LEFT JOIN detail_produksi_ke1 z ON z.no_trans = e.no_trans_produksi1
+RIGHT JOIN produk x ON x.no_produk = a.no_produk
+LEFT JOIN detail_penjualan_ips c ON c.no_trans = a.no_trans
+LEFT JOIN pembagian d ON d.no_trans_produksi1 = z.no_trans
+
+WHERE a.no_produk = 'PR_001'
+GROUP BY a.no";
+
+
+        $data['result'] = $this->db->query($query1)->result_array();
+        $this->template->load('template','penjs/stock_card',$data);
+      }
+	}
+
+	public function lap_ks_bb(){
+		 if(isset($_POST['no_bb'])){
+       $no = $_POST['no_bb'];
+       $awal = $_POST['tgl_awal'];
+       $akhir = $_POST['tgl_akhir'];
+        $data['no'] = $no;
+        $data['awal'] = $awal;
+        $data['akhir'] = $akhir;
+     
+        $this->db->where('no_bb', $no);
+        $data['bahan_baku1'] = $this->db->get('bahan_baku')->row_array();
+        $data['bahan_baku'] = $this->db->get('bahan_baku')->result_array();
+     $query1 = "SELECT a.tgl_trans, a.no_trans, ifnull((d.lulus), '0') as jumlah, 
+                    ifnull((z.subtotal)*(d.lulus/z.jumlah) / d.lulus, '0') as rata, 
+                    ifnull((z.subtotal)*(d.lulus/z.jumlah),'0') as total_pmb,  
+                    ifnull((c.jumlah),'0') as jumlah_bahan_baku, 
+                    ifnull((c.bbb)/c.jumlah,'0') as harga_satuan, 
+                    ifnull((c.bbb),'0') as subtotal_pmk, 
+                    ifnull((a.unit),'0') as unit, 
+                    ifnull((a.total),'0') as total, 
+                    ifnull(round(a.total/a.unit), '0') as ratatotal 
+                    FROM kartu_stok_bb a 
+LEFT JOIN cek_kualitas e ON e.no_trans = a.no_trans
+LEFT JOIN detail_pembelian_bb z ON z.no_trans = e.no_trans_pembb
+RIGHT JOIN bahan_baku x ON x.no_bb = a.no_bb
+LEFT JOIN detail_produksi_ke1 c ON c.no_trans = a.no_trans
+LEFT JOIN detail_cek_kualitas d ON d.no_trans = e.no_trans
+
+WHERE a.no_bb = '$no' AND tgl_trans >= '$awal' AND tgl_trans <= '$akhir'
+GROUP BY a.no";
+
+        $data['result'] = $this->db->query($query1)->result_array();
+        $this->template->load('template','bb/stock_card',$data);
+      }else{
+        $no = 'BB_001';
+      
+        $this->db->where('no_bb', $no);
+        $data['bahan_baku1'] = $this->db->get('bahan_baku')->row_array();
+        $data['bahan_baku'] = $this->db->get('bahan_baku')->result_array();
+     $query1 = "SELECT a.tgl_trans, a.no_trans, ifnull((d.lulus), '0') as jumlah, 
+                    ifnull((z.subtotal)*(d.lulus/z.jumlah) / d.lulus, '0') as rata, 
+                    ifnull((z.subtotal)*(d.lulus/z.jumlah),'0') as total_pmb,  
+                    ifnull((c.jumlah),'0') as jumlah_bahan_baku, 
+                    ifnull((c.bbb)/c.jumlah,'0') as harga_satuan, 
+                    ifnull((c.bbb),'0') as subtotal_pmk, 
+                    ifnull((a.unit),'0') as unit, 
+                    ifnull((a.total),'0') as total, 
+                    ifnull(round(a.total/a.unit), '0') as ratatotal 
+                    FROM kartu_stok_bb a 
+LEFT JOIN cek_kualitas e ON e.no_trans = a.no_trans
+LEFT JOIN detail_pembelian_bb z ON z.no_trans = e.no_trans_pembb
+RIGHT JOIN bahan_baku x ON x.no_bb = a.no_bb
+LEFT JOIN detail_produksi_ke1 c ON c.no_trans = a.no_trans
+LEFT JOIN detail_cek_kualitas d ON d.no_trans = e.no_trans
+
+WHERE a.no_bb = '$no'
+GROUP BY a.no";
+
+
+        $data['result'] = $this->db->query($query1)->result_array();
+        $this->template->load('template','bb/stock_card',$data);
+      }
+	}
+
+	public function lap_ks_bp(){
+		 if(isset($_POST['no_bp'])){
+       $no = $_POST['no_bp'];
+       $awal = $_POST['tgl_awal'];
+       $akhir = $_POST['tgl_akhir'];
+        $data['no'] = $no;
+        $data['awal'] = $awal;
+        $data['akhir'] = $akhir;
+     
+        $this->db->where('no_bp', $no);
+        $data['bahan_penolong1'] = $this->db->get('bahan_penolong')->row_array();
+        $data['bahan_penolong'] = $this->db->get('bahan_penolong')->result_array();
+     $query1 = "SELECT no_trans, a.no_bp, nama_bp, tgl_trans, 
+     			ifnull(unit1,0) as unit1,
+     			ifnull(unit2,0) as unit2,
+     			ifnull(unit3,0) as unit3,
+     			ifnull(harga1,0) as harga1,
+     			ifnull(harga2,0) as harga2,
+     			ifnull(harga3,0) as harga3,
+     			ifnull(total1,0) as total1,
+     			ifnull(total2,0) as total2,
+     			ifnull(total3,0) as total3
+     			FROM kartu_stok_bp a 
+     			JOIN bahan_penolong b ON a.no_bp = b.no_bp
+
+WHERE a.no_bp = '$no' AND a.tgl_trans >= '$awal' AND a.tgl_trans <= '$akhir'
+GROUP BY a.no
+ORDER BY a.no ASC";
+
+        $data['result'] = $this->db->query($query1)->result_array();
+        $this->template->load('template','bp/stock_card',$data);
+      }else{
+        $no = 'BP_001';
+      
+      $this->db->where('no_bp', $no);
+        $data['bahan_penolong1'] = $this->db->get('bahan_penolong')->row_array();
+        $data['bahan_penolong'] = $this->db->get('bahan_penolong')->result_array();
+     $query1 = "SELECT no_trans, a.no_bp, nama_bp, tgl_trans, 
+     			ifnull(unit1,0) as unit1,
+     			ifnull(unit2,0) as unit2,
+     			ifnull(unit3,0) as unit3,
+     			ifnull(harga1,0) as harga1,
+     			ifnull(harga2,0) as harga2,
+     			ifnull(harga3,0) as harga3,
+     			ifnull(total1,0) as total1,
+     			ifnull(total2,0) as total2,
+     			ifnull(total3,0) as total3
+     			FROM kartu_stok_bp a 
+     			JOIN bahan_penolong b ON a.no_bp = b.no_bp
+
+WHERE a.no_bp = 'BP_001'
+GROUP BY a.no
+ORDER BY a.no ASC";
+
+
+        $data['result'] = $this->db->query($query1)->result_array();
+        $this->template->load('template','bp/stock_card',$data);
+      }
+	}
+
 	
 }

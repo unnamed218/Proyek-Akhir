@@ -1,19 +1,19 @@
 <html>
 	<head>
-		<title>Transaksi Produksi Pertama</title>
+		<title>Transaksi Produksi IPS</title>
 	</head>
-	<!-- <center><h3><b>Transaksi Produksi Pertama</h3></b></center>
+	<!-- <center><h3><b>Transaksi Produksi IPS</h3></b></center>
 	<hr> -->
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Form Produksi Pertama</b></h3>
+    <h3 class="panel-title"><b>Form Produksi IPS</b></h3>
   </div>
   	 <div class="x_content">
   	 	
 	<body>
 		<form method = "POST" action = "<?php echo site_url('c_transaksi/tambah_produksi_ke1');?>">
 			<div class="form-group">
-			  <label>ID Produksi Pertama</label>
+			  <label>ID Produksi IPS</label>
 			  <input type = "text" name = "no_trans" class = "form-control" value="<?php echo $id?>" readonly>
 			
 			</div>
@@ -32,6 +32,7 @@
 															}
 								?>
 						</select>
+			  <?php echo form_error('no_trans_ck'); ?>
 	
 				</div>
 			
