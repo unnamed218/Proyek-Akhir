@@ -1467,7 +1467,7 @@ group by no_bbp";
        $tgl =$this->db->get('produksi_ke2')->row()->tgl_trans;
 
 
-      //input ke detail produksi ke 1
+      //input ke detail produksi ke 2
    
       $data = array('no_trans' => $id,
                'tgl_trans' => $tgl,
@@ -1559,7 +1559,7 @@ group by no_bbp";
                      'harga2' => $harga11,
                      'total2' => $biaya,
                      'unit3' => $stok_update,
-                     'harga3' => $harga12,
+                     'harga3' => $harga11,
                      'total3' => $total_stok_bp);
        $this->db->insert('kartu_stok_bp', $data6);
        }
@@ -1581,11 +1581,16 @@ group by no_bbp";
        $this->m_keuangan->GenerateJurnal('5113', $id, 'k', $bbop);
 
         //kartu stok penj toko
+       $harga13 = $pbj / $jumlah;
        $data1 = array('no_trans' => $id,
                      'tgl_trans' => $tgl,
                      'no_produk' => $no_prod,
-                     'unit' => $jumlah,
-                     'total' => $pbj);
+                     'unit1' => $jumlah,
+                     'harga1' => $harga13,
+                     'total1' => $pbj,
+                     'unit3' => $jumlah,
+                     'harga3' => $harga13,
+                     'total3' => $pbj);
        $this->db->insert('kartu_stok_penj', $data1);
 
      
@@ -2097,8 +2102,13 @@ group by no_bbp";
          $data = array('no_trans' => $id,
                      'tgl_trans' =>$tgl,   
                      'no_produk' => $no_produk,
-                     'unit' => $data['cek_stok_penj'],
-                     'total' => $total);
+                     'unit2' => $data['cek_stok_penj'],
+                     'harga2' => $data['harga'],
+                     'total2' => $total,
+                     'unit3' => $data['cek_stok_penj'],
+                     'harga3' => $data['harga'],
+                     'total3' => $total
+                  );
          $this->db->insert('kartu_stok_penj', $data);
 
       }

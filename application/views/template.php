@@ -210,7 +210,7 @@
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_bp">Kartu Persediaan Bahan Penolong</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_prod1">Kartu Persediaan Produk IPS</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_prod">Kartu Persediaan Produk Toko</a></li>
-                                    <li><a href="<?php echo site_url();?>c_keuangan/lap_lr">Laporan Laba Rugi</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/lr">Laporan Laba Rugi</a></li>
                                      <?php
                                     elseif( $this->session->userdata('level')=="produksi1"):
                                      ?>

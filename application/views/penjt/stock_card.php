@@ -129,23 +129,18 @@
 			<td>".$data['tgl_trans']."</td>
 			<td>".$data['no_trans']."</td>
 			<td>".$maka."</td>
-			<td>".$data['jumlah']."</td>
-			<td align='right'>".format_rp($data['rata'])."</td>
-			<td align='right'>".format_rp($data['total_pmb'])."</td>
-			<td>".$data['jumlah_bahan_baku']."</td>
-			<td align='right'>".format_rp($data['harga_satuan'])."</td>
-			<td align='right'>".format_rp($data['subtotal_pmk'])."</td>
-			<td>".$data['unit']."</td>
-			<td align='right'>".format_rp($data['ratatotal'])."</td>
-			<td align='right'>".format_rp($data['total'])."</td>
+			<td>".$data['unit1']."</td>
+			<td align='right'>".format_rp($data['harga1'])."</td>
+			<td align='right'>".format_rp($data['total1'])."</td>
+			<td>".$data['unit2']."</td>
+			<td align='right'>".format_rp($data['harga2'])."</td>
+			<td align='right'>".format_rp($data['total2'])."</td>
+			<td>".$data['unit3']."</td>
+			<td align='right'>".format_rp($data['harga3'])."</td>
+			<td align='right'>".format_rp($data['total3'])."</td>
 
 			";
-			$totalpmb =0;
-			$totalpmk = 0;
-			$total = 0;
-			$unit = 0;
-			$unitpmb = 0;
-			$unitpmk = 0 ;
+			
 	echo "
 	</tr>
 		";	}

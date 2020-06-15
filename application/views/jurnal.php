@@ -39,7 +39,7 @@
 <p>
   	 <center><b>
   	 	<div style="font-size: 25px">
-  	 	KPSBU</div>
+  	 	KPSBU Lembang</div>
   	 <div style="font-size: 20px">Jurnal</div>
   	 <?php if(isset($awal, $akhir)){?>
   	 <div style="font-size: 15px">
