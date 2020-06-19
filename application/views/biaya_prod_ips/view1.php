@@ -19,8 +19,19 @@
       '9' => 'September',
       '10' => 'Oktober',
       '11' => 'November',
-      '12' => 'Desember'
-    );?>
+      '12' => 'Desember',
+       '01' => 'Januari',
+      '02' => 'Februari',
+      '03' => 'Maret',
+      '04' => 'April',
+      '05' => 'Mei',
+      '06' => 'Juni',
+      '07' => 'Juli',
+      '08' => 'Agustus',
+      '09' => 'September',
+    );
+  	$spasi = '&nbsp&nbsp&nbsp&nbsp';
+    ?>
   	 <div class="x_content">
   	 		<div class="row">
   	 		<div class="col-sm-6">
@@ -93,54 +104,115 @@
 </b>
 </center>
 </p>
-  	 	 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
+  	 	 <table class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">
-				<th style="width: 2px;">No</th>
-				<th>ID Transaksi</th>
-				<th>Tanggal Transaksi</th>
-				<th>Total Transaksi</th>
-				<th>Aksi</th>
+				<th>Keterangan</th>
+				<th></th>
+				<th></th>
 			</tr>
 		</thead>
-		<tbody>
-			<?php
-			$no=1;
-			$total = 0;
-			$totalbiaya = 0;
-				foreach($result as $data){
-					$total = $data['bbb'] + $data['btk'] + $data['bop'];
-					echo "
+		
+			<tr>
+				<td>Pemakaian Bahan Baku :</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><?php echo $spasi ?>Persediaan Bahan Baku Awal</td>
+				<td align='right'><?php echo format_rp('0')?></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><?php echo $spasi ?>Pembelian Bahan Baku</td>
+				<td align='right'><?php echo format_rp($bb)?></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><?php echo $spasi ?>Bahan Baku Siap Digunakan</td>
+				<td align='right'><?php echo format_rp($bb)?></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><?php echo $spasi ?>Persediaan Bahan Baku Akhir</td>
+				<td align='right'><?php echo format_rp('0')?></td>
+				<td></td>
+			</tr>
+			<tr>
+				<th>Total Pemakaian Bahan Baku</th>
+				<td></td>
+				<td align='right'><b><?php echo format_rp($bb)?></b></td>
+			</tr>
+			<tr>
+				<th>Biaya Tenaga Kerja Langsung (BTKL)</th>
+				<td></td>
+				<td align='right'><b><?php echo format_rp($btk)?></b></td>
+			</tr>
+			<tr>
+				<td>Biaya Overhead Pabril Variabel</td>
+				<td align='right'><?php echo format_rp('0')?></td>
+				<td></td>
+			</tr>
 
-						<tr><td>$no</td>
-							<td>".$data['no_trans']."</td>
-							<td>".$data['tgl_trans']."</td>
-							<td align = 'right'>".format_rp($total)."</td>
-							" ?>
-							<td>
-							<a href="detail_lap_bp_ips/<?php echo $data['no_trans']; ?>">
-							
-							<span class="fa-stack">
-							  <i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
-							 <span class="glyphicon glyphicon-pencil fa-stack-1x" aria-hidden="true" style="color:white"></span>
-							</span> </a>
-							</td>
-							<!--<td align="center">
-							<a class="btn btn-warning" href="isi_edit_pemb/<?php echo $data['no_pemb']; ?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a>
-					</td>-->
 
-						</tr>
-						
-					<?php
-					$no++;
-					$totalbiaya = $totalbiaya + $total;
-				}
-			?>
-				<td colspan="3" align='center'><b>Total</b></td>
-			<td align ="right"><b><?php echo format_rp($totalbiaya) ; ?></b></td>
-			<td></td>
-		</tr>
-			</tbody>
+			<tr>
+				<th>Total Biaya Overhead Pabrik Variabel</th>
+				<td></td>
+				<td align='right'><b><?php echo format_rp('0')?></b></td>
+			</tr>
+
+			<tr>
+				<th>Total Biaya Produksi</th>
+				<td></td>
+				<td align='right'><b><?php echo format_rp($totalbp)?></b></td>
+			</tr>
+			<tr>
+				<td>Persediaan Produk Dalam Proses Awal</td>
+				<td></td>
+				<td align='right'><?php echo format_rp('0')?></td>
+			</tr>
+			<tr>
+				<td>Produk Siap DiProses</td>
+				<td></td>
+				<td align='right'><b><?php echo format_rp($totalbp)?></b></td>
+			</tr>
+			<tr>
+				<th>Persediaan Produk Dalam Proses Akhir</th>
+				<td></td>
+				<td align='right'><?php echo format_rp('0')?></td>
+			</tr>
+			<tr>
+				<td>Harga Pokok Produksi</td>
+				<td></td>
+				<td align='right'><b><?php echo format_rp($totalbp)?></b></td>
+			</tr>
+			<tr>
+				<td>Persediaan Produk Jadi Awal</td>
+				<td></td>
+				<td align='right'><?php echo format_rp('0')?></td>
+			</tr>
+			<tr>
+				<td>Produk Tersedia Untuk Dijual</td>
+				<td></td>
+				<td align='right'><b><?php echo format_rp($totalbp)?></b></td>
+			</tr>
+			<tr>
+				<td>Persediaan Produk Jadi Akhir</td>
+				<td></td>
+				<td align='right'><?php echo format_rp('0')?></td>
+			</tr>
+			<tr>
+				<td>Harga Pokok Penjualan</td>
+				<td></td>
+				<td align='right'><b><?php echo format_rp($totalbp)?></b></td>
+			</tr>
+			<tr>
+				<td>Harga Pokok Penjualan Satuan</td>
+				<td></td>
+				<td align='right'><b><?php echo format_rp($hargasatuan)?></b></td>
+			</tr>
+			
+			
 		</table>
 
 	

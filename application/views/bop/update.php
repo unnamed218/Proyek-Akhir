@@ -12,20 +12,23 @@
 	
 		<div class="row">
 	<div class="form-group">
-			<div class="col-xs-4">
+			<div class="col-xs-6">
 				<label>ID BOP</label>
 				<input readonly type="text" class="form-control"  value="<?php echo $data['no_bop'] ; ?>"  >
 			</div>
-		
+			<div class="col-xs-6">
+				<label>Tanggal</label>
+				<input type="text" class="form-control"  value="<?php echo $data['tgl_bop'] ; ?>"readonly >
+			</div>
 	
-			<div class="col-xs-4">
+			<!-- <div class="col-xs-4">
 				<label>Bulan</label>
 				<input type="text" class="form-control"  value="<?php echo $data['bulan'] ; ?>"readonly >
 			</div>
 			<div class="col-xs-4">
 				<label>Tahun</label>
 				<input type="text" class="form-control"  value="<?php echo $data['tahun'] ; ?>" readonly> 
-			</div>
+			</div> -->
 			</div>
 	</div>
 
@@ -58,7 +61,7 @@
 	
 			<div class="col-xs-6">
 				<div class="form-group">
-			  <label>harga</label>
+			  <label>Harga</label>
 			  <input type = "text" name = "harga" class = "form-control">
 			  
 			  <?php echo form_error('harga'); ?>
@@ -89,8 +92,8 @@
 		 	<thead>
 			<tr class="headings">
 				<th>Nama BOP</th>
-				<th>Harga (bulanan)</th>
-				<th>Harga (harian)</th>
+				<!-- <th>Harga (bulanan)</th> -->
+				<th>Harga</th>
 				<th>Aksi</th>
 			</tr>
 		</thead>
@@ -102,10 +105,12 @@
 							<tr>
 							<td>".$data['nama_jbop']."</td>
 							<td>".format_rp($data['harga'])."</td>
-							<td>".format_rp(ROUND($data['harga']/$data['hari']))." (".$data['hari']." hari)</td>
 							" ?>
 							<td>
-							<!-- <a href="isi_edit_bop/<?php echo $data['no_bop']; ?>"><span class="fa-stack">
+							<!-- 
+							
+							<td>".format_rp(ROUND($data['harga']/$data['hari']))." (".$data['hari']." hari)</td>
+							<a href="isi_edit_bop/<?php echo $data['no_bop']; ?>"><span class="fa-stack">
 							  <i class="fa fa-square fa-stack-2x" style="color:orange"></i>
 							  <i class="fa fa-edit fa-stack-1x fa-inverse"></i>
 							</span></a> -->

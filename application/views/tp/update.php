@@ -191,13 +191,15 @@
 					
 					echo "
 							<tr>
-							<td>".$data['nama_bb']."</td>"; ?>
+							<td>".$data['nama_bdp']."</td>"; ?>
 							<?php 
 							$nama = substr($data['no_bbp'],0,2);
 							if($nama == 'BB'){ echo "
 							<td>Bahan Baku</td> ";
 						}elseif($nama == 'BP'){
 							echo "<td>Bahan Penolong</td>";
+						}else{
+							echo "<td>Produk dalam Proses";
 						}
 						echo "
 

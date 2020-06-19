@@ -39,6 +39,8 @@
 			  </select>
 			
 			  <?php echo form_error('satuan'); ?>
+			</div>
+			
 			  <hr>
 			<button type="submit" class="btn btn-default btn-primary">Simpan</button>
 			<a href = "<?php echo site_url()."/c_masterdata/lihat_produk"?>" type="button" class="btn btn-default">Kembali</a>

@@ -14,9 +14,13 @@
   	 <a href = "<?php echo site_url()."/c_transaksi/form_pemb1"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Pembelian</a>&nbsp <a href = "<?php echo site_url()."/c_transaksi/form_pemakaian"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Pemakaian</a>
   	</div>   -->            
   	
-  	 	<form  method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_prod' ?> " class="form-inline">
+  	 	<form  method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_prod1' ?> " class="form-inline">
   	 		
-		<div class="col-md-9">
+		<div class="col-sm-2">
+
+			   <input type="text" class="form-control" value="<?php echo $produk1['nama_produk']?> - <?php echo $produk1['satuan']?>" readonly>
+			</div>
+			<div class="col-sm-8">
 			
 			  <label>Tanggal Awal :</label>
 		<input type = "date" name="tgl_awal" class = "form-control" required="">
@@ -57,20 +61,6 @@
 </center>
 </p>
 <hr>
-<div class="row">
-		<div class="col-sm-6">
-			<div class="form-group">
-			<label>Nama Produk</label>
-			<input type="text" class="form-control" value="<?php echo $produk1['nama_produk']?>" readonly>
-		</div>
-	</div>
-	<div class="col-sm-6">
-			<div class="form-group">
-			<label>Satuan Produk</label>
-			<input type="text" class="form-control" value="<?php echo $produk1['satuan']?>" readonly>
-		</div>
-	</div>
-</div>
 
 		 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
@@ -102,6 +92,12 @@
 
 			<?php 
 			$no = 0;
+			$unit1 = 0;
+			$unit2 = 0;
+			$unit3 = 0;
+			$total1 = 0;
+			$total2 = 0;
+			$total3 = 0;
 			foreach($result as $data){
 				
 				$no++;
@@ -131,17 +127,55 @@
 			<td align='right'>".format_rp($data['total'])."</td>
 
 			";
-			$totalpmb =0;
-			$totalpmk = 0;
-			$total = 0;
-			$unit = 0;
-			$unitpmb = 0;
-			$unitpmk = 0 ;
+			
+			
+			$unit1 = $unit1 + $data['jumlah'];
+			$total1 = $total1 + $data['total_pmb'];
+			$unit2 = $unit2 + $data['jumlah_bahan_baku'];
+			$total2 = $total2 + $data['subtotal_pmk'];
+			$unit3 = $unit1 - $unit2;
+			$total3 = $total1 - ($total2 * (100/130));
 	echo "
 	</tr>
 		";	}
 		?>
-		
+
+		<tr>
+			<th colspan="4">Saldo Produksi</th>
+			<td><b><?php echo $unit1 ;?></b></td>
+			<td align="right"><b><?php echo format_rp($total1 / $unit1)?></b></td>
+			<td align="right"><b><?php echo format_rp($total1) ;?></b></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th colspan="4">Saldo Penjualan</th>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><b><?php echo $unit2 ;?></b></td>
+			<td align="right"><b><?php echo format_rp($total2 / $unit2) ;?></b></td>
+			<td align="right"><b><?php echo format_rp($total2) ;?></b></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th colspan="4">Saldo Akhir</th>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><b><?php echo $unit3 ;?></b></td>
+			<td align="right"><b><?php echo format_rp($total3 / $unit3) ;?></b></td>
+			<td align="right"><b><?php echo format_rp($total3) ;?></b></td>
+		</tr>	
 		</tbody>
 	</table>
 		

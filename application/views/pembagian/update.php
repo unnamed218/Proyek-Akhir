@@ -143,7 +143,7 @@
 		 	<thead>
 			<tr class="headings">
 				<th>Dijual ke IPS</th>	
-				<th>Produksi</th>
+				<th>Produksi Olahan</th>
 				<th>Total</th>
 			<!-- 	<th>Supplier</th>
 				<th>Aksi</th> -->

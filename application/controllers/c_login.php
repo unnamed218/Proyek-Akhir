@@ -22,10 +22,10 @@ class c_login extends CI_Controller{
                 if($level == "admin")
                 {
                     redirect('c_masterdata/beranda');
-                }elseif ($level == "produksi1") 
+                }elseif ($level == "produksi") 
                 {
                     redirect('c_masterdata/beranda');
-                }elseif($level == "produksi2"){
+                }elseif($level == "pembelian"){
                     redirect('c_masterdata/beranda');
                 }elseif($level == "penjualan"){
                     redirect('c_masterdata/beranda');

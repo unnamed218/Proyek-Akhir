@@ -13,8 +13,7 @@
 			<tr class="headings">
 				<th style="width: 2px;">No</th>
 				<th>ID BOP</th>
-				<th>Bulan</th>
-				<th>Tahun</th>
+				<th>Tanggal</th>
 				<th>Aksi</th>
 			</tr>
 		</thead>
@@ -41,8 +40,7 @@
 
 						<tr><td>$no</td>
 							<td>".$data['no_bop']."</td>
-							<td>".$bulan[$data['bulan']]."</td>
-							<td>".$data['tahun']."</td>
+							<td>".$data['tgl_bop']."</td>
 							" ?>
 							<td>
 							<a href="isi_edit_bop/<?php echo $data['no_bop']; ?>">
@@ -51,6 +49,7 @@
 							  <i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
 							 <span class="glyphicon glyphicon-pencil fa-stack-1x" aria-hidden="true" style="color:white"></span>
 							</span></a>
+							
 							</td>
 							<!--<td align="center">
 							<a class="btn btn-warning" href="isi_edit_bop/<?php echo $data['no_bop']; ?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a>

@@ -39,19 +39,21 @@
 
 		<form method="POST" action="<?php echo site_url().'/c_masterdata/edit_bom'; ?>">
 			<input readonly type="hidden" class="form-control" name="no_produk" value="<?php echo $data['no_produk'] ; ?>"  >
-			  <label>Nama Bahan Baku / Penolong</label>
+			  <label>Nama Bahan Baku / Penolong / Produk dalam Proses</label>
 			    <select name = "no_bbp" class = "form-control">
-			    <option value="#" disabled selected>Pilih Bahan Baku / Penolong</option>
+			    <option value="#" disabled selected>Pilih Bahan Baku / Penolong / Produk dalam Proses</option>
 				<?php
 				
 					foreach($result as $data){
 						$cek = substr($data['no_bbp'],0,2);
 						if($cek == 'BB'){
 							$jenis = 'Bahan Baku';
-						}else{
+						}elseif($cek == 'BP'){
 							$jenis = 'Bahan Penolong';
+						}else{
+							$jenis = 'Produk Dalam Proses';
 						}
-						echo "<option value = ".$data['no_bbp'].">".$jenis." - ".$data['nama_bbp']."</option>";
+						echo "<option value = ".$data['no_bbp'].">".$jenis." - ".$data['nama_bbp']." - ".$data['satuan']."</option>";
 					}
 				?>
 			  </select>
@@ -108,8 +110,10 @@
 					$cek = substr($data['no_bbp'],0,2);
 						if($cek == 'BB'){
 							$jenis = 'Baku';
-						}else{
+						}elseif($cek == 'BP'){
 							$jenis = 'Penolong';
+						}else{
+							$jenis = 'Produk Dalam Proses';
 						}
 					echo "
 							<tr>

@@ -13,9 +13,10 @@
 			<tr class="headings">
 				<th style="width: 2px;">No</th>
 				<th>ID BTKL</th>
-				<th>Bulan</th>
+				<th>Tanggal</th>
+<!-- 				<th>Bulan</th>
 				<th>Tahun</th>
-				<th>Jumlah Tenaga Kerja</th>
+ -->				<th>Jumlah Tenaga Kerja</th>
 				<th>Tarif Tenaga Kerja</th>
 				<th>Aksi</th>
 			</tr>
@@ -28,8 +29,7 @@
 
 						<tr><td>$no</td>
 							<td>".$data['no_btk']."</td>
-							<td>".$data['bulan']."</td>
-							<td>".$data['tahun']."</td>
+							<td>".$data['tgl_btk']."</td>
 							<td>".$data['jumlah_pgw']."</td>
 							<td>".format_rp($data['tarif'])."</td>
 							" ?>

@@ -14,9 +14,14 @@
   	
   	<!-- </div>               -->
   	
-  	 	<form method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_bp' ?> " class="form-inline">
   	 		
-		<div class="col-md-12">
+		
+		<div class="col-sm-2">
+
+			   <input type="text" class="form-control" value="<?php echo $bahan_penolong1['nama_bp']?> - <?php echo $bahan_penolong1['satuan']?>" readonly>
+			</div>
+			<div class="col-sm-8">
+  	 	<form method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_bp' ?> " class="form-inline">
 			  <!-- <label>Nama Bahan Penolong &nbsp&nbsp&nbsp</label> -->
 			   <label>Bahan Penolong :</label>
 			  <select name="no_bp" class="form-control">
@@ -30,12 +35,13 @@
 			  <label>Tanggal Awal :</label>
 		<input type = "date" name="tgl_awal" class = "form-control" required="">
 		<label>Tanggal Akhir :</label>
-		<input type = "date" name="tgl_akhir" class = "form-control" required="">&nbsp&nbsp
+		<input type = "date" name="tgl_akhir" class = "form-control" required="">&nbsp
 	
 		
 	<input type="submit" value="Cari" class="btn btn-info">
-</div>
+
 	</form>
+	</div>
 </div>
 <!-- <div class="row" style="margin-top: 10px; margin-left: 180px">
 	<div class="col-md-9">
@@ -66,20 +72,7 @@
 </center>
 </p>
 <hr>
-<div class="row">
-		<div class="col-sm-6">
-			<div class="form-group">
-			<label>Nama Bahan Penolong</label>
-			<input type="text" class="form-control" value="<?php echo $bahan_penolong1['nama_bp']?>" readonly>
-		</div>
-	</div>
-	<div class="col-sm-6">
-			<div class="form-group">
-			<label>Satuan Bahan Penolong</label>
-			<input type="text" class="form-control" value="<?php echo $bahan_penolong1['satuan']?>" readonly>
-		</div>
-	</div>
-</div>
+
 
 		 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
@@ -111,12 +104,15 @@
 
 			<?php 
 			$no = 0;
-			$unitpmb = 0;
-			$totalpmb = 0;
-			$unitprod = 0;
-			$totalprod = 0;
-			$unitsaldo = 0;
-			$totalsaldo = 0;
+			$unit1 = 0;
+			$unit2 = 0;
+			$unit3 = 0;
+			$total1 = 0;
+			$total2 = 0;
+			$total3 = 0;
+			$harga1 = 0;
+			$harga2 = 0;
+			$harga3 = 0;
 			foreach($result as $data){
 				
 				$no++;
@@ -135,7 +131,7 @@
 			<td>".$maka."</td>
 			<td>".$data['unit1']."</td>
 			<td align='right'>".format_rp($data['harga1'])."</td>
-			<td align='right'>".format_rp($data['total1'])."</td>
+			<td align='right'>".format_rp($data['total1'])."</td>	
 			<td>".$data['unit2']."</td>
 			<td align='right'>".format_rp($data['harga2'])."</td>
 			<td align='right'>".format_rp($data['total2'])."</td>
@@ -147,13 +143,23 @@
 
 	echo "
 	</tr>
-		";	}
+		";	
+		$unit1 = $unit1 + $data['unit1'];
+			$total1 = $total1 + $data['total1'];
+			$unit2 = $unit2 + $data['unit2'];
+			$total2 = $total2 + $data['total2'];
+			$unit3 = $unit1 - $unit2;
+			$total3 = $total1 - $total2;
+			$harga1 = $data['harga1'];
+			$harga2 = $data['harga2'];
+			$harga3 = $data['harga3'];
+		}
 		?>
-		<!-- <tr>
+		<tr>
 			<th colspan="4">Saldo Pembelian</th>
-			<td><b><?php echo $unitpmb ;?></b></td>
-			<td align="right"><b><?php echo format_rp($totalpmb / $unitpmb) ;?></b></td>
-			<td align="right"><b><?php echo format_rp($totalpmb) ;?></b></td>
+			<td><b><?php echo $unit1 ;?></b></td>
+			<td align="right"><b><?php echo format_rp($harga1)?></b></td>
+			<td align="right"><b><?php echo format_rp($total1) ;?></b></td>
 			<td></td>
 			<td></td>
 			<td></td>
@@ -162,29 +168,30 @@
 			<td></td>
 		</tr>
 		<tr>
-			<th colspan="4">Saldo Pembelian</th>
-			<td><b><?php echo $unitpmb ;?></b></td>
-			<td align="right"><b><?php echo format_rp($totalpmb / $unitpmb) ;?></b></td>
-			<td align="right"><b><?php echo format_rp($totalpmb) ;?></b></td>
+			<th colspan="4">Saldo Produksi</th>
 			<td></td>
 			<td></td>
 			<td></td>
+			<td><b><?php echo $unit2 ;?></b></td>
+			<td align="right"><b><?php echo format_rp($harga2) ;?></b></td>
+			<td align="right"><b><?php echo format_rp($total2) ;?></b></td>
 			<td></td>
 			<td></td>
 			<td></td>
 		</tr>
 		<tr>
-			<th colspan="4">Saldo Pembelian</th>
-			<td><b><?php echo $unitpmb ;?></b></td>
-			<td align="right"><b><?php echo format_rp($totalpmb / $unitpmb) ;?></b></td>
-			<td align="right"><b><?php echo format_rp($totalpmb) ;?></b></td>
+			<th colspan="4">Saldo Akhir</th>
 			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
-		</tr>	 -->
+			<td><b><?php echo $unit3 ;?></b></td>
+			<td align="right"><b><?php echo format_rp($harga3) ;?></b></td>
+			<td align="right"><b><?php echo format_rp($total3) ;?></b></td>
+		</tr>	
+		
 		</tbody>
 	</table>
 		

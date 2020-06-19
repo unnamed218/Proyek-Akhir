@@ -17,7 +17,21 @@
 			  <input type = "text" name = "no_bop" class = "form-control" value="<?php echo $id?>" readonly>
 			
 			</div>
-			<div class="form-group">
+			  <div class="form-group">
+              <label>Tanggal</label>
+
+                <div class="form-group">
+                        <div class='input-group date' id='myDatepicker2'>
+                            <input type='text' class="form-control" name = "tgl_bop">
+                            <span class="input-group-addon">
+                               <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+            
+			  <?php echo form_error('tgl_bop'); ?>
+            </div>
+			<!-- <div class="form-group">
 			  <label>Bulan</label>
 			  <select name="bulan" class="form-control">
 					<option value="*" disabled selected>Pilih Bulan</option>
@@ -57,7 +71,7 @@
 			  
 			  <?php echo form_error('tahun'); ?>
 			
-			</div>
+			</div> -->
 			
 				
 			  <hr>

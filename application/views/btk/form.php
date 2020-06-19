@@ -11,13 +11,32 @@
   	 <div class="x_content">
   	 	
 	<body>
+	<?php if (isset($error)){ echo "<div class='alert alert-danger'><li>".$error."</li></div>"; }?>
 		<form method = "POST" action = "<?php echo site_url('c_masterdata/tambah_btk');?>">
 			<div class="form-group">
 			  <label>ID BTKL</label>
 			  <input type = "text" name = "no_btk" class = "form-control" value="<?php echo $id?>" readonly>
 			
 			</div>
-			<div class="form-group">
+			<!-- <div class="form-group">
+			  <label>Tanggal</label>
+			  <input type = "text" name = "tgl_btk" class = "form-control" readonly value="<?php echo date('Y-m-d')?>">
+			</div> -->
+			  <div class="form-group">
+              <label>Tanggal</label>
+
+                <div class="form-group">
+                        <div class='input-group date' id='myDatepicker2'>
+                            <input type='text' class="form-control" name = "tgl_btk">
+                            <span class="input-group-addon">
+                               <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+            
+			  <?php echo form_error('tgl_btk'); ?>
+            </div>
+			<!-- <div class="form-group">
 			  <label>Bulan</label>
 			  <select name="bulan" class="form-control">
 					<option value="*" disabled selected>Pilih Bulan</option>
@@ -57,7 +76,7 @@
 			  
 			  <?php echo form_error('tahun'); ?>
 			
-			</div>
+			</div> -->
 			<div class="form-group">
 			  <label>Jumlah Tenaga Kerja</label>
 			  <input type = "text" name = "jumlah_pgw" class = "form-control">

@@ -159,7 +159,7 @@
 		<a href="lihat_BOM" class="btn btn-default">Back</a>
 		<input type="button" class="btn btn-default" value="Back" onClick=history.go(-1);> -->
 	</div>
-	<a href = "<?php echo site_url()."/c_transaksi/lihat_pemb"?>" class="btn btn-default" role="button">Kembali</a>
+	<a href = "<?php echo site_url()."/c_transaksi/lihat_pemby"?>" class="btn btn-default" role="button">Kembali</a>
 
 	</div>
 	</div>

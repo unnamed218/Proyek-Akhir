@@ -21,6 +21,14 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-xs-4">
+				<label>Tanggal</label>
+				<input readonly type="text" class="form-control" name="tgl_btkl" value="<?php echo $data['tgl_btk'] ; ?>"  >
+			</div>
+		</div>
+	</div>
+	<!-- <div class="form-group">
+		<div class="row">
+			<div class="col-xs-4">
 				<label>Bulan</label>
 			 <input readonly type="text" class="form-control" name="bulan" value="<?php echo $data['bulan'] ; ?>"  >
 			  
@@ -34,7 +42,7 @@
 			<input readonly type="text" class="form-control" name="tahun" value="<?php echo $data['tahun'] ; ?>" >
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<div class="form-group">
 		<div class="row">
 			<div class="col-xs-4">

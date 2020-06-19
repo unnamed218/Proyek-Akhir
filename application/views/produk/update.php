@@ -36,15 +36,31 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="form-group">
+			  <label>Satuan</label>
+			  <select name="satuan" class="form-control">
+			  	<option disabled selected>Pilih Satuan</option>
+			  	<option value="ton">ton</option>
+			  	<option value="kg">kg</option>
+			  	<option value="gram">gram</option>
+			  	<option value="liter">liter</option>
+			  	<option value="ml">ml</option>
+			  	<option value="buah">buah</option>
+			  	
+			  </select>
+			
+			  <?php echo form_error('satuan'); ?>
+			</div>
+	<!-- <div class="form-group">
 		<div class="row">
 			<div class="col-xs-4">
 				 <label>Satuan</label>
-			<input type="text" class="form-control" name="satuan" value="<?php echo $data['satuan'] ; ?>" readonly >
+			<input type="text" class="form-control" name="satuan" value="<?php echo $data['satuan'] ; ?>" >
 			</div>
 		</div>
 	</div>
-	<?php echo form_error('satuan'); ?>
+	<?php echo form_error('satuan'); ?> -->
 
 		<input type="submit" name="submit" class="btn btn-primary" value="Simpan">
 

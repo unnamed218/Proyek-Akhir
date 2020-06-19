@@ -58,7 +58,8 @@
 							<td>".$data['jumlah']." ".$data['satuan']."</td>
 						
 							
-							<td align='right'>".format_rp($data['jumlah'])."</td>"; ?>
+							<td align='right'>".format_rp($data['harga'])."</td>
+							<td align='right'>".format_rp($data['harga']*$data['jumlah'])."</td>"; ?>
 							
 
 						</tr>
@@ -82,7 +83,7 @@
 		<a href="lihat_BOM" class="btn btn-default">Back</a>
 		<input type="button" class="btn btn-default" value="Back" onClick=history.go(-1);> -->
 	</div>
-	<a href = "<?php echo site_url()."/c_transaksi/lihat_penjs"?>" class="btn btn-default" role="button">Kembali</a>
+	<a href = "<?php echo site_url()."/c_transaksi/lihat_penjt"?>" class="btn btn-default" role="button">Kembali</a>
 
 	</div>
 	</div>

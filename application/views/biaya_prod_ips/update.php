@@ -98,41 +98,44 @@
 				<?php $bbtk = round($btk); ?>
 			</tr>
 			<tr>
-				<th colspan="3">Biaya Operasional Pabrik</th>
+				<th>Biaya Overhead Pabrik</th>
+				<td>0</td>
+				<td>0</td>
 			</tr>
-			<tr>
+			<!-- <tr>
 				<td colspan="3">Biaya Operasional Pabrik></td>
-			</tr>
-			<tr>
+			</tr> -->
+			<!-- <tr> -->
 
 					<?php
 
-			$no=1;
-			$bbop = 0;
-				foreach($bop as $data){
+			// $no=1;
+			// $bbop = 0;
+			// 	foreach($bop as $data){
 
-					echo "
-					<tr>
-							<td>".$data['nama_jbop']."</td>
+			// 		echo "
+			// 		<tr>
+			// 				<td>".$data['nama_jbop']."</td>
 							
 
-							<td>".format_rp(ROUND($data['harga'] / $hari))."</td>
+			// 				<td>".format_rp(ROUND($data['harga'] / $hari))."</td>
 							
-							<td>".format_rp(ROUND(($data['harga']/ $hari)/$jumlah))."</td>
-							<tr>"; 
-							$bbop = round($bbop + ($data['harga'] / $hari)); ?>
+			// 				<td>".format_rp(ROUND(($data['harga']/ $hari)/$jumlah))."</td>
+			// 				<tr>"; 
+			// 				$bbop = round($bbop + ($data['harga'] / $hari)); 
+							?>
 					<?php
-					$no++;
-				}
+					// $no++;
+				// }
 			?>
-			</tr>
+			<!-- </tr> -->
 			<?php 
-			$biaya_produksi = round($bbop + $bbtk + $total);
+			$biaya_produksi = round($bbtk + $total);
 			?>
 			<tr>
 				<th>Biaya Produksi</th>
 				<th><?php echo format_rp($biaya_produksi) ?></th>
-				<th><?php echo format_rp($biaya_produksi / $jmlprod) ?> </th> 
+				<th><?php echo format_rp(round($biaya_produksi / $jmlprod)) ?> </th> 
 			</tr>
 
 			</tbody>

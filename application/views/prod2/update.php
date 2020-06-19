@@ -76,9 +76,13 @@
 			<tr>
 				<?php 
 				$pbdp = 0;
-				$pbdp = round($bombbb['nominal'] * $presentase); 
+				$pbdp = round($bombbb['nominal'] * ($jumlah / $jumlah_produksi)); 
 				?>
-				<td colspan="5"><?php echo $bombbb['nama_coa']?></td>
+				<td ><?php echo $bombbb['nama_coa']?></td>
+				<td>1</td>
+				<td><?php echo $jumlah;?></td>
+				<td>buah</td>
+				<td align='right'><?php echo format_rp($pbdp/$jumlah)?></td>
 				<td align="right"><?php echo format_rp($pbdp) ?></td>
 
 			</tr>
@@ -143,8 +147,8 @@
 			</tr>
 			<tr>
 				<td><?php echo $bombbb['nama_coa']?></td>
-				<td><?php echo format_rp($pbdp) ?></td>
-				<td><?php echo format_rp($pbdp/$jumlah) ?></td>
+				<td align='right'><?php echo format_rp($pbdp) ?></td>
+				<td align='right'><?php echo format_rp($pbdp/$jumlah) ?></td>
 				<?php $bbbb = round($pbdp) ?>
 			</tr>
 			<!-- ///////////////////////////////////////////////////////////////////////////////-->
@@ -153,43 +157,42 @@
 			</tr>
 			<tr>
 				<td>Biaya Tenaga Kerja</td>
-				<td><?php echo format_rp(round($btk))?> </td>
-				<td><?php echo format_rp(round($btk / $jumlah))?></td>
+				<td align='right'><?php echo format_rp(round($btk))?> </td>
+				<td align='right'><?php echo format_rp(round($btk / $jumlah))?></td>
 				<?php $bbtk = round($btk); ?>
 			</tr>
 			<!-- ///////////////////////////////////////////////////////////////////////////////-->
 			<tr>
-				<th colspan="3">Biaya Operasional Pabrik</th>
+				<th colspan="3">Biaya Overhead Pabrik</th>
 			</tr>
-			<tr>
-				<td colspan="3">Biaya Operasional Pabrik</td>
-			</tr>
-			<tr>
+			
+			<!-- <tr> -->
 
 					<?php
 
-			$no=1;
+			// $no=1;
 			$bbop = 0;
-				foreach($bop as $data){
+			// 	foreach($bop as $data){
 
-					echo "
-					<tr>
-							<td>".$data['nama_jbop']."</td>
+			// 		echo "
+			// 		<tr>
+			// 				<td>".$data['nama_jbop']."</td>
 							
 
-							<td>".format_rp(ROUND(($data['harga'] / $hari)*$presentase))."</td>
+			// 				<td>".format_rp(ROUND(($data['harga'] / $hari)*$presentase))."</td>
 							
-							<td>".format_rp(ROUND((($data['harga']/ $hari)*$presentase)/$jumlah))."</td>
-							<tr>"; 
-							$bbop = round($bbop + (($data['harga'] / $hari)*$presentase)); ?>
+			// 				<td>".format_rp(ROUND((($data['harga']/ $hari)*$presentase)/$jumlah))."</td>
+			// 				<tr>"; 
+			// 				$bbop = round($bbop + (($data['harga'] / $hari)*$presentase)); 
+							?>
 					<?php
-					$no++;
-				}
+					// $no++;
+				// }
 			?>
-			</tr>
+			<!-- </tr> -->
 			<!-- ////////////////////////////////////////////////////////////////////////////////////////  -->
 			<tr>
-				<td colspan="3">Biaya Bahan Penolong</td>
+				<th colspan="3">Biaya Overhead Pabrik Variabel</th>
 			</tr>
 			
 					<?php
@@ -203,9 +206,9 @@
 							<td>".$data['nama_bp']."</td>
 							
 
-							<td>".format_rp($data['biaya'])."</td>
+							<td align='right'>".format_rp($data['biaya'])."</td>
 							
-							<td>".format_rp($data['biaya'] / $jumlah)."</td>
+							<td align='right'>".format_rp($data['biaya'] / $jumlah)."</td>
 							<tr>"; 
 							$bbp = round($bbp + $data['biaya']) ?>
 					<?php
@@ -215,12 +218,13 @@
 			<!-- ///////////////////////////////////////////////////////////////////////////////-->
 			<?php 
 			//total biaya produksi
-			$biaya_produksi = round(($bbop) + ($bbtk) + ($bbp) + ($bbbb));
-			$biaya_produksi_satuan = round($biaya_produksi / $jumlah); ?>
+			$biaya_produksi = round( + ($bbtk) + ($bbp) + ($bbbb));
+			$biaya_produksi_satuan = round($biaya_produksi / $jumlah); 
+			?>
 			<tr>
 				<th>Biaya Produksi</th>
-				<th><?php echo format_rp(round($biaya_produksi))?> </th>
-				<th><?php echo format_rp(round($biaya_produksi_satuan)) ?> </th>
+				<td align='right'><b><?php echo format_rp(round($biaya_produksi))?></b></td>
+				<td align='right'><b><?php echo format_rp(round($biaya_produksi_satuan)) ?></b></td>
 
 			</tr>
 

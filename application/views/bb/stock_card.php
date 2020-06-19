@@ -14,11 +14,15 @@
   	 <a href = "<?php echo site_url()."/c_transaksi/form_pemb1"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Pembelian</a>&nbsp <a href = "<?php echo site_url()."/c_transaksi/form_pemakaian"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Pemakaian</a>
   	</div>   -->            
   	
-  	 	<form method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_prod' ?> " class="form-inline">
+  	 	
   	 		
-		<div class="col-md-9">
-			  <!-- <label>Nama Produk &nbsp&nbsp&nbsp</label> -->
-			   <label>Bahan Baku :</label>
+		<div class="col-md-2">
+
+			   <input type="text" class="form-control" value="<?php echo $bahan_baku1['nama_bb']?> - <?php echo $bahan_baku1['satuan']?>" readonly>
+			</div>
+			<div class="col-md-8">
+				<form method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_prod' ?> " class="form-inline">
+				   <label>Bahan Baku :</label>
 			  <select name="no_produk" class="form-control">
 			  	<option value="#" disabled selected>Pilih Bahan Baku</option>
 			 	 <?php
@@ -34,7 +38,9 @@
 	
 		
 	<input type="submit" value="Cari" class="btn btn-info">
-</div>
+	</div>
+	
+	
 	</form>
 </div>
 <!-- <div class="row" style="margin-top: 10px; margin-left: 180px">
@@ -66,7 +72,7 @@
 </center>
 </p>
 <hr>
-<div class="row">
+<!-- <div class="row">
 		<div class="col-sm-6">
 			<div class="form-group">
 			<label>Nama Bahan Baku</label>
@@ -80,7 +86,7 @@
 		</div>
 	</div>
 </div>
-
+ -->
 		 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">
@@ -111,6 +117,15 @@
 
 			<?php 
 			$no = 0;
+			$unit1 = 0;
+			$unit2 = 0;
+			$unit3 = 0;
+			$total1 = 0;
+			$total2 = 0;
+			$total3 = 0;
+			$harga1 = 0;
+			$harga2 = 0;
+			$harga3 = 0;
 			foreach($result as $data){
 				
 				$no++;
@@ -142,8 +157,57 @@
 			";
 	echo "
 	</tr>
-		";	}
+		";	
+
+	$unit1 = $unit1 + $data['jumlah'];
+			$total1 = $total1 + $data['total_pmb'];
+			$unit2 = $unit2 + $data['jumlah_bahan_baku'];
+			$total2 = $total2 + $data['subtotal_pmk'];
+			$unit3 = $unit1 - $unit2;
+			$total3 = $total1 - $total2;
+			$harga1 = $data['rata'];
+			$harga2 = $data['harga_satuan'];
+			$harga3 = $data['ratatotal'];
+
+		}
 		?>
+		
+		<tr>
+			<th colspan="4">Saldo Pembelian</th>
+			<td><b><?php echo $unit1 ;?></b></td>
+			<td align="right"><b><?php echo format_rp($harga1)?></b></td>
+			<td align="right"><b><?php echo format_rp($total1) ;?></b></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th colspan="4">Saldo Produksi</th>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><b><?php echo $unit2 ;?></b></td>
+			<td align="right"><b><?php echo format_rp($harga2) ;?></b></td>
+			<td align="right"><b><?php echo format_rp($total2) ;?></b></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th colspan="4">Saldo Akhir</th>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><b><?php echo $unit3 ;?></b></td>
+			<td align="right"><b><?php echo format_rp($harga3) ;?></b></td>
+			<td align="right"><b><?php echo format_rp($total3) ;?></b></td>
+		</tr>	
 		
 		</tbody>
 	</table>

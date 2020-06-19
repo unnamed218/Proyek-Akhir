@@ -119,7 +119,7 @@ class c_masterdata extends CI_controller{
             array(
                'field' => 'nama_bb',
                'label' => 'Nama Bahan Baku',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[bahan_baku.nama_bb]',
+               'rules' => 'required|min_length[3]|max_length[30]|is_unique[bahan_baku.nama_bb]',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!',
                   'min_length' => '%s minimal 3 huruf!',
@@ -503,7 +503,7 @@ class c_masterdata extends CI_controller{
             array(
                'field' => 'nama_bp',
                'label' => 'Nama Bahan Penolong',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[50]',
+               'rules' => 'required|min_length[3]|max_length[50]',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!',
                   'min_length' => '%s minimal 3 huruf!',
@@ -1064,16 +1064,8 @@ class c_masterdata extends CI_controller{
          $config = array(
             
             array(
-               'field' => 'bulan',
-               'label' => 'Bulan',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            ),
-            array(
-               'field' => 'tahun',
-               'label' => 'Harga',
+               'field' => 'tgl_bop',
+               'label' => 'Tanggal',
                'rules' => 'required',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!'
@@ -1088,8 +1080,9 @@ class c_masterdata extends CI_controller{
          } else {
             $data = array(
                'no_bop' => $_POST['no_bop'],
-               'bulan' => $_POST['bulan'],
-               'tahun' => $_POST['tahun']
+               'tgl_bop' => $_POST['tgl_bop'],
+               'bulan' => '0',
+               'tahun' => '0'
             );
             $this->db->insert('bop', $data);
            
@@ -1235,21 +1228,13 @@ class c_masterdata extends CI_controller{
          
          $config = array(
             
-            array(
-               'field' => 'bulan',
-               'label' => 'Bulan',
+           array(
+               'field' => 'tgl_btk',
+               'label' => 'Tanggal',
                'rules' => 'required',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!'
                )
-            ),
-            array(
-               'field' => 'tahun',
-               'label' => 'Tahun',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-            )
             ),
             array(
                'field' => 'jumlah_pgw',
@@ -1278,17 +1263,37 @@ class c_masterdata extends CI_controller{
          if ($this->form_validation->run() == FALSE) {
             $this->form_btk();
          } else {
+            $this->db->where('tgl_btk', $_POST['tgl_btk']);
+            $cek = $this->db->get('btk')->result_array();
+            if($cek == FALSE){
             $data = array(
                'no_btk' => $_POST['no_btk'],
-               'bulan' => $_POST['bulan'],
-               'tahun' => $_POST['tahun'],
+               'bulan' => '0',
+               'tahun' => '0',
+               'tgl_btk' => $_POST['tgl_btk'],
                'jumlah_pgw' => $_POST['jumlah_pgw'],
                'tarif' => $_POST['tarif']
             );
             $this->db->insert('btk', $data);
            
             redirect('c_masterdata/lihat_btk');
+         }else{   $query1   = "SELECT  MAX(RIGHT(no_btk,3)) as kode FROM   btk";
+         $abc      = $this->db->query($query1);
+         $no_trans = "";
+         if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+               $tmp = ((int) $k->kode) + 1;
+               $kd  = sprintf("%03s", $tmp);
+            }
+         } else {
+            $kd = "001";
          }
+         $no_trans   = "BTK_" . $kd;
+         $data['id'] = $no_trans;
+            $data['error'] = 'Tanggal sudah ada di database!';
+         $this->template->load('template', 'btk/form', $data);
+         }
+      }
        
       
    }
@@ -1457,13 +1462,11 @@ class c_masterdata extends CI_controller{
            array(
                'field' => 'nama_ips',
                'label' => 'Nama Konsumen IPS',
-               'rules' => 'required|min_length[3]|max_length[30]|is_unique[konsumen_ips.nama_ips]',
+               'rules' => 'required|min_length[3]|max_length[30]',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!',
                   'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!',
-                  'is_unique' => '%s sudah ada di database!'
+                  'max_length' => '%s maksimal 30 huruf!'
                )
             ),
             array(
@@ -1528,6 +1531,8 @@ class c_masterdata extends CI_controller{
          $query = "(SELECT no_bb as no_bbp, nama_bb as nama_bbp, satuan FROM bahan_baku)
                   UNION
                   (SELECT no_bp, nama_bp, satuan FROM bahan_penolong)
+                  UNION
+                  (SELECT no_bdp, nama_bdp, satuan FROM bahan_dalam_proses)
                   ORDER BY no_bbp";
          $x['result'] = $this->db->query($query)->result_array();
          $query1 = "SELECT no_produk, no_bb as no_bbp, nama_bb as nama_bbp, satuan, jumlah
@@ -1536,11 +1541,18 @@ class c_masterdata extends CI_controller{
                      ON a.no_bb = b.no_bbp
                      WHERE no_produk LIKE '".$id."'
                      UNION
+                     SELECT no_produk, no_bdp, nama_bdp, satuan , jumlah
+                     FROM bahan_dalam_proses a
+                     JOIN bom b
+                     ON a.no_bdp = b.no_bbp
+                     WHERE no_produk LIKE '".$id."'
+                     UNION
                      SELECT no_produk, no_bp, nama_bp, satuan , jumlah
                      FROM bahan_penolong a
                      JOIN bom b
                      ON a.no_bp = b.no_bbp
                      WHERE no_produk LIKE '".$id."'
+                    
                      ORDER BY no_bbp";
          $x['result1'] = $this->db->query($query1)->result_array();
          
@@ -1556,7 +1568,7 @@ class c_masterdata extends CI_controller{
             
             array(
                'field' => 'no_bbp',
-               'label' => 'Nama Bahan Baku / Penolong',
+               'label' => 'Nama Bahan Baku / Penolong / Produk Dalam Proses',
                'rules' => 'required',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!'
