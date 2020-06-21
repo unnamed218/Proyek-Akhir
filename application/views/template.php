@@ -88,7 +88,7 @@
                                  <?php
                                     if( $this->session->userdata('level')=="admin"):
                                      ?>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">Akun</a></li>
+                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_bb">Bahan Baku</a></li>
                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_bp">Bahan Penolong</a></li>
                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_bdp">Produk Dalam Proses</a></li>
@@ -128,15 +128,15 @@
                                        <?php
                                     elseif( $this->session->userdata('level')=="keuangan3"):
                                      ?>
-                                       <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">Akun</a></li>
+                                       <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
                                         <?php
                                     elseif( $this->session->userdata('level')=="keuangan1"):
                                      ?>
-                                       <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">Akun</a></li>
+                                       <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
                                         <?php
                                     elseif( $this->session->userdata('level')=="keuangan2"):
                                      ?>
-                                       <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">Akun</a></li>
+                                       <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
                                  <?php 
 
                                     endif

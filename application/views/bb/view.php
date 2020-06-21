@@ -17,7 +17,6 @@
 				<th>ID Bahan Baku</th>
 				<th>Nama Bahan Baku</th>
 				<th>Harga</th>
-				<th>Stok</th>
 				<th>Satuan</th>
 				<th>Aksi</th>
 			</tr>
@@ -32,7 +31,6 @@
 							<td>".$data['no_bb']."</td>
 							<td>".$data['nama_bb']."</td>
 							<td>".format_rp($data['harga'])."</td>
-							<td>".$data['stok']."</td>
 							<td>".$data['satuan']."</td>" ?>
 							<td>
 							<a href="isi_edit_bb/<?php echo $data['no_bb']; ?>">
