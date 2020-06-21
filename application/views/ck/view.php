@@ -7,7 +7,12 @@
     <h3 class="panel-title"><b>Daftar Cek Kualitas</b></h3>
   </div>
   	 <div class="x_content">
+  	 		<?php if (isset($error)){ echo "<div class='alert alert-success'><li>".$error."</li></div>"; }?>
+  	 		<?php if($cek == TRUE ){?>
+  	 			<a href = "#" class="btn btn-info" role="button" disabled="disabled"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
+  	 		<?php }else{ ?>
   	 		<a href = "<?php echo site_url()."/c_transaksi/form_ck"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
+  	 	<?php } ?>
   	 	 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">

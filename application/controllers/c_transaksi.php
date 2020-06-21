@@ -15,8 +15,23 @@ class c_transaksi extends CI_controller{
     }
  //PEMBELIAN BAHAN BAKU
    public function lihat_pemb(){
+    $this->db->where('tgl_trans', date('Y-m-d'));
+    $cek = $this->db->get('pembelian_bb')->result();
+   $query1   = "SELECT  MAX(no_trans) as kode FROM pembelian_bb";
+     $cek_trans = $this->db->query($query1)->row_array();
+     $cek_trans1 = $cek_trans['kode'];
+     $query2 = "SELECT * FROM pembelian_bb
+                WHERE no_trans = '$cek_trans1' AND status > 0";
+      $cek1 = $this->db->query($query2)->result();
+    $data['cek'] = $cek;
+    $data['cek1'] = $cek1;
+    if($cek1 == TRUE){
+       $data['error'] = 'Pembelian Bahan Baku untuk hari ini sudah dilakukan!';
+    }
+
       $data['result'] = $this->db->get('pembelian_bb')->result_array();
         $this->template->load('template', 'pemb/view', $data);
+      // var_dump($cek1);
    }
 
    public function isi_edit_pemb($id){
@@ -161,8 +176,24 @@ class c_transaksi extends CI_controller{
 
     //Cek kualitas
    public function lihat_ck(){
+     $this->db->where('tgl_trans', date('Y-m-d'));
+    $cek = $this->db->get('cek_kualitas')->result();
+    $date = date('Y-m-d');
+     $query1   = "SELECT  MAX(no_trans) as kode FROM cek_kualitas";
+     $cek_trans = $this->db->query($query1)->row_array();
+     $cek_trans1 = $cek_trans['kode'];
+     $query2 = "SELECT * FROM cek_kualitas
+                WHERE no_trans = '$cek_trans1' AND status > 0";
+      $cek1 = $this->db->query($query2)->result();
+    $data['cek'] = $cek;
+    $data['cek1'] = $cek1;  
+    if($cek1 == TRUE){
+       $data['error'] = 'Cek Kualitas untuk hari ini sudah dilakukan!';
+    }
+
       $data['result'] = $this->db->get('cek_kualitas')->result_array();
         $this->template->load('template', 'ck/view', $data);
+      // var_dump($query2);
    }
 
    public function isi_edit_ck($id){
@@ -361,8 +392,33 @@ class c_transaksi extends CI_controller{
    //MENENTUKAN TRANSAKSI PRODUKSI 1
 
    public function lihat_produksi_ke1(){
+     $this->db->where('tgl_btk', date('Y-m-d'));
+      $data['cek1'] = $this->db->get('btk')->result();
+      //
+      $this->db->where('tgl_bop', date('Y-m-d'));
+      $data['cek2'] = $this->db->get('bop')->result();
+      //
+      $this->db->where('tgl_trans', date('Y-m-d'));
+      $data['cek3'] = $this->db->get('produksi_ke1')->result();
+
+      //
+     $date = date('Y-m-d');
+     
+     $query2 = "SELECT * FROM produksi_ke1
+                WHERE tgl_trans = '$date' AND status > 0";
+      $cek4 = $this->db->query($query2)->result();
+
+      
+      if($data['cek1'] == FALSE OR $data['cek2'] == FALSE){
+        $data['error'] = 'Master Data BOP atau BTK untuk hari ini masih kosong!';
+      }
+
+      if($cek4 == TRUE){
+        $data['clear'] = 'Produksi IPS untuk hari ini sudah dilakukan!';
+      }
       $data['result'] = $this->db->get('produksi_ke1')->result_array();
       $this->template->load('template', 'prod1/view', $data);
+      // var_dump($query2);
    }
 
     public function isi_edit_produksi_ke1($id){
@@ -413,12 +469,17 @@ class c_transaksi extends CI_controller{
       $bulan1 = substr($tgl, 5,2);
       $tahun1 = substr($tgl, 0,4);
 
-    
-      $this->db->where('tgl_btk', date('Y-m-d'));
+      $this->db->where('no_trans', $id);
+      $cek = $this->db->get('produksi_ke1')->row()->status;
+
+      if($cek == 0){
+         $this->db->where('tgl_btk', date('Y-m-d'));
       $btk = $this->db->get('btk')->row()->tarif;
-      $kalender = CAL_GREGORIAN;
-      $hari = cal_days_in_month($kalender, $bulan1, $tahun1);
-      $data['hari'] = $hari;
+      }else{
+        $this->db->where('no_trans', $id);
+        $btk = $this->db->get('detail_produksi_ke1')->row()->btk;
+      }
+   
       $data['btk'] = $btk;
 
      
@@ -574,6 +635,16 @@ class c_transaksi extends CI_controller{
 
 
    public function lihat_pembagian(){
+    $this->db->where('tgl_trans', date('Y-m-d'));
+    $cek = $this->db->get('pembagian')->result();
+    $this->db->where('tgl_trans', date('Y-m-d'));
+    $this->db->where('status >', '0');
+    $cek1 = $this->db->get('pembagian')->result();
+    $data['cek'] = $cek;
+    $data['cek1'] = $cek1;
+    if($cek1 == TRUE){
+       $data['error'] = 'Pembagian untuk hari ini sudah dilakukan!';
+    }
       $data['result'] = $this->db->get('pembagian')->result_array();
       $this->template->load('template', 'pembagian/view', $data);
    }
@@ -823,7 +894,16 @@ class c_transaksi extends CI_controller{
 	 public function lihat_tp()
    {
       	
-         
+          $this->db->where('tgl_tp', date('Y-m-d'));
+    $cek = $this->db->get('target_produksi')->result();
+    $this->db->where('tgl_tp', date('Y-m-d'));
+    $this->db->where('status >', '0');
+    $cek1 = $this->db->get('target_produksi')->result();
+    $data['cek'] = $cek;
+    $data['cek1'] = $cek1;
+    if($cek1 == TRUE){
+       $data['error'] = 'Target Produksi untuk hari ini sudah dilakukan!';
+    }
          $data['result'] = $this->db->get('target_produksi')->result_array();
          $this->template->load('template', 'tp/view', $data);
        
@@ -1101,6 +1181,17 @@ group by no_bbp";
 
     //PEMBELIAN BAHAN PENOLONG
    public function lihat_pembp(){
+
+          $this->db->where('tgl_trans', date('Y-m-d'));
+    $cek = $this->db->get('pembelian_bp')->result();
+    $this->db->where('tgl_trans', date('Y-m-d'));
+    $this->db->where('status >', '0');
+    $cek1 = $this->db->get('pembelian_bp')->result();
+    $data['cek'] = $cek;
+    $data['cek1'] = $cek1;
+    if($cek1 == TRUE){
+       $data['error'] = 'Pembelian Bahan Penolong untuk hari ini sudah dilakukan!';
+    }
    	$data['result'] = $this->db->get('pembelian_bp')->result_array();
    	  $this->template->load('template', 'pembp/view', $data);
    }
@@ -1276,6 +1367,30 @@ group by no_bbp";
  //MENENTUKAN TRANSAKSI PRODUKSI 2
 
    public function lihat_produksi_ke2(){
+    $this->db->where('tgl_btk', date('Y-m-d'));
+      $data['cek1'] = $this->db->get('btk')->result();
+      //
+      $this->db->where('tgl_bop', date('Y-m-d'));
+      $data['cek2'] = $this->db->get('bop')->result();
+      //
+      $this->db->where('tgl_trans', date('Y-m-d'));
+      $data['cek3'] = $this->db->get('produksi_ke2')->result();
+
+      //
+     $date = date('Y-m-d');
+     
+     $query2 = "SELECT * FROM produksi_ke2
+                WHERE tgl_trans = '$date' AND status > 0";
+      $cek4 = $this->db->query($query2)->result();
+
+      
+      if($data['cek1'] == FALSE OR $data['cek2'] == FALSE){
+        $data['error'] = 'Master Data BOP atau BTK untuk hari ini masih kosong!';
+      }
+
+      if($cek4 == TRUE){
+        $data['clear'] = 'Produksi Olahan untuk hari ini sudah dilakukan!';
+      }
       $data['result'] = $this->db->get('produksi_ke2')->result_array();
       $this->template->load('template', 'prod2/view', $data);
    }
@@ -1384,11 +1499,18 @@ group by no_bbp";
       $bulan1 = substr($tgl, 5,2);
       $tahun1 = substr($tgl, 0,4);
 
-      $this->db->where('tgl_btk', date('Y-m-d'));
+       $this->db->where('no_trans', $id);
+      $cek = $this->db->get('produksi_ke2')->row()->status;
+
+      if($cek == 0){
+         $this->db->where('tgl_btk', date('Y-m-d'));
       $btk = $this->db->get('btk')->row()->tarif;
-      $kalender = CAL_GREGORIAN;
-      $hari = cal_days_in_month($kalender, $bulan1, $tahun1);
-      $data['hari'] = $hari;
+      }else{
+        $this->db->where('no_trans', $id);
+        $btk = $this->db->get('detail_produksi_ke2')->row()->btk;
+      }
+     
+     
       $data['btk']  = $btk * ($data['jumlah'] / $jml_produksi);
      
      //BIAYA BOP
@@ -2219,6 +2341,16 @@ group by no_bbp";
    //---------------------------------------------------------------------------------- 
    
     public function lihat_pemby(){
+       $this->db->where('tgl_trans', date('Y-m-d'));
+    $cek = $this->db->get('pembayaran')->result();
+    $this->db->where('tgl_trans', date('Y-m-d'));
+    $this->db->where('status >', '0');
+    $cek1 = $this->db->get('pembayaran')->result();
+    $data['cek'] = $cek;
+    $data['cek1'] = $cek1;
+    if($cek1 == TRUE){
+       $data['error'] = 'Pembayaran untuk hari ini sudah dilakukan!';
+    }
       $data['result'] = $this->db->get('pembayaran')->result_array();
         $this->template->load('template', 'pemby/view', $data);
    }

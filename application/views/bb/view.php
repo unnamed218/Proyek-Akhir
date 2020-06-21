@@ -7,7 +7,9 @@
     <h3 class="panel-title"><b>Daftar Bahan Baku</b></h3>
   </div>
   	 <div class="x_content">
+  	 	
   	 		<a href = "<?php echo site_url()."/c_masterdata/form_bb"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
+
   	 	 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">

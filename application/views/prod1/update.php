@@ -113,12 +113,12 @@
 	</div>
 
 	<?php //end of tabel ?>
-	<?php // tabel biaya produksi atau harga pokok produksinya ?>
+	<?php // tabel Harga Pokok Produksi atau harga pokok produksinya ?>
 	<div class="row" >
 
 	<div class="col-md-12" >
 		<hr>
-		<h5><b>Biaya Produksi</b></h5	>
+		<h5><b>Harga Pokok Produksi</b></h5	>
 		<table  class="table table-striped table-bordered table-hover jambo_table" >
 		 	<thead>
 			<tr class="headings">
@@ -201,7 +201,7 @@
 			$bbop =0;	
 			?>
 			<tr>
-				<th>Biaya Produksi</th>
+				<th>Harga Pokok Produksi</th>
 				<th><?php echo format_rp($biaya_produksi) ?></th>
 				<th><?php echo format_rp(round($biaya_produksi / $jmlprod)) ?> </th> 
 			</tr>

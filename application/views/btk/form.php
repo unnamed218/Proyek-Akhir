@@ -24,8 +24,8 @@
 			</div> -->
 			  <div class="form-group">
               <label>Tanggal</label>
-
-                <div class="form-group">
+              	<input type = "text" name = "tgl_btk" class = "form-control" value="<?php echo date('Y-m-d')?>" readonly>
+            <!--     <div class="form-group">
                         <div class='input-group date' id='myDatepicker2'>
                             <input type='text' class="form-control" name = "tgl_btk">
                             <span class="input-group-addon">
@@ -33,7 +33,7 @@
                             </span>
                         </div>
                     </div>
-            
+             -->
 			  <?php echo form_error('tgl_btk'); ?>
             </div>
 			<!-- <div class="form-group">

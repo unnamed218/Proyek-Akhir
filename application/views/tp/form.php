@@ -19,8 +19,9 @@
 			</div>
 			  <div class="form-group">
               <label>Tanggal Produksi</label>
+               <input type = "text" name = "tgl_tp" class = "form-control" value="<?php echo date('Y-m-d')?>" readonly>
                 <!-- <input type = "date" name = "tgl_tp" class = "form-control" id="myDatepicker2"> -->
-
+<!-- 
                 <div class="form-group">
                         <div class='input-group date' id='myDatepicker2'>
                             <input type='text' class="form-control" name = "tgl_tp">
@@ -28,7 +29,7 @@
                                <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
-                    </div>
+                    </div> -->
             
 			  <?php echo form_error('tgl_tp'); ?>
             </div>

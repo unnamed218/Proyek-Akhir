@@ -28,7 +28,7 @@
   	 <div class="x_content">
   	 	<div class="row">
   	 		<div class="col-sm-6">
-		<form class = 'form-inline' method = "POST" class = "form-inline" action = "<?php echo site_url().'/c_keuangan/lap_penjs';?>">
+		<form class = 'form-inline' method = "POST" class = "form-inline" action = "<?php echo site_url().'/c_keuangan/lap_penjt';?>">
 		
 
 				<label>Pilih Bulan :</label> 

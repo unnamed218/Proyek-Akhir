@@ -39,7 +39,8 @@
 
 	<div class="form-group">
 			  <label>Satuan</label>
-			  <select name="satuan" class="form-control">
+			  <input type="text" class="form-control" name="satuan" value="<?php echo $data['satuan'] ; ?>" readonly >
+			  <!-- <select name="satuan" class="form-control">
 			  	<option disabled selected>Pilih Satuan</option>
 			  	<option value="ton">ton</option>
 			  	<option value="kg">kg</option>
@@ -48,7 +49,7 @@
 			  	<option value="ml">ml</option>
 			  	<option value="buah">buah</option>
 			  	
-			  </select>
+			  </select> -->
 			
 			  <?php echo form_error('satuan'); ?>
 			</div>

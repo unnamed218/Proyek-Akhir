@@ -1031,7 +1031,8 @@ class c_masterdata extends CI_controller{
     public function lihat_bop()
    {
       
-         
+          $this->db->where('tgl_bop', date('Y-m-d'));
+         $data['cek'] = $this->db->get('bop')->result();
          $data['result'] = $this->db->get('bop')->result_array();
          $this->template->load('template', 'bop/view', $data);
        
@@ -1053,6 +1054,7 @@ class c_masterdata extends CI_controller{
          }
          $no_trans   = "BOP_" . $kd;
          $data['id'] = $no_trans;
+
          $this->template->load('template', 'bop/form', $data);
        
    }
@@ -1195,7 +1197,8 @@ class c_masterdata extends CI_controller{
 
     public function lihat_btk()
    {
-      
+         $this->db->where('tgl_btk', date('Y-m-d'));
+         $data['cek'] = $this->db->get('btk')->result();
          
          $data['result'] = $this->db->get('btk')->result_array();
          $this->template->load('template', 'btk/view', $data);

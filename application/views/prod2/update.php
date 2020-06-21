@@ -132,7 +132,7 @@
 
 	<div class="col-md-12" >
 		<hr>
-		<h5><b>Biaya Produksi</b></h5	>
+		<h5><b>Harga Pokok Produksi</b></h5	>
 		<table  class="table table-striped table-bordered table-hover jambo_table" >
 		 	<thead>
 			<tr class="headings">
@@ -217,12 +217,12 @@
 			?>
 			<!-- ///////////////////////////////////////////////////////////////////////////////-->
 			<?php 
-			//total biaya produksi
+			//total Harga Pokok Produksi
 			$biaya_produksi = round( + ($bbtk) + ($bbp) + ($bbbb));
 			$biaya_produksi_satuan = round($biaya_produksi / $jumlah); 
 			?>
 			<tr>
-				<th>Biaya Produksi</th>
+				<th>Harga Pokok Produksi</th>
 				<td align='right'><b><?php echo format_rp(round($biaya_produksi))?></b></td>
 				<td align='right'><b><?php echo format_rp(round($biaya_produksi_satuan)) ?></b></td>
 

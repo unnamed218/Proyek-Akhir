@@ -186,7 +186,7 @@
 	if($fpenj == 0){
 		$kontribusi = 0;
 	}else{
-		$kontribusi = round(($labakotor / $labakotor1) * 100);
+		$kontribusi = ($labakotor / $labakotor1) * 100;
 	}
 	?>
 		<tr>
@@ -236,7 +236,7 @@
 		<tr>
 			<th>Kontribusi</th>
 			<td align='right'></td>
-			<td align='right'><?php echo $kontribusi ?>%</td>
+			<td align='right'><?php echo round($kontribusi) ?>%</td>
 		</tr>
 		<tr>
 			<th>Beban Operasional</th>

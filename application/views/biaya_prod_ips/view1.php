@@ -4,7 +4,7 @@
 	<body>
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Laporan Biaya Produksi IPS</b></h3>
+    <h3 class="panel-title"><b>Laporan Harga Pokok Produksi IPS</b></h3>
   </div>
   <?php  $namabulan = array(
       '0' => 'December',
@@ -39,7 +39,7 @@
 		
 
 				<label>Pilih Bulan :</label> 
-				<select name="bulan" class="form-control">
+				<select name="bulan" class="form-control" required="">
 					<option value="*" disabled selected>Pilih Bulan</option>
 					<option value="1">Januari</option>
 					<option value="2">Februari</option>
@@ -58,7 +58,7 @@
 		
 		&nbsp&nbsp
 			<label>Pilih Tahun :</label>
-			<select name="tahun" class="form-control">
+			<select name="tahun" class="form-control" required="">
 				<option value="#" disabled selected>Pilih Tahun</option>
 				<?php
 				$now =date('Y');
@@ -94,7 +94,7 @@
   	 	<div style="font-size: 25px">
   	 	KPSBU
   	 </div>
-  	 <div style="font-size: 20px">Laporan Biaya Produksi IPS</div>
+  	 <div style="font-size: 20px">Laporan Harga Pokok Produksi IPS</div>
   
   	<?php if(isset($bulan, $tahun)){ ?>
   	 <div style="font-size: 15px">
@@ -112,7 +112,13 @@
 				<th></th>
 			</tr>
 		</thead>
+		<?php 
+		$fawal = 0;
+		$fawald = 0;
+		$fawalk = 0;
 		
+		$fawal = $cekawald - $cekawalk;
+		?>
 			<tr>
 				<td>Pemakaian Bahan Baku :</td>
 				<td></td>
@@ -162,7 +168,7 @@
 			</tr>
 
 			<tr>
-				<th>Total Biaya Produksi</th>
+				<th>Total Harga Pokok Produksi</th>
 				<td></td>
 				<td align='right'><b><?php echo format_rp($totalbp)?></b></td>
 			</tr>
@@ -179,37 +185,41 @@
 			<tr>
 				<th>Persediaan Produk Dalam Proses Akhir</th>
 				<td></td>
-				<td align='right'><?php echo format_rp('0')?></td>
+				<td align='right'><?php echo format_rp($akhir)?></td>
 			</tr>
 			<tr>
 				<td>Harga Pokok Produksi</td>
 				<td></td>
-				<td align='right'><b><?php echo format_rp($totalbp)?></b></td>
+				<td align='right'><b><?php echo format_rp($hpprod)?></b></td>
 			</tr>
 			<tr>
 				<td>Persediaan Produk Jadi Awal</td>
 				<td></td>
-				<td align='right'><?php echo format_rp('0')?></td>
+				<td align='right'><?php echo format_rp($fawal)?></td>
 			</tr>
 			<tr>
 				<td>Produk Tersedia Untuk Dijual</td>
 				<td></td>
-				<td align='right'><b><?php echo format_rp($totalbp)?></b></td>
+				<td align='right'><b><?php echo format_rp($hpprod)?></b></td>
 			</tr>
+			<?php 
+			$jadiakhir = $hpprod - $filterakhir;
+			$hpp = $filterakhir;
+			?>
 			<tr>
 				<td>Persediaan Produk Jadi Akhir</td>
 				<td></td>
-				<td align='right'><?php echo format_rp('0')?></td>
+				<td align='right'><?php echo format_rp($jadiakhir)?></td>
 			</tr>
 			<tr>
 				<td>Harga Pokok Penjualan</td>
 				<td></td>
-				<td align='right'><b><?php echo format_rp($totalbp)?></b></td>
+				<td align='right'><b><?php echo format_rp($hpp)?></b></td>
 			</tr>
 			<tr>
-				<td>Harga Pokok Penjualan Satuan</td>
+				<td>Harga Pokok Penjualan Satuan (<?php echo ($jumlahterjual)?> buah)</td>
 				<td></td>
-				<td align='right'><b><?php echo format_rp($hargasatuan)?></b></td>
+				<td align='right'><b><?php echo format_rp($hargasatuanterjual)?></b></td>
 			</tr>
 			
 			
