@@ -1039,7 +1039,8 @@ class c_masterdata extends CI_controller{
    }
    public function form_bop()
    {
-      
+      date_default_timezone_set('Asia/Jakarta');
+         $date = date('Y-m-d');
          
          $query1   = "SELECT  MAX(RIGHT(no_bop,3)) as kode FROM bop";
          $abc      = $this->db->query($query1);
@@ -1096,7 +1097,7 @@ class c_masterdata extends CI_controller{
    
    public function isi_edit_bop($id)
    {
-
+      
 
          $x['jenis_bop'] = $this->db->get('jenis_bop')->result_array();
          $this->db->where('no_bop', $id);
@@ -1206,7 +1207,8 @@ class c_masterdata extends CI_controller{
    }
    public function form_btk()
    {
-      
+      date_default_timezone_set('Asia/Jakarta');
+         $date = date('Y-m-d');
          
          $query1   = "SELECT  MAX(RIGHT(no_btk,3)) as kode FROM   btk";
          $abc      = $this->db->query($query1);

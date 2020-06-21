@@ -423,6 +423,7 @@ class c_transaksi extends CI_controller{
 
     public function isi_edit_produksi_ke1($id){
          date_default_timezone_set('Asia/Jakarta');
+         $date = date('Y-m-d');
       $data['id'] = $id;
       $data['no_trans'] = $id; 
       $this->db->where('no_trans', $id);
@@ -501,7 +502,7 @@ class c_transaksi extends CI_controller{
 
       
       $this->template->load('template', 'prod1/update', $data);
-      // var_dump($data['cek_selesai']);
+      // var_dump(date('Y-m-d'));
    }
 
    public function form_produksi_ke1(){
