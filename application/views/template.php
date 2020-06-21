@@ -178,7 +178,6 @@
                                      
                                   <li><a href="<?php echo site_url();?>c_transaksi/lihat_pemb">Pembelian Bahan Baku</a></li>
                                       <li><a href="<?php echo site_url();?>c_transaksi/lihat_ck">Cek Kualitas</a></li>
-                                      <li><a href="<?php echo site_url();?>c_transaksi/lihat_pembp">Pembelian Bahan 
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_produksi_ke1">Produksi ke IPS</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_pembagian">Pembagian</a></li>
                               
