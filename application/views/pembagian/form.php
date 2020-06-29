@@ -28,7 +28,7 @@
 							    <option value="#" disabled selected>Pilih Produksi</option>
 								<?php				
 								foreach($prod as $data){				
-								echo "<option value = ".$data['no_trans'].">".$data['no_trans']."</option>";
+								echo "<option value = ".$data['no_trans'].">".$data['no_trans']." (".$data['tgl_trans'].")</option>";
 															}
 								?>
 						</select>

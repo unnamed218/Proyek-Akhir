@@ -21,7 +21,7 @@
 <!-- 				<th>Bulan</th>
 				<th>Tahun</th>
  -->				<th>Jumlah Tenaga Kerja</th>
-				<th>Tarif Tenaga Kerja</th>
+				<th>Tarif Tenaga Kerja (Perhari)</th>
 				<th>Aksi</th>
 			</tr>
 		</thead>
@@ -58,7 +58,6 @@
 			</tbody>
 		</table>
 
-		*Tarif Harga per orang dan bulanan.
 
 	
 	

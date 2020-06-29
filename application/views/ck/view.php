@@ -17,8 +17,8 @@
 		 	<thead>
 			<tr class="headings">
 				<th style="width: 2px;">No</th>
-				<th>ID Transaksi</th>
-				<th>Tanggal Transaksi</th>
+				<th>ID Pengecekan</th>
+				<th>Tanggal Pengecekan</th>
 				<th>Aksi</th>
 			</tr>
 		</thead>

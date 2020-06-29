@@ -104,7 +104,7 @@
 					echo "
 							<tr>
 							<td>".$data['nama_jbop']."</td>
-							<td>".format_rp($data['harga'])."</td>
+							<td align='right'>".format_rp($data['harga'])."</td>
 							" ?>
 							<td>
 							<!-- 

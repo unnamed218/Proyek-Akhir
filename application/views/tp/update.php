@@ -39,7 +39,7 @@
 			<div class="col-xs-3">
 				<div class="form-group">
 				<label>Jumlah</label>
-				<input type="text" class="form-control"  value="<?php echo $jumlah ; ?>"readonly >
+				<input type="text" class="form-control"  value="<?php echo number($jumlah) ; ?> liter <?php if($status == 0){?> (Sisa <?php echo number($jumlah - $cek)?> liter) <?php }?>"readonly >
 				</div>
 			</div>
 			
@@ -143,7 +143,7 @@
 					echo "
 							<tr>
 							<td>".$data['nama_produk']."</td>
-							<td>".$data['jumlah']."</td>
+							<td>".number($data['jumlah'])."</td>
 						
 							
 							<td>".$data['satuan']."</td>"; ?>
@@ -191,19 +191,17 @@
 					
 					echo "
 							<tr>
-							<td>".$data['nama_bdp']."</td>"; ?>
+							<td>".$data['nama_bb']."</td>"; ?>
 							<?php 
 							$nama = substr($data['no_bbp'],0,2);
 							if($nama == 'BB'){ echo "
 							<td>Bahan Baku</td> ";
 						}elseif($nama == 'BP'){
 							echo "<td>Bahan Penolong</td>";
-						}else{
-							echo "<td>Produk dalam Proses";
 						}
 						echo "
 
-							<td>".$data['jumlah_bom']."</td>
+							<td>".number($data['jumlah_bom'])."</td>
 							
 							<td>".$data['satuan']."</td>"; ?>
 								

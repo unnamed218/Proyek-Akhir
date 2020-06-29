@@ -59,13 +59,13 @@
 						
 							
 							<td align='right'>".format_rp($data['harga'])."</td>
-							<td align='right'>".format_rp($data['harga']*$data['jumlah'])."</td>"; ?>
+							<td align='right'>".format_rp($data['subtotal'])."</td>"; ?>
 							
 
 						</tr>
 						
 					<?php
-					$total=$total+($data['jumlah']);
+					$total=$total+($data['subtotal']);
 					$no++;
 				}
 			?>

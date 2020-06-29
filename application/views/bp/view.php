@@ -14,7 +14,7 @@
 				<th style="width: 2px;">No</th>
 				<th>ID Bahan Penolong</th>
 				<th>Nama Bahan Penolong</th>
-				<th>Harga</th>
+				<!-- <th>Harga</th> -->
 				<th>Satuan</th>
 				<th>Aksi</th>
 			</tr>
@@ -28,7 +28,6 @@
 						<tr><td>$no</td>
 							<td>".$data['no_bp']."</td>
 							<td>".$data['nama_bp']."</td>
-							<td>".format_rp($data['harga'])."</td>
 							<td>".$data['satuan']."</td>" ?>
 							<td>
 							<a href="isi_edit_bp/<?php echo $data['no_bp']; ?>">

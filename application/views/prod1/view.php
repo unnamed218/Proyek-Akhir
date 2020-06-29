@@ -19,8 +19,9 @@
 		 	<thead>
 			<tr class="headings">
 				<th style="width: 2px;">No</th>
-				<th>ID Transaksi</th>
-				<th>Tanggal Transaksi</th>
+				<th>ID Produksi</th>
+				<th>Tanggal Produksi</th>
+				<th>Jumlah Produksi</th>
 				<th>Aksi</th>
 			</tr>
 		</thead>
@@ -33,6 +34,7 @@
 						<tr><td>$no</td>
 							<td>".$data['no_trans']."</td>
 							<td>".$data['tgl_trans']."</td>
+							<td>".number($data['jumlah'])."</td>
 							" ?>
 							<td>
 							<a href="isi_edit_produksi_ke1/<?php echo $data['no_trans']; ?>">

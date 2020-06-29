@@ -155,16 +155,17 @@
 				<td align='right'><b><?php echo format_rp($btk)?></b></td>
 			</tr>
 			<tr>
-				<td>Biaya Overhead Pabril Variabel</td>
-				<td align='right'><?php echo format_rp('0')?></td>
+				<td>Biaya Overhead Pabrik Variabel</td>
+				<td align='right'><?php echo format_rp($bop)?></td>
 				<td></td>
 			</tr>
+			
 
 
 			<tr>
 				<th>Total Biaya Overhead Pabrik Variabel</th>
 				<td></td>
-				<td align='right'><b><?php echo format_rp('0')?></b></td>
+				<td align='right'><b><?php echo format_rp($bop)?></b></td>
 			</tr>
 
 			<tr>
@@ -188,40 +189,11 @@
 				<td align='right'><?php echo format_rp($akhir)?></td>
 			</tr>
 			<tr>
-				<td>Harga Pokok Produksi</td>
+				<th>Harga Pokok Produksi</th>
 				<td></td>
 				<td align='right'><b><?php echo format_rp($hpprod)?></b></td>
 			</tr>
-			<tr>
-				<td>Persediaan Produk Jadi Awal</td>
-				<td></td>
-				<td align='right'><?php echo format_rp($fawal)?></td>
-			</tr>
-			<tr>
-				<td>Produk Tersedia Untuk Dijual</td>
-				<td></td>
-				<td align='right'><b><?php echo format_rp($hpprod)?></b></td>
-			</tr>
-			<?php 
-			$jadiakhir = $hpprod - $filterakhir;
-			$hpp = $filterakhir;
-			?>
-			<tr>
-				<td>Persediaan Produk Jadi Akhir</td>
-				<td></td>
-				<td align='right'><?php echo format_rp($jadiakhir)?></td>
-			</tr>
-			<tr>
-				<td>Harga Pokok Penjualan</td>
-				<td></td>
-				<td align='right'><b><?php echo format_rp($hpp)?></b></td>
-			</tr>
-			<tr>
-				<td>Harga Pokok Penjualan Satuan (<?php echo ($jumlahterjual)?> buah)</td>
-				<td></td>
-				<td align='right'><b><?php echo format_rp($hargasatuanterjual)?></b></td>
-			</tr>
-			
+		
 			
 		</table>
 

@@ -3,6 +3,7 @@ class c_masterdata extends CI_controller{
    
     function __construct(){
         parent:: __construct();
+          date_default_timezone_set('Asia/Jakarta');
        if(empty($this->session->userdata('level'))){
             redirect('c_login/home');
         }
@@ -128,17 +129,6 @@ class c_masterdata extends CI_controller{
                   'is_unique' => '%s sudah ada di database!'
                )
             ),
-            array(
-               'field' => 'harga',
-               'label' => 'Harga',
-               'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!'
-               )
-            ),
             
             array(
                'field' => 'satuan',
@@ -158,7 +148,6 @@ class c_masterdata extends CI_controller{
             $data = array(
                'no_bb' => $_POST['no_bb'],
                'nama_bb' => $_POST['nama_bb'],
-               'harga' => $_POST['harga'],
                'stok' => 0,
                'satuan' => $_POST['satuan']
             );
@@ -196,17 +185,6 @@ class c_masterdata extends CI_controller{
                   'customAlpha' => '%s hanya boleh berupa huruf!'
                )
             ),
-            array(
-               'field' => 'harga',
-               'label' => 'Harga',
-               'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!'
-               )
-            ),
             
             array(
                'field' => 'satuan',
@@ -227,13 +205,11 @@ class c_masterdata extends CI_controller{
          } else {
             $no_bb   = $_POST['no_bb'];
             $nama_bb = $_POST['nama_bb'];
-            $harga   = $_POST['harga'];
             $stok    = $_POST['stok'];
             $satuan  = $_POST['satuan'];
             
             $data = array(
                'nama_bb' => $nama_bb,
-               'harga' => $harga,
                'stok' => $stok,
                'satuan' => $satuan
             );
@@ -444,18 +420,6 @@ class c_masterdata extends CI_controller{
                )
             ),
             array(
-               'field' => 'harga',
-               'label' => 'Harga',
-               'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!'
-               )
-            ),
-            
-            array(
                'field' => 'satuan',
                'label' => 'Satuan',
                'rules' => 'required',
@@ -473,7 +437,6 @@ class c_masterdata extends CI_controller{
             $data = array(
                'no_bp' => $_POST['no_bp'],
                'nama_bp' => $_POST['nama_bp'],
-               'harga' => $_POST['harga'],
                'stok' => 0,
                'satuan' => $_POST['satuan']
             );
@@ -511,17 +474,6 @@ class c_masterdata extends CI_controller{
                   'customAlpha' => '%s hanya boleh berupa huruf!'
                )
             ),
-            array(
-               'field' => 'harga',
-               'label' => 'Harga',
-               'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!'
-               )
-            ),
             
             array(
                'field' => 'satuan',
@@ -541,13 +493,11 @@ class c_masterdata extends CI_controller{
          } else {
             $no_bp   = $_POST['no_bp'];
             $nama_bp = $_POST['nama_bp'];
-            $harga   = $_POST['harga'];
             $stok    = $_POST['stok'];
             $satuan  = $_POST['satuan'];
             
             $data = array(
                'nama_bp' => $nama_bp,
-               'harga' => $harga,
                'stok' => $stok,
                'satuan' => $satuan
             );
@@ -1536,20 +1486,12 @@ class c_masterdata extends CI_controller{
          $query = "(SELECT no_bb as no_bbp, nama_bb as nama_bbp, satuan FROM bahan_baku)
                   UNION
                   (SELECT no_bp, nama_bp, satuan FROM bahan_penolong)
-                  UNION
-                  (SELECT no_bdp, nama_bdp, satuan FROM bahan_dalam_proses)
                   ORDER BY no_bbp";
          $x['result'] = $this->db->query($query)->result_array();
          $query1 = "SELECT no_produk, no_bb as no_bbp, nama_bb as nama_bbp, satuan, jumlah
                      FROM bahan_baku a
                      JOIN bom b
                      ON a.no_bb = b.no_bbp
-                     WHERE no_produk LIKE '".$id."'
-                     UNION
-                     SELECT no_produk, no_bdp, nama_bdp, satuan , jumlah
-                     FROM bahan_dalam_proses a
-                     JOIN bom b
-                     ON a.no_bdp = b.no_bbp
                      WHERE no_produk LIKE '".$id."'
                      UNION
                      SELECT no_produk, no_bp, nama_bp, satuan , jumlah
@@ -1573,7 +1515,7 @@ class c_masterdata extends CI_controller{
             
             array(
                'field' => 'no_bbp',
-               'label' => 'Nama Bahan Baku / Penolong / Produk Dalam Proses',
+               'label' => 'Nama Bahan Baku / Penolong',
                'rules' => 'required',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!'

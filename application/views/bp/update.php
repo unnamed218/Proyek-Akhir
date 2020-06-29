@@ -27,7 +27,7 @@
 		</div>
 		<?php echo form_error('nama_bp'); ?>
 	</div>
-	<div class="form-group">
+<!-- 	<div class="form-group">
 		<div class="row">
 			<div class="col-xs-4">
 				<label>Harga</label>
@@ -35,7 +35,7 @@
 			</div>
 		</div>
 	</div>
-	<?php echo form_error('harga'); ?>
+	<?php echo form_error('harga'); ?> -->
 	<div class="form-group">
 		<div class="row">
 			<div class="col-xs-4">

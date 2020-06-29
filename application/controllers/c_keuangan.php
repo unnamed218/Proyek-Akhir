@@ -4,6 +4,7 @@ class c_keuangan extends CI_Controller
 
 	  function __construct(){
         parent:: __construct();
+           date_default_timezone_set('Asia/Jakarta');
        if(empty($this->session->userdata('level'))){
             redirect('c_login/home');
         }
@@ -361,7 +362,7 @@ class c_keuangan extends CI_Controller
 				$tahun = date('Y');
 				$data['bulan'] = $bulan;
 				$data['tahun'] = $tahun;
-				$query1 = "SELECT ifnull(sum(bbb),0) as bbb, ifnull(sum(btk),0) as btk, ifnull(sum(jumlah),0) as jumlah
+				$query1 = "SELECT ifnull(sum(bbb),0) as bbb, ifnull(sum(btk),0) as btk,ifnull(sum(bop),0) as bop, ifnull(sum(jumlah),0) as jumlah
 							FROM detail_produksi_ke1 a
 							JOIN produksi_ke1 b ON a.no_trans = b.no_trans
 							WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun'";
@@ -372,10 +373,13 @@ class c_keuangan extends CI_Controller
 				$btk = $this->db->query($query1)->row()->btk;
 				$data['btk'] = $btk;
 
+				$bop = $this->db->query($query1)->row()->bop;
+				$data['bop'] = $bop;
+
 				$jml1 = $this->db->query($query1)->row()->jumlah;
 				$data['jml'] = $jml1;
 				$totalbp = 0;
-				$totalbp = $bb + $btk;
+				$totalbp = $bb + $btk + $bop;
 				$data['totalbp'] = $totalbp;
 				if($totalbp == TRUE){
 				$data['hargasatuan'] = $totalbp / $jml1	;
@@ -569,11 +573,12 @@ $query35 = "SELECT ifnull(SUM(hpp), 0) as nominal
 				$btk = $this->db->query($query1)->row()->btk;
 				$data['btk'] = $btk;
 
-				$query2 = "SELECT nama_bp, ifnull(sum(a.jumlah) * c.jumlah, 0) as jumlah, c.no_bbp, ifnull((sum(a.jumlah) * c.jumlah)*d.harga, 0) as biaya , a.no_produk
+				$query2 = "SELECT nama_bp, ifnull(sum(a.jumlah) * c.jumlah, 0) as jumlah, c.no_bbp, ifnull((sum(a.jumlah) * c.jumlah)*e.harga, 0) as biaya , a.no_produk
                   FROM detail_produksi_ke2 a
                   JOIN produk b ON a.no_produk = b.no_produk
                   JOIN bom c ON c.no_produk = b.no_produk
                   JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
+                  JOIN detail_pembelian_bp e ON d.no_bp =  e.no_bp
                   WHERE NOT c.no_bbp = 'BB_001' AND a.no_produk = '$no_produk'
                   group by no_bbp";
                  $data['bp'] = $this->db->query($query2)->result_array();
@@ -1008,6 +1013,358 @@ ORDER BY a.no ASC";
         $this->template->load('template','bp/stock_card',$data);
       }
 	}
+
+	public function lr1(){
+
+		if(isset($_POST['bulan'],$_POST['tahun'])){
+			$bulan = $_POST['bulan'];
+		$tahun = $_POST['tahun'];
+		$data['bulan'] = $bulan;
+		$data['tahun'] = $tahun;
+
+		//baris produk
+		$this->db->or_not_like('no_produk', 'PR_001');
+		$data['list_produk'] = $this->db->get('produk')->result_array();
+
+		////////////IPS IPS IPS IPS
+		$qpenj0 = "SELECT ifnull(sum(nominal),0) as nominal
+					FROM jurnal
+					WHERE posisi_dr_cr = 'k' AND no_coa = '4111' AND id_jurnal LIKE 'PENJS%' AND MONTH(tgl_jurnal) = '$bulan' AND YEAR(tgl_jurnal) = '$tahun'";
+		$penjs = $this->db->query($qpenj0)->row_array()['nominal'];
+		$data['penjs'] = $penjs;
+
+		$qhpp0 =  "SELECT ifnull(sum(nominal),0) as hpp
+					FROM jurnal
+					WHERE posisi_dr_cr = 'd' AND no_coa = '6111' AND id_jurnal LIKE 'PENJS%' AND MONTH(tgl_jurnal) = '$bulan' AND YEAR(tgl_jurnal) = '$tahun'";
+		$hppips = $this->db->query($qhpp0)->row_array()['hpp'];
+		$data['hppips'] = $hppips;
+		$data['laba_kotor_ips'] = $data['penjs'] - $data['hppips'];
+
+		$qbebanips = "SELECT ifnull(sum(subtotal),0) as subtotal, c.no_coa, nama_coa
+					FROM (SELECT * FROM pembayaran WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun')as a 
+					JOIN (SELECT * FROM detail_pembayaran WHERE jenis_penjualan = 'ips')as b ON a.no_trans = b.no_trans
+					RIGHT JOIN coa c ON c.no_coa = b.no_coa
+					GROUP BY no_coa
+					ORDER BY no_coa ASC
+                    ";
+		$ibbn = $this->db->query($qbebanips)->result_array();
+		$data['ipsbeban'] = $ibbn;
+
+		//TOTAL TOKOOOO
+		$qpenjt = "SELECT ifnull(sum(subtotal), 0) as penjualan, ifnull(sum(hpp), 0) as hpp
+					FROM detail_penjualan_toko a 
+					JOIN penjualan_toko b ON  a.no_trans = b.no_trans 
+					WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun'";
+
+		$data['penj_toko'] = $this->db->query($qpenjt)->row_array()['penjualan'];
+		$data['hpp_toko'] = $this->db->query($qpenjt)->row_array()['hpp'];
+		$data['laba_kotor_toko'] = $data['penj_toko'] - $data['hpp_toko'];
+
+		
+		//list tokooooooooooooooooooooooooooooooooooo
+
+		$qpenj1 = "SELECT ifnull(sum(subtotal), 0) as nominal, b.no_produk, ifnull(sum(hpp),0) as hpp, ifnull((sum(subtotal) - sum(hpp)), 0) as laba_kotor
+					FROM (SELECT * FROM penjualan_toko WHERE month(tgl_trans) ='$bulan' AND YEAR(tgl_trans) = '$tahun') as ab
+                    JOIN detail_penjualan_toko c ON ab.no_trans = c.no_trans
+                    RIGHT JOIN produk b ON c.no_produk = b.no_produk 
+                    WHERE b.no_produk NOT LIKE 'PR_001'
+					GROUP BY b.no_produk 
+					ORDER BY b.no_produk ASC";
+		$penjt = $this->db->query($qpenj1)->result_array();
+		$data['penjt'] = $penjt;
+
+		$qbebantoko = "SELECT ifnull(sum(subtotal),0) as subtotal, c.no_coa, nama_coa
+					FROM (SELECT * FROM pembayaran WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun')as a 
+					JOIN (SELECT * FROM detail_pembayaran WHERE jenis_penjualan = 'toko')as b ON a.no_trans = b.no_trans
+					RIGHT JOIN coa c ON c.no_coa = b.no_coa
+					GROUP BY no_coa
+					ORDER BY no_coa ASC
+                    ";
+		$tbbn = $this->db->query($qbebantoko)->result_array();
+		$data['tokobeban'] = $tbbn;
+
+
+
+		}else{
+		$bulan = date('m');
+		$tahun = date('Y');
+		$data['bulan'] = $bulan;
+		$data['tahun'] = $tahun;
+
+		//baris produk
+		$this->db->or_not_like('no_produk', 'PR_001');
+		$data['list_produk'] = $this->db->get('produk')->result_array();
+
+		////////////IPS IPS IPS IPS
+		$qpenj0 = "SELECT ifnull(sum(nominal),0) as nominal
+					FROM jurnal
+					WHERE posisi_dr_cr = 'k' AND no_coa = '4111' AND id_jurnal LIKE 'PENJS%' AND MONTH(tgl_jurnal) = '$bulan' AND YEAR(tgl_jurnal) = '$tahun'";
+		$penjs = $this->db->query($qpenj0)->row_array()['nominal'];
+		$data['penjs'] = $penjs;
+
+		$qhpp0 =  "SELECT ifnull(sum(nominal),0) as hpp
+					FROM jurnal
+					WHERE posisi_dr_cr = 'd' AND no_coa = '6111' AND id_jurnal LIKE 'PENJS%' AND MONTH(tgl_jurnal) = '$bulan' AND YEAR(tgl_jurnal) = '$tahun'";
+		$hppips = $this->db->query($qhpp0)->row_array()['hpp'];
+		$data['hppips'] = $hppips;
+		$data['laba_kotor_ips'] = $data['penjs'] - $data['hppips'];
+
+		$qbebanips = "SELECT ifnull(sum(subtotal),0) as subtotal, c.no_coa, nama_coa
+					FROM (SELECT * FROM pembayaran WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun')as a 
+					JOIN (SELECT * FROM detail_pembayaran WHERE jenis_penjualan = 'ips')as b ON a.no_trans = b.no_trans
+					RIGHT JOIN coa c ON c.no_coa = b.no_coa
+					GROUP BY no_coa
+					ORDER BY no_coa ASC
+                    ";
+		$ibbn = $this->db->query($qbebanips)->result_array();
+		$data['ipsbeban'] = $ibbn;
+
+		//TOTAL TOKOOOO
+		$qpenjt = "SELECT ifnull(sum(subtotal), 0) as penjualan, ifnull(sum(hpp), 0) as hpp
+					FROM detail_penjualan_toko a 
+					JOIN penjualan_toko b ON  a.no_trans = b.no_trans 
+					WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun'";
+
+		$data['penj_toko'] = $this->db->query($qpenjt)->row_array()['penjualan'];
+		$data['hpp_toko'] = $this->db->query($qpenjt)->row_array()['hpp'];
+		$data['laba_kotor_toko'] = $data['penj_toko'] - $data['hpp_toko'];
+
+		
+		//list tokooooooooooooooooooooooooooooooooooo
+
+		$qpenj1 = "SELECT ifnull(sum(subtotal), 0) as nominal, b.no_produk, ifnull(sum(hpp),0) as hpp, ifnull((sum(subtotal) - sum(hpp)), 0) as laba_kotor
+					FROM (SELECT * FROM penjualan_toko WHERE month(tgl_trans) ='$bulan' AND YEAR(tgl_trans) = '$tahun') as ab
+                    JOIN detail_penjualan_toko c ON ab.no_trans = c.no_trans
+                    RIGHT JOIN produk b ON c.no_produk = b.no_produk 
+                    WHERE b.no_produk NOT LIKE 'PR_001'
+					GROUP BY b.no_produk 
+					ORDER BY b.no_produk ASC";
+		$penjt = $this->db->query($qpenj1)->result_array();
+		$data['penjt'] = $penjt;
+
+		$qbebantoko = "SELECT ifnull(sum(subtotal),0) as subtotal, c.no_coa, nama_coa
+					FROM (SELECT * FROM pembayaran WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun')as a 
+					JOIN (SELECT * FROM detail_pembayaran WHERE jenis_penjualan = 'toko')as b ON a.no_trans = b.no_trans
+					RIGHT JOIN coa c ON c.no_coa = b.no_coa
+					GROUP BY no_coa
+					ORDER BY no_coa ASC
+                    ";
+		$tbbn = $this->db->query($qbebantoko)->result_array();
+		$data['tokobeban'] = $tbbn;
+	}
+
+
+
+		$this->template->load('template', 'laba_rugi1',$data);
+			}
+
+	public function hpp_ips(){
+
+		if(isset($_POST['bulan'], $_POST['tahun'])){
+			$bulan = $_POST['bulan'];
+		$tahun = $_POST['tahun'];
+		$data['bulan'] = $bulan;
+		$data['tahun'] = $tahun;
+		$cek = date('m-d-Y', mktime(0,0,0,1,$bulan-1,$tahun));
+				$bulan11 = substr($cek, 3,2);
+				$tahun11 = substr($cek, 6,5);
+
+		$qhpp0 =  "SELECT ifnull(sum(nominal),0) as hpp
+					FROM jurnal
+					WHERE posisi_dr_cr = 'd' AND no_coa = '6111' AND id_jurnal LIKE 'PENJS%' AND MONTH(tgl_jurnal) = '$bulan' AND YEAR(tgl_jurnal) = '$tahun'";
+		$hppips = $this->db->query($qhpp0)->row_array()['hpp'];
+		$data['hppips'] = $hppips;
+
+		$qprodukjadi = "SELECT ifnull(sum(subtotal) * (sum(stok_jual) / sum(jumlah)), 0) as total_jadi
+						FROM detail_produksi_ke1 a 
+						JOIN produksi_ke1 b ON a.no_trans = b.no_trans
+						WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun'";
+		$produk_jadi = $this->db->query($qprodukjadi)->row_array()['total_jadi'];
+		$data['produk_jadi'] = $produk_jadi;
+
+		$qprodukawal = "SELECT ifnull(sum(nominal),0) as hpp_kurang,
+						(SELECT ifnull(sum(subtotal) * (sum(stok_jual) / sum(jumlah)), 0)
+						FROM detail_produksi_ke1 a 
+						JOIN produksi_ke1 b ON a.no_trans = b.no_trans
+						WHERE MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11') as hpp_tambah
+							FROM jurnal
+							WHERE posisi_dr_cr = 'd' AND no_coa = '6111' AND id_jurnal LIKE 'PENJS%' AND MONTH(tgl_jurnal) = '$bulan11' AND YEAR(tgl_jurnal) = '$tahun11'";
+		$hitungawaltambah = $this->db->query($qprodukawal)->row_array()['hpp_tambah'];
+		$hitungawalkurang = $this->db->query($qprodukawal)->row_array()['hpp_kurang'];
+
+		$awal_hpp = $hitungawaltambah - $hitungawalkurang;
+		$data['awal_hpp'] = $awal_hpp;
+
+		$produk_siap_dijual = $produk_jadi + $awal_hpp;
+		$data['produk_siap_dijual'] = $produk_siap_dijual;
+
+		$akhir_hpp = $produk_siap_dijual - $hppips;
+		$data['akhir_hpp'] = $akhir_hpp;
+
+		}else{
+
+
+		$bulan = date('m');
+		$tahun = date('Y');
+		$data['bulan'] = $bulan;
+		$data['tahun'] = $tahun;
+		$cek = date('m-d-Y', mktime(0,0,0,1,$bulan-1,$tahun));
+				$bulan11 = substr($cek, 3,2);
+				$tahun11 = substr($cek, 6,5);
+
+		$qhpp0 =  "SELECT ifnull(sum(nominal),0) as hpp
+					FROM jurnal
+					WHERE posisi_dr_cr = 'd' AND no_coa = '6111' AND id_jurnal LIKE 'PENJS%' AND MONTH(tgl_jurnal) = '$bulan' AND YEAR(tgl_jurnal) = '$tahun'";
+		$hppips = $this->db->query($qhpp0)->row_array()['hpp'];
+		$data['hppips'] = $hppips;
+
+		$qprodukjadi = "SELECT ifnull(sum(subtotal) * (sum(stok_jual) / sum(jumlah)), 0) as total_jadi
+						FROM detail_produksi_ke1 a 
+						JOIN produksi_ke1 b ON a.no_trans = b.no_trans
+						WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun'";
+		$produk_jadi = $this->db->query($qprodukjadi)->row_array()['total_jadi'];
+		$data['produk_jadi'] = $produk_jadi;
+
+		$qprodukawal = "SELECT ifnull(sum(nominal),0) as hpp_kurang,
+						(SELECT ifnull(sum(subtotal) * (sum(stok_jual) / sum(jumlah)), 0)
+						FROM detail_produksi_ke1 a 
+						JOIN produksi_ke1 b ON a.no_trans = b.no_trans
+						WHERE MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11') as hpp_tambah
+							FROM jurnal
+							WHERE posisi_dr_cr = 'd' AND no_coa = '6111' AND id_jurnal LIKE 'PENJS%' AND MONTH(tgl_jurnal) = '$bulan11' AND YEAR(tgl_jurnal) = '$tahun11'";
+		$hitungawaltambah = $this->db->query($qprodukawal)->row_array()['hpp_tambah'];
+		$hitungawalkurang = $this->db->query($qprodukawal)->row_array()['hpp_kurang'];
+
+		$awal_hpp = $hitungawaltambah - $hitungawalkurang;
+		$data['awal_hpp'] = $awal_hpp;
+
+		$produk_siap_dijual = $produk_jadi + $awal_hpp;
+		$data['produk_siap_dijual'] = $produk_siap_dijual;
+
+		$akhir_hpp = $produk_siap_dijual - $hppips;
+		$data['akhir_hpp'] = $akhir_hpp;
+	}
+
+
+
+		$this->template->load('template', 'hpp/view_ips', $data);
+	}
+
+	public function hpp_toko(){
+
+		if(isset($_POST['bulan'], $_POST['tahun'])){
+			$bulan = $_POST['bulan'];
+		$tahun = $_POST['tahun'];
+		$produk = $_POST['produk'];
+		$data['bulan'] = $bulan;
+		$data['tahun'] = $tahun;
+		$cek = date('m-d-Y', mktime(0,0,0,1,$bulan-1,$tahun));
+				$bulan11 = substr($cek, 3,2);
+				$tahun11 = substr($cek, 6,5);
+
+		$this->db->or_not_like('no_produk', 'PR_001');
+		$list_produk = $this->db->get('produk')->result_array();
+		$data['list_produk'] = $list_produk;
+
+		$this->db->where('no_produk', $produk);
+		$nama_produk = $this->db->get('produk')->row_array()['nama_produk'];
+		$data['nama_produk'] = $nama_produk;
+
+				//
+		$qhpp0 =  "SELECT ifnull(sum(hpp),0) as hpp
+					FROM detail_penjualan_toko a 
+					JOIN penjualan_toko b ON a.no_trans = b.no_trans
+					WHERE  MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' AND no_produk = '$produk'";
+		$hpptoko = $this->db->query($qhpp0)->row_array()['hpp'];
+		$data['hpptoko'] = $hpptoko;
+			//
+
+		$qprodukjadi = "SELECT ifnull(sum(subtotal), 0) as total_jadi
+						FROM detail_produksi_ke2 a 
+						WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' AND no_produk = '$produk'";
+		$produk_jadi = $this->db->query($qprodukjadi)->row_array()['total_jadi'];
+		$data['produk_jadi'] = $produk_jadi;
+
+		$qprodukawal = "SELECT ifnull(sum(hpp),0) as hpp_kurang,
+						(SELECT ifnull(sum(subtotal), 0)
+						FROM detail_produksi_ke2 a 
+						WHERE MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk') as hpp_tambah
+							FROM detail_penjualan_toko a 
+					JOIN penjualan_toko b ON a.no_trans = b.no_trans
+					WHERE  MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk'";
+		$hitungawaltambah = $this->db->query($qprodukawal)->row_array()['hpp_tambah'];
+		$hitungawalkurang = $this->db->query($qprodukawal)->row_array()['hpp_kurang'];
+
+		$awal_hpp = $hitungawaltambah - $hitungawalkurang;
+		$data['awal_hpp'] = $awal_hpp;
+
+		$produk_siap_dijual = $produk_jadi + $awal_hpp;
+		$data['produk_siap_dijual'] = $produk_siap_dijual;
+
+		$akhir_hpp = $produk_siap_dijual - $hpptoko;
+		$data['akhir_hpp'] = $akhir_hpp;
+
+		}else{
+
+
+		$bulan = date('m');
+		$tahun = date('Y');
+		$produk = 'PR_002';
+		$data['bulan'] = $bulan;
+		$data['tahun'] = $tahun;
+		$cek = date('m-d-Y', mktime(0,0,0,1,$bulan-1,$tahun));
+				$bulan11 = substr($cek, 3,2);
+				$tahun11 = substr($cek, 6,5);
+
+		$this->db->or_not_like('no_produk', 'PR_001');
+		$list_produk = $this->db->get('produk')->result_array();
+		$data['list_produk'] = $list_produk;
+
+		$this->db->where('no_produk', $produk);
+		$nama_produk = $this->db->get('produk')->row_array()['nama_produk'];
+		$data['nama_produk'] = $nama_produk;
+
+				//
+		$qhpp0 =  "SELECT ifnull(sum(hpp),0) as hpp
+					FROM detail_penjualan_toko a 
+					JOIN penjualan_toko b ON a.no_trans = b.no_trans
+					WHERE  MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' AND no_produk = '$produk'";
+		$hpptoko = $this->db->query($qhpp0)->row_array()['hpp'];
+		$data['hpptoko'] = $hpptoko;
+			//
+
+		$qprodukjadi = "SELECT ifnull(sum(subtotal), 0) as total_jadi
+						FROM detail_produksi_ke2 a 
+						WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' AND no_produk = '$produk'";
+		$produk_jadi = $this->db->query($qprodukjadi)->row_array()['total_jadi'];
+		$data['produk_jadi'] = $produk_jadi;
+
+		$qprodukawal = "SELECT ifnull(sum(hpp),0) as hpp_kurang,
+						(SELECT ifnull(sum(subtotal), 0)
+						FROM detail_produksi_ke2 a 
+						WHERE MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk') as hpp_tambah
+							FROM detail_penjualan_toko a 
+					JOIN penjualan_toko b ON a.no_trans = b.no_trans
+					WHERE  MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk'";
+		$hitungawaltambah = $this->db->query($qprodukawal)->row_array()['hpp_tambah'];
+		$hitungawalkurang = $this->db->query($qprodukawal)->row_array()['hpp_kurang'];
+
+		$awal_hpp = $hitungawaltambah - $hitungawalkurang;
+		$data['awal_hpp'] = $awal_hpp;
+
+		$produk_siap_dijual = $produk_jadi + $awal_hpp;
+		$data['produk_siap_dijual'] = $produk_siap_dijual;
+
+		$akhir_hpp = $produk_siap_dijual - $hpptoko;
+		$data['akhir_hpp'] = $akhir_hpp;
+	}
+
+
+
+		$this->template->load('template', 'hpp/view_toko', $data);
+	}
+
+
 
 
 	public function lr(){

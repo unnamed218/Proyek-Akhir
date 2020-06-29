@@ -24,13 +24,7 @@
 			  <?php echo form_error('nama_bb'); ?>
 			
 			</div>
-			<div class="form-group">
-			  <label>Harga</label>
-			  <input type = "number" name = "harga" class = "form-control">
-			  
-			  <?php echo form_error('harga'); ?>
 			
-			</div>
 			
 				<div class="form-group">
 			  <label>Satuan</label>

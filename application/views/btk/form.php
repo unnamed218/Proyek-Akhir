@@ -84,7 +84,7 @@
 			  <?php echo form_error('jumlah_pgw'); ?>
 			</div>
 			<div class="form-group">
-			  <label>Total Tarif Tenaga Kerja</label>
+			  <label>Total Tarif Tenaga Kerja (Perhari)</label>
 			  <input type = "text" name = "tarif" class = "form-control">
 			
 			  <?php echo form_error('tarif'); ?>

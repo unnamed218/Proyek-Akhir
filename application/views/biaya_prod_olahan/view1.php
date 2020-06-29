@@ -182,34 +182,9 @@
 				<td align='right'><?php echo format_rp('0')?></td>
 			</tr>
 			<tr>
-				<td>Harga Pokok Produksi</td>
+				<th>Harga Pokok Produksi</th>
 				<td></td>
-				<td align='right'><b><?php echo format_rp('0')?></b></td>
-			</tr>
-			<tr>
-				<td>Persediaan Produk Jadi Awal</td>
-				<td></td>
-				<td align='right'><?php echo format_rp('0')?></td>
-			</tr>
-			<tr>
-				<td>Produk Tersedia Untuk Dijual</td>
-				<td></td>
-				<td align='right'><b><?php echo format_rp('0')?></b></td>
-			</tr>
-			<tr>
-				<td>Persediaan Produk Jadi Akhir</td>
-				<td></td>
-				<td align='right'><?php echo format_rp('0')?></td>
-			</tr>
-			<tr>
-				<td>Harga Pokok Penjualan</td>
-				<td></td>
-				<td align='right'><b><?php echo format_rp('0')?></b></td>
-			</tr>
-			<tr>
-				<td>Harga Pokok Penjualan Satuan</td>
-				<td></td>
-				<td align='right'><b><?php echo format_rp('0')?></b></td>
+				<td align='right'><b><?php echo format_rp($hpprod)?></b></td>
 			</tr>
 			
 			

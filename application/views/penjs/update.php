@@ -30,22 +30,17 @@
 			<div class="col-xs-3">
 				<div class="form-group">
 				<label>Jumlah</label>
-				<input type="text" class="form-control"  value="<?php echo $jumlah; ?> <?php echo $satuan?>"readonly >
+				<input type="text" class="form-control"  value="<?php echo number($jumlah); ?> <?php echo $satuan?>"readonly >
 				</div>
 			</div>
 
 			<?php 
-			$jumlah_produksi = 0;
-			$harga = 0;
-			$harga_satuan = 0;
-			$jumlah_produksi = $list['jual'] + $list['produksi'];
-			$harga = round(($list['biaya'] * ($list['jual'] / $jumlah_produksi))*1.3);
-			$harga_satuan = ($harga / $jumlah);
+			
 			?>
 				<div class="col-xs-3">
 				<div class="form-group">
 				<label>Total Harga</label>
-				<input readonly type="text" class="form-control"  value="<?php echo format_rp($harga)?> (<?php echo format_rp($harga_satuan); ?>/pcs)"  >
+				<input readonly type="text" class="form-control"  value="<?php echo format_rp($harga * $jumlah)?> (<?php echo format_rp($harga) ?>/pcs)"  >
 			</div>
 		</div>
 		
@@ -59,11 +54,10 @@
 		?>
 			<form method="POST" action="<?php echo site_url().'/c_transaksi/tambah_penjs'; ?>">
 			<input readonly type="hidden" class="form-control" name="no_trans" value="<?php echo $no_trans ; ?>"  >
-			<input readonly type="hidden" class="form-control" name="id_pembg" value="<?php echo $id_pembg ; ?>"  >
 			<input readonly type="hidden" class="form-control" name="tgl_trans" value="<?php echo $tgl ; ?>"  >
-			<input readonly type="hidden" class="form-control" name="harga" value="<?php echo $harga_satuan ; ?>"  >
-			<input readonly type="hidden" class="form-control" name="no_produk" value="<?php echo $no_produk?>"  >
-			<input readonly type="hidden" class="form-control" name="jumlah1" value="<?php echo $jumlah?>"  >
+			<input readonly type="hidden" class="form-control" name="jumlah1" value="<?php echo $jumlah ; ?>"  >
+			<input readonly type="hidden" class="form-control" name="id_pembg" value="<?php echo $id_pembg ; ?>"  >
+			<input readonly type="hidden" class="form-control" name="harga" value="<?php echo $harga ; ?>"  >
 
 
 
@@ -166,10 +160,10 @@
 					echo "
 							<tr>
 							<td>".$data['nama_ips']."</td>
-							<td>".$data['jumlah']."</td>
+							<td>".number($data['jumlah'])."</td>
 						
 							
-							<td>".format_rp($data['subtotal'])."</td>"; ?>
+							<td align='right'>".format_rp($data['subtotal'])."</td>"; ?>
 								
 
 						</tr>
@@ -182,9 +176,9 @@
 				}
 			?>
 			<tr>
-				<td>Total</td>
-				<td><?php echo $total_jml; ?></td>
-				<td><?php echo format_rp($total); ?></td>
+				<td align='center'>Total</td>
+				<td><?php echo number($total_jml); ?></td>
+				<td align='right'><?php echo format_rp($total); ?></td>
 			</tr>
 			</tbody>
 

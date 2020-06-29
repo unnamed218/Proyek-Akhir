@@ -7,7 +7,7 @@
     <h3 class="panel-title"><b>Daftar Pembelian Bahan Baku</b></h3>
   </div>
   	 <div class="x_content">
-  	 	<?php if (isset($error)){ echo "<div class='alert alert-success'><li>".$error."</li></div>"; }?>
+  	 	<?php if ($cek == TRUE){ echo "<div class='alert alert-success'><li>".$error."</li></div>"; }?>
   	 		<?php if($cek == TRUE){?>
   	 			<a href = "#" class="btn btn-info" role="button" disabled="disabled"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
   	 		<?php }else{ ?>

@@ -29,7 +29,7 @@
 			    <option value="#" disabled selected>Pilih Nama Produk</option>
 				<?php
 					foreach($barang as $data){
-						echo "<option value = ".$data['no_produk'].">".$data['nama_produk']." - ".$data['stok']." ".$data['satuan']."</option>";
+						echo "<option value = ".$data['no_produk'].">".$data['nama_produk']." - ".number($data['stok'])." ".$data['satuan']." @".format_rp($data['harga_jual'])."</option>";
 					}
 				?>
 			  </select>

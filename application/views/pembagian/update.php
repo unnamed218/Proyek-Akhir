@@ -63,7 +63,7 @@
 			<div class="col-xs-4">
 				<div class="form-group">
 				<label>Dari</label>
-				<input readonly type="text" class="form-control"  value="<?php echo $jumlah?> <?php echo $satuan?>"  >
+				<input readonly type="text" class="form-control"  value="<?php echo number($jumlah) ?> <?php echo $satuan?>"  >
 				<input readonly type="hidden" class="form-control"  value="<?php echo $jumlah?>"  name="jumlah">;
 			</div>
 		</div>
@@ -128,7 +128,7 @@
 			<div class="col-xs-3">
 				<div class="form-group">
 				<label>Jumlah Tersedia</label>
-				<input readonly type="text" class="form-control"  value="<?php echo $jumlah?> <?php echo $satuan?>"  >
+				<input readonly type="text" class="form-control"  value="<?php echo number($jumlah)?> <?php echo $satuan?>"  >
 			</div>
 		</div>
 			</div>
@@ -157,9 +157,9 @@
 					$total = $data['produksi'] + $data['jual'];
 					echo "
 							<tr>
-							<td>".$data['jual']." </td>
-							<td>".$data['produksi']."</td>
-							<td>".$total." </td>"; ?>
+							<td>".number($data['jual'])." </td>
+							<td>".number($data['produksi'])."</td>
+							<td>".number($total)." </td>"; ?>
 							
 
 						</tr>

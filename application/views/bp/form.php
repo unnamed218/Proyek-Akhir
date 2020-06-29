@@ -24,13 +24,13 @@
 			  <?php echo form_error('nama_bp'); ?>
 			
 			</div>
-			<div class="form-group">
+			<!-- <div class="form-group">
 			  <label>Harga</label>
 			  <input type = "number" name = "harga" class = "form-control">
 			  
 			  <?php echo form_error('harga'); ?>
 			
-			</div>
+			</div> -->
 			
 			<div class="form-group">
 			  <label>Satuan</label>

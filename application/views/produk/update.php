@@ -11,30 +11,24 @@
 <div>
 <form method="POST" action="<?php echo site_url().'/c_masterdata/edit_produk'; ?>">
 	<div class="form-group">
-		<div class="row">
-			<div class="col-xs-4">
+		
 				<label>ID Produk</label>
 				<input readonly type="text" class="form-control" name="no_produk" value="<?php echo $data['no_produk'] ; ?>"  >
-			</div>
-		</div>
+			
 	</div>
 	<div class="form-group">
-		<div class="row">
-			<div class="col-xs-4">
+	
 				<label>Nama Produk</label>
-				<input type="text" class="form-control" name="nama_produk" value="<?php echo $data['nama_produk'] ; ?>" >
-			</div>
-		</div>
+				<input type="text" class="form-control" name="nama_produk" value="<?php echo $data['nama_produk'] ; ?>"  >
 		<?php echo form_error('nama_produk'); ?>
 	</div>
-	
+
 	<div class="form-group">
-		<div class="row">
-			<div class="col-xs-4">
-				<label>Stok</label>
-				<input type="text" class="form-control" name="stok" value="<?php echo $data['stok'] ; ?>" readonly >
-			</div>
-		</div>
+	
+				<label>Harga Jual</label>
+				<input readonly type="text" class="form-control" value="<?php echo format_rp($data['harga_jual']) ; ?>"  >
+				<input readonly type="hidden" class="form-control" name="harga_jual" value="<?php echo ($data['harga_jual']) ; ?>"  >
+	
 	</div>
 
 	<div class="form-group">

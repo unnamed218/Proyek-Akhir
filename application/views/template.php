@@ -48,8 +48,8 @@
 
     <link href="<?php echo base_url();?>assets/vendors/cropper/dist/cropper.min.css" rel="stylesheet">
    </head>
-   <body class="nav-md">
-      <div class="container body">
+   <body class="nav-md" >
+      <div class="container body" style="position: relative;">
          <div class="main_container">
             <div class="col-md-3 left_col">
                <div class="left_col scroll-view">
@@ -231,11 +231,13 @@
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_penjt">Laporan Penjualan Toko</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_bp_ips">Laporan Harga Pokok Produksi IPS</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_bp_olahan">Laporan Harga Pokok Produksi Olahan</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/hpp_ips">Laporan Harga Pokok Penjualan IPS</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/hpp_toko">Laporan Harga Pokok Penjualan Toko</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_bb">Kartu Persediaan Bahan Baku</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_bp">Kartu Persediaan Bahan Penolong</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_prod1">Kartu Persediaan Produk IPS</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_prod">Kartu Persediaan Produk Toko</a></li>
-                                    <li><a href="<?php echo site_url();?>c_keuangan/lr">Laporan Laba Rugi</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/lr1">Laporan Laba Rugi</a></li>
                                      <?php
                                     elseif( $this->session->userdata('level')=="produksi1"):
                                      ?>
