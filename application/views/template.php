@@ -267,6 +267,9 @@
                                      <li><a href="<?php echo site_url();?>c_keuangan/lap_penjs">Laporan Penjualan IPS</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_penjt">Laporan Penjualan Toko</a></li>
                                      <li><a href="<?php echo site_url();?>c_keuangan/lap_pemby">Laporan Pembayaran Beban</a></li>
+                                     
+                                    <li><a href="<?php echo site_url();?>c_keuangan/hpp_ips">Laporan Harga Pokok Penjualan IPS</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/hpp_toko">Laporan Harga Pokok Penjualan Toko</a></li>
                                      <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_prod1">Kartu Persediaan Produk IPS</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_prod">Kartu Persediaan Produk Toko</a></li>
                                       <li><a href="<?php echo site_url();?>c_keuangan/lr">Laporan Laba Rugi</a></li>
