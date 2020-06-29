@@ -460,137 +460,104 @@ $query35 = "SELECT ifnull(SUM(hpp), 0) as nominal
 
 	}
 
-	public function lap_bap_ips1(){
-
-		if(isset($_POST['bulan'], $_POST['tahun'])){
-   			$this->db->where('MONTH(tgl_trans)', $_POST['bulan']);
-   			$this->db->where('YEAR(tgl_trans)', $_POST['tahun']);
-   			$data['bulan'] = $_POST['bulan'];
-   			$data['tahun'] = $_POST['tahun'];
-   		}
-		$this->db->select('a.no_trans, tgl_trans, bbb,btk,bop');
-		$this->db->from('produksi_ke1 a');
-		$this->db->join('detail_produksi_ke1 b', 'a.no_trans = b.no_trans');
-		$this->db->order_by('a.no_trans');
-		$data['result'] = $this->db->get()->result_array();
-		$this->template->load('template', 'biaya_prod_ips/view', $data);
 	
-	}
-
-	public function detail_lap_bp_ips($id){
-
-		 $data['id'] = $id;
-      $data['no_trans'] = $id; 
-      $this->db->where('no_trans', $id);
-      $data['tgl'] = $this->db->get('produksi_ke1')->row()->tgl_trans;
-
-
-       $this->db->where('a.no_trans', $id);
-       $this->db->join('cek_kualitas b', 'b.no_trans = a.no_trans_ck');
-       $this->db->join('detail_pembelian_bb c', 'c.no_trans = b.no_trans_pembb');
-       $this->db->join('bahan_baku d', 'd.no_bb = c.no_bb');
-      $data['satuan'] = $this->db->get('produksi_ke1 a')->row()->satuan;
-
-         $this->db->where('no_trans', $id);
-      $id_ck = $this->db->get('produksi_ke1')->row()->no_trans_ck;
-      $data['no_ck'] = $id_ck;
-
-      $this->db->where('no_trans', $id_ck);
-      $pembb = $this->db->get('cek_kualitas')->row()->no_trans_pembb;
-      $data['no_trans_pembb'] = $pembb;
-      
-      //bom
-      $this->db->select('a.jumlah, b.nama_bb, b.harga, b.satuan, e.lulus as jumlahbb');
-      $this->db->from('bom a');
-      $this->db->join('bahan_baku b', 'a.no_bbp = b. no_bb');
-      $this->db->join('detail_pembelian_bb c', 'b.no_bb = c.no_bb');
-      $this->db->join('cek_kualitas d', 'd.no_trans_pembb = c.no_trans ');
-      $this->db->join('detail_cek_kualitas e', 'e.no_trans = d.no_trans');
-      $this->db->where('c.no_trans', $pembb);
-      $this->db->group_by('b.no_bb');
-
-      $data['bom'] = $this->db->get()->result_array();  
-
-        //biaya tenaga kerja
-      $this->db->where('no_trans', $id);
-      $tgl = $this->db->get('produksi_ke1')->row()->tgl_trans;
-      $bulan1 = substr($tgl, 5,2);
-      $tahun1 = substr($tgl, 0,4);
-
-      $this->db->where('bulan', $bulan1);
-      $this->db->where('tahun', $tahun1);
-      $btk = $this->db->get('btk')->row()->tarif;
-      $kalender = CAL_GREGORIAN;
-      $hari = cal_days_in_month($kalender, $bulan1, $tahun1);
-      $data['hari'] = $hari;
-      $data['btk'] = $btk / $hari;
-
-     
-     //BIAYA BOP
-      $this->db->where('bulan', $bulan1);
-      $this->db->where('tahun', $tahun1);
-      $this->db->select('a.no_bop,nama_jbop, harga');
-      $this->db->from('bop a');
-      $this->db->join('detail_bop b', 'a.no_bop = b.no_bop');
-      $this->db->join('jenis_bop c', 'c.no_jbop = b.no_jbop');
-      $data['bop'] = $this->db->get()->result_array();
-    
-     //jumlah produksi
-
-      $this->db->where('no_trans',  $data['no_ck']);
-      $data['jmlprod'] = $this->db->get('detail_cek_kualitas')->row()->lulus;
-
-           //cek selesai produksi
-      $this->db->where('no_trans', $id);
-      $data['cek'] = $this->db->get('detail_produksi_ke1')->num_rows();
-
-
-      
-      $this->template->load('template', 'biaya_prod_ips/update', $data);
-
-	}
 
 		public function lap_bp_olahan(){
+
+			if(isset($_POST['bulan'], $_POST['tahun'])){
+				$bulan1 = $_POST['bulan'];
+				$tahun1 = $_POST['tahun'];
+				$cek = date('m-d-Y', mktime(0,0,0,1,$bulan1-1,$tahun1));
+				$bulan11 = substr($cek, 3,2);
+				$tahun11 = substr($cek, 6,5);
+				$bulan = $_POST['bulan'];
+				$tahun = $_POST['tahun'];
+				$produk = $_POST['produk'];
+ 				$data['bulan'] = $bulan;
+				$data['tahun'] = $tahun;
+
+
+		$this->db->or_not_like('no_produk', 'PR_001');
+		$list_produk = $this->db->get('produk')->result_array();
+		$data['list_produk'] = $list_produk;
+
+		$this->db->where('no_produk', $produk);
+		$nama_produk = $this->db->get('produk')->row_array()['nama_produk'];
+		$data['nama_produk'] = $nama_produk;
+
+				$query1 = "SELECT ifnull(sum(bbb),0) as bbb, ifnull(sum(btk),0) as btk,ifnull(sum(bop),0) as bop,ifnull(sum(bp),0) as bp, ifnull(sum(jumlah),0) as jumlah
+							FROM detail_produksi_ke2 a
+							JOIN produksi_ke1 b ON a.no_trans = b.no_trans
+							WHERE MONTH(b.tgl_trans) = '$bulan' AND YEAR(b.tgl_trans) = '$tahun' AND no_produk = '$produk'";
+				
+				$bb = $this->db->query($query1)->row_array()['bbb'];
+				$data['bb'] = $bb;
+
+				$btk = $this->db->query($query1)->row_array()['btk'];
+				$data['btk'] = $btk;
+
+				$bop = $this->db->query($query1)->row_array()['bop'];
+				$data['bop'] = $bop;
+
+				$bp = $this->db->query($query1)->row_array()['bp'];
+				$data['bp'] = $bp;
+
+				$totalbop = $bop + $bp;
+				$data['totalbop'] = $totalbop;
+
+				$totalhpp = $bb + $btk + $bop + $bp;
+				$data['totalhpp'] = $totalhpp;
+			}else{
+
+
 			$bulan1 = date('m');
 				$tahun1 = date('Y');
 				$cek = date('m-d-Y', mktime(0,0,0,1,$bulan1-1,$tahun1));
 				$bulan11 = substr($cek, 3,2);
 				$tahun11 = substr($cek, 6,5);
 				$bulan = date('m');
-				// $bulan = '07';
 				$tahun = date('Y');
-				$no_produk = 'PR_002';
+				$produk = 'PR_002';
  				$data['bulan'] = $bulan;
 				$data['tahun'] = $tahun;
-				$query1 = "SELECT ifnull(sum(bbb),0) as bbb, ifnull(sum(btk),0) as btk, ifnull(sum(jumlah),0) as jumlah
+
+				$this->db->or_not_like('no_produk', 'PR_001');
+				$list_produk = $this->db->get('produk')->result_array();
+				$data['list_produk'] = $list_produk;
+
+				$this->db->where('no_produk', $produk);
+				$nama_produk = $this->db->get('produk')->row_array()['nama_produk'];
+				$data['nama_produk'] = $nama_produk;
+
+				$query1 = "SELECT ifnull(sum(bbb),0) as bbb, ifnull(sum(btk),0) as btk,ifnull(sum(bop),0) as bop,ifnull(sum(bp),0) as bp, ifnull(sum(jumlah),0) as jumlah
 							FROM detail_produksi_ke2 a
 							JOIN produksi_ke2 b ON a.no_trans = b.no_trans
-							WHERE MONTH(a.tgl_trans) = '$bulan' AND YEAR(a.tgl_trans) = '$tahun' AND no_produk = '$no_produk'";
+							WHERE MONTH(b.tgl_trans) = '$bulan' AND YEAR(b.tgl_trans) = '$tahun' AND no_produk = '$produk'";
 				
-				$bb = $this->db->query($query1)->row()->bbb;
+				$bb = $this->db->query($query1)->row_array()['bbb'];
 				$data['bb'] = $bb;
 
-				$btk = $this->db->query($query1)->row()->btk;
+				$btk = $this->db->query($query1)->row_array()['btk'];
 				$data['btk'] = $btk;
 
-				$query2 = "SELECT nama_bp, ifnull(sum(a.jumlah) * c.jumlah, 0) as jumlah, c.no_bbp, ifnull((sum(a.jumlah) * c.jumlah)*e.harga, 0) as biaya , a.no_produk
-                  FROM detail_produksi_ke2 a
-                  JOIN produk b ON a.no_produk = b.no_produk
-                  JOIN bom c ON c.no_produk = b.no_produk
-                  JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
-                  JOIN detail_pembelian_bp e ON d.no_bp =  e.no_bp
-                  WHERE NOT c.no_bbp = 'BB_001' AND a.no_produk = '$no_produk'
-                  group by no_bbp";
-                 $data['bp'] = $this->db->query($query2)->result_array();
+				$bop = $this->db->query($query1)->row_array()['bop'];
+				$data['bop'] = $bop;
 
-				$jml1 = $this->db->query($query1)->row()->jumlah;
-				$data['jml'] = $jml1;
-				
+				$bp = $this->db->query($query1)->row_array()['bp'];
+				$data['bp'] = $bp;
+
+				$totalbop = $bop + $bp;
+				$data['totalbop'] = $totalbop;
+
+				$totalhpp = $bb + $btk + $bop + $bp;
+				$data['totalhpp'] = $totalhpp;
+				}
 				
 
 			
 		
       $this->template->load('template', 'biaya_prod_olahan/view1', $data);
+				// var_dump($query1);
 
 		}
 

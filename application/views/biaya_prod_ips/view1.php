@@ -94,7 +94,7 @@
   	 	<div style="font-size: 25px">
   	 	KPSBU
   	 </div>
-  	 <div style="font-size: 20px">Laporan Harga Pokok Produksi IPS</div>
+  	 <div style="font-size: 20px">Laporan Harga Pokok Produksi IPS Susu Sapi</div>
   
   	<?php if(isset($bulan, $tahun)){ ?>
   	 <div style="font-size: 15px">

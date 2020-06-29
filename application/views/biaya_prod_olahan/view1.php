@@ -33,10 +33,18 @@
   	$spasi = '&nbsp&nbsp&nbsp&nbsp';
     ?>
   	 <div class="x_content">
-  	 		<!-- <div class="row">
-  	 		<div class="col-sm-6">
-		<form class = 'form-inline' method = "POST" class = "form-inline" action = "<?php echo site_url().'/c_keuangan/lap_bp_ips';?>">
-		
+  	 		<div class="row">
+  	 		<div class="col-sm-12">
+		<form class = 'form-inline' method = "POST" class = "form-inline" action = "<?php echo site_url().'/c_keuangan/lap_bp_olahan';?>">
+			<label>Produk</label>
+						<select name = "produk" class = "form-control" required="">
+							    <option value="#" disabled selected>Pilih Produk</option>
+								<?php				
+								foreach($list_produk as $data){				
+								echo "<option value = ".$data['no_produk'].">".$data['no_produk']." - ".$data['nama_produk']."</option>";
+															}
+								?>
+						</select>
 
 				<label>Pilih Bulan :</label> 
 				<select name="bulan" class="form-control" required="">
@@ -75,7 +83,7 @@
 		
 		  <button class = "btn btn-info btn-md" type = "submit">filter</button>
 		</form>
-	</div> -->
+	</div>
 	<!-- 	<div class="col-sm-6">
 	<?php if(isset($bulan, $tahun)):?>
 	<a href="<?php echo site_url()."/c_keuangan/lap_pdf_filter/$bulan/$tahun"?>"  target="_blank" rel="nofollow" class="btn btn-success" role="button">Print</a>
@@ -94,7 +102,7 @@
   	 	<div style="font-size: 25px">
   	 	KPSBU
   	 </div>
-  	 <div style="font-size: 20px">Laporan Harga Pokok Produksi Olahan</div>
+  	 <div style="font-size: 20px">Laporan Harga Pokok Produksi Olahan <?php echo $nama_produk?></div>
   
   	<?php if(isset($bulan, $tahun)){ ?>
   	 <div style="font-size: 15px">
@@ -125,12 +133,12 @@
 			</tr>
 			<tr>
 				<td><?php echo $spasi ?>Persediaan Produk Dalam Proses</td>
-				<td align='right'><?php echo format_rp('0')?></td>
+				<td align='right'><?php echo format_rp($bb)?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td><?php echo $spasi ?>Persediaan Produk Dalam Proses Siap Digunakan</td>
-				<td align='right'><?php echo format_rp('0')?></td>
+				<td align='right'><?php echo format_rp($bb)?></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -141,30 +149,35 @@
 			<tr>
 				<th>Total Pemakaian Produk Dalam Proses</th>
 				<td></td>
-				<td align='right'><b><?php echo format_rp('0')?></b></td>
+				<td align='right'><b><?php echo format_rp($bb)?></b></td>
 			</tr>
 			<tr>
 				<th>Biaya Tenaga Kerja Langsung (BTKL)</th>
 				<td></td>
-				<td align='right'><b><?php echo format_rp('0')?></b></td>
+				<td align='right'><b><?php echo format_rp($btk)?></b></td>
 			</tr>
 			<tr>
 				<td>Biaya Overhead Pabril Variabel</td>
-				<td align='right'><?php echo format_rp('0')?></td>
+				<td align='right'><?php echo format_rp($bop)?></td>
 				<td></td>
 			</tr>
 
+			<tr>
+				<td>Biaya Bahan Penolong</td>
+				<td align='right'><?php echo format_rp($bp)?></td>
+				<td></td>
+			</tr>
 
 			<tr>
 				<th>Total Biaya Overhead Pabrik Variabel</th>
 				<td></td>
-				<td align='right'><b><?php echo format_rp('0')?></b></td>
+				<td align='right'><b><?php echo format_rp($totalbop)?></b></td>
 			</tr>
 
 			<tr>
 				<th>Total Harga Pokok Produksi</th>
 				<td></td>
-				<td align='right'><b><?php echo format_rp('0')?></b></td>
+				<td align='right'><b><?php echo format_rp($totalhpp)?></b></td>
 			</tr>
 			<tr>
 				<td>Persediaan Produk Dalam Proses Awal</td>
@@ -174,7 +187,7 @@
 			<tr>
 				<td>Produk Siap DiProses</td>
 				<td></td>
-				<td align='right'><b><?php echo format_rp('0')?></b></td>
+				<td align='right'><b><?php echo format_rp($totalhpp)?></b></td>
 			</tr>
 			<tr>
 				<th>Persediaan Produk Dalam Proses Akhir</th>
@@ -184,7 +197,7 @@
 			<tr>
 				<th>Harga Pokok Produksi</th>
 				<td></td>
-				<td align='right'><b><?php echo format_rp($hpprod)?></b></td>
+				<td align='right'><b><?php echo format_rp($totalhpp)?></b></td>
 			</tr>
 			
 			
