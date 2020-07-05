@@ -33,6 +33,8 @@
 					}
 				?>
 			  </select>
+			  <?php echo form_error('no_produk'); ?>
+			  
 			</div>
 		
 			<div class="form-group">
@@ -66,7 +68,7 @@
 					echo "
 						<tr>
 							<td>".$data['nama_produk']."</td>
-							<td align = 'left'>".$data['jumlah']."</td>
+							<td align = 'left'>".number($data['jumlah'])."</td>
 							<td align = 'right'>".format_rp($data['harga'])."</td>
 							<td align = 'left'>".$data['satuan']."</td>
 							<td align = 'right'>".format_rp($data['harga']*$data['jumlah'])."</td>

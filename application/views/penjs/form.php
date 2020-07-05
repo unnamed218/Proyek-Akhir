@@ -28,7 +28,7 @@
 							    <option value="#" disabled selected>Pilih ID Pembagian</option>
 								<?php				
 								foreach($pembagian as $data){				
-								echo "<option value = ".$data['no_trans'].">".$data['no_trans']." - ".$data['jual']." buah</option>";
+								echo "<option value = ".$data['no_trans'].">".$data['no_trans']." - ".number($data['jual'])." buah</option>";
 															}
 								?>
 						</select>

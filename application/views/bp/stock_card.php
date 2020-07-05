@@ -6,7 +6,7 @@
 	 -->
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar Kartu Persediaan</b></h3>
+    <h3 class="panel-title"><b>Daftar Kartu Persediaan Bahan Penolong</b></h3>
   </div>
   	 <div class="x_content">
   	 	<div class="row">
@@ -16,11 +16,11 @@
   	
   	 		
 		
-		<div class="col-sm-2">
+		<!-- <div class="col-sm-2"> -->
 
-			   <input type="text" class="form-control" value="<?php echo $bahan_penolong1['nama_bp']?> - <?php echo $bahan_penolong1['satuan']?>" readonly>
-			</div>
-			<div class="col-sm-8">
+			   <!-- <input type="text" class="form-control" value="<?php echo $bahan_penolong1['nama_bp']?> - <?php echo $bahan_penolong1['satuan']?>" readonly> -->
+			<!-- </div> -->
+			<div class="col-sm-12">
   	 	<form method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_bp' ?> " class="form-inline">
 			  <!-- <label>Nama Bahan Penolong &nbsp&nbsp&nbsp</label> -->
 			   <label>Bahan Penolong :</label>
@@ -62,7 +62,7 @@
   	 <center><b>
   	 	<div style="font-size: 25px">
   	 	KPSBU Lembang</div>
-  	 <div style="font-size: 20px">Kartu Persediaan</div>
+  	 <div style="font-size: 20px">Kartu Persediaan <?php echo $bahan_penolong1['nama_bp']?></div>
   
   	  <?php if(isset($awal, $akhir)){?>
   	 <div style="font-size: 15px">
@@ -79,8 +79,6 @@
 			<tr class="headings">
 				<th rowspan="2"> <center>No</center></th>
 				<th rowspan="2">Tanggal</th>
-				<th rowspan="2">ID Trans</th>
-				<th rowspan="2">Keterangan</th>
 				<th colspan="3">Pembelian</th>
 				<th colspan="3">Produksi</th>
 				<th colspan="3">Saldo</th>
@@ -104,15 +102,6 @@
 
 			<?php 
 			$no = 0;
-			$unit1 = 0;
-			$unit2 = 0;
-			$unit3 = 0;
-			$total1 = 0;
-			$total2 = 0;
-			$total3 = 0;
-			$harga1 = 0;
-			$harga2 = 0;
-			$harga3 = 0;
 			foreach($result as $data){
 				
 				$no++;
@@ -127,15 +116,13 @@
 				echo "
 			<td>$no</td>
 			<td>".$data['tgl_trans']."</td>
-			<td>".$data['no_trans']."</td>
-			<td>".$maka."</td>
-			<td>".$data['unit1']."</td>
+			<td>".number($data['unit1'])."</td>
 			<td align='right'>".format_rp($data['harga1'])."</td>
 			<td align='right'>".format_rp($data['total1'])."</td>	
-			<td>".$data['unit2']."</td>
+			<td>".number($data['unit2'])."</td>
 			<td align='right'>".format_rp($data['harga2'])."</td>
 			<td align='right'>".format_rp($data['total2'])."</td>
-			<td>".$data['unit3']."</td>
+			<td>".number($data['unit3'])."</td>
 			<td align='right'>".format_rp($data['harga3'])."</td>
 			<td align='right'>".format_rp($data['total3'])."</td>
 
@@ -144,21 +131,13 @@
 	echo "
 	</tr>
 		";	
-		$unit1 = $unit1 + $data['unit1'];
-			$total1 = $total1 + $data['total1'];
-			$unit2 = $unit2 + $data['unit2'];
-			$total2 = $total2 + $data['total2'];
-			$unit3 = $unit1 - $unit2;
-			$total3 = $total1 - $total2;
-			$harga1 = $data['harga1'];
-			$harga2 = $data['harga2'];
-			$harga3 = $data['harga3'];
+		
 		}
 		?>
-		<tr>
-			<th colspan="4">Saldo Pembelian</th>
-			<td><b><?php echo $unit1 ;?></b></td>
-			<td align="right"><b><?php echo format_rp($harga1)?></b></td>
+			<tr>
+			<th colspan="2">Saldo Pembelian</th>
+			<td><b><?php echo number($unit1) ;?></b></td>
+			<td align="right"></td>
 			<td align="right"><b><?php echo format_rp($total1) ;?></b></td>
 			<td></td>
 			<td></td>
@@ -168,30 +147,29 @@
 			<td></td>
 		</tr>
 		<tr>
-			<th colspan="4">Saldo Produksi</th>
+			<th colspan="2">Saldo Produksi</th>
 			<td></td>
 			<td></td>
 			<td></td>
-			<td><b><?php echo $unit2 ;?></b></td>
-			<td align="right"><b><?php echo format_rp($harga2) ;?></b></td>
+			<td><b><?php echo number($unit2) ;?></b></td>
+			<td align="right"><b></b></td>
 			<td align="right"><b><?php echo format_rp($total2) ;?></b></td>
 			<td></td>
 			<td></td>
 			<td></td>
 		</tr>
 		<tr>
-			<th colspan="4">Saldo Akhir</th>
+			<th colspan="2">Saldo Akhir</th>
 			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
-			<td><b><?php echo $unit3 ;?></b></td>
-			<td align="right"><b><?php echo format_rp($harga3) ;?></b></td>
+			<td><b><?php echo number($unit3) ;?></b></td>
+			<td align="right"><b><?php echo format_rp($harga3)?></b></td>
 			<td align="right"><b><?php echo format_rp($total3) ;?></b></td>
 		</tr>	
-		
 		</tbody>
 	</table>
 		

@@ -43,12 +43,9 @@
 	 	}
 	 	if($data['no_coa'] == 5223){
 
-	 	$tbbn5223 = $data['subtotal'];
-	 	}
-	 	if($data['no_coa'] == 5224){
-
 	 	$tbbn5224 = $data['subtotal'];
 	 	}
+	 	
 	 	if($data['no_coa'] == 5211){
 
 	 	$tbbn5211 = $data['subtotal'];
@@ -58,7 +55,7 @@
 	 	$tbbn5212 = $data['subtotal'];
 	 	}
 	 }
-	 $tbbntotalfix = $tbbn5221 + $tbbn5222 + $tbbn5223 + $tbbn5224;
+	 $tbbntotalfix = $tbbn5221 + $tbbn5222  + $tbbn5224;
 	 $tbbntotalvar = $tbbn5211 + $tbbn5212;
 	 $tbbntotalakhir = $tbbntotalfix + $tbbntotalvar;
 	 $laba_bersih_toko =  $laba_kotor_toko - $tbbntotalakhir; 
@@ -78,18 +75,15 @@
 	 	}
 	 	if($data['no_coa'] == 5223){
 
-	 	$ibbn5223 = $data['subtotal'];
-	 	}
-	 	if($data['no_coa'] == 5224){
-
 	 	$ibbn5224 = $data['subtotal'];
 	 	}
+	 	
 	 	if($data['no_coa'] == 5213){
 
 	 	$ibbn5213 = $data['subtotal'];
 	 	}
 	 }
-	 $ibbntotalfix = $ibbn5221 + $ibbn5222 + $ibbn5223 + $ibbn5224;
+	 $ibbntotalfix = $ibbn5221 + $ibbn5222  + $ibbn5224;
 	 $ibbntotalvar = $ibbn5213;
 	 $ibbntotalakhir = $ibbntotalfix + $ibbntotalvar;
 	 $laba_bersih_ips =  $laba_kotor_ips - $ibbntotalakhir; 
@@ -102,13 +96,13 @@
     $laba_kotor = $penj - $hpp;
     $beban5221 = $tbbn5221 + $ibbn5221;
     $beban5222 = $tbbn5222 + $ibbn5222;
-    $beban5223 = $tbbn5223 + $ibbn5223;
+    
     $beban5224 = $tbbn5224 + $ibbn5224;
     $beban5211 = $tbbn5211;
     $beban5212 = $tbbn5212;
-    $beban5213 = $ibbn5223;
-    $total_beban_tetap = $beban5221 + $beban5222 + $beban5223 + $beban5224 ;
-    $total_beban_var = $beban5211 + $beban5212 + $beban5213 ;
+   
+    $total_beban_tetap = $beban5221 + $beban5222  + $beban5224 ;
+    $total_beban_var = $beban5211 + $beban5212  ;
     $total_beban = $total_beban_tetap + $total_beban_var;
     $laba_bersih = $laba_kotor - $total_beban;
 
@@ -312,7 +306,7 @@
 			<td align='right'><?php echo format_rp($beban5221)?></td>
 		</tr>
 
-		<tr>
+		<!-- <tr>
 			<td>Beban Gaji Karyawan</td>
 			<td align='right'><?php echo format_rp($ibbn5223)?></td>
 			<?php 
@@ -330,7 +324,7 @@
 			?>
 			<td align='right'><?php echo format_rp($tbbn5223)?></td>
 			<td align='right'><?php echo format_rp($beban5223)?></td>
-		</tr>
+		</tr> -->
 
 		<tr>
 			<td>Beban Administrasi dan Umum Tetap</td>
@@ -459,7 +453,7 @@
 			<td align='right'></td>
 			<td align='right'></td>
 			<td align='right'></td>
-			<td align='right'><?php echo format_rp($beban5213)?></td>
+			<td align='right'></td>
 		</tr>
 		
 		<tr>

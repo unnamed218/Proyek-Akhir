@@ -158,15 +158,54 @@
 			</tr>
 			<tr>
 				<td>Biaya Overhead Pabril Variabel</td>
-				<td align='right'><?php echo format_rp($bop)?></td>
+				<td align='right'></td>
 				<td></td>
 			</tr>
+			
+					<?php
+			$no=1;
+			$bbop = 0;
+				foreach($bop as $data){
+
+					echo "
+					<tr>
+							<td>".$data['nama_jbop']."</td>
+							
+
+							<td align='right'>".format_rp(($data['harga'] * $jumlah_baris))."</td>
+							<td></td>
+							<tr>"; 
+							$bbop = ($bbop + ($data['harga'] * $jumlah_baris)); 
+					?>
+			</tr>
+					<?php
+					$no++;
+				} 
+				?>
 
 			<tr>
-				<td>Biaya Bahan Penolong</td>
-				<td align='right'><?php echo format_rp($bp)?></td>
+				<td>Bahan Penolong</td>
+				<td align='right'></td>
 				<td></td>
 			</tr>
+			<?php
+			$no=1;
+				foreach($list_bp as $data){
+
+					echo "
+					<tr>
+							<td>".$data['nama_bp']."</td>
+							
+
+							<td align='right'>".format_rp($data['total'])."</td>
+							<td></td>
+							<tr>"; 
+					?>
+			</tr>
+					<?php
+					$no++;
+				} 
+				?>
 
 			<tr>
 				<th>Total Biaya Overhead Pabrik Variabel</th>
@@ -175,7 +214,7 @@
 			</tr>
 
 			<tr>
-				<th>Total Harga Pokok Produksi</th>
+				<th>Total Biaya Produksi</th>
 				<td></td>
 				<td align='right'><b><?php echo format_rp($totalhpp)?></b></td>
 			</tr>

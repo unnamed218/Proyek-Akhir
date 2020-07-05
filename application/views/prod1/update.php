@@ -108,18 +108,17 @@
 
 	<div class="col-md-12" >
 		<hr>
-		<h5><b>Harga Pokok Produksi</b></h5	>
+		<h5><b>Biaya Produksi IPS</b></h5	>
 		<table  class="table table-striped table-bordered table-hover jambo_table" >
 		 	<thead>
 			<tr class="headings">
 				<th>Keterangan</th>
 				<th>Biaya</th>
-				<th>Per buah</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<th colspan="3">Biaya Bahan Baku</th>
+				<th colspan="2">Biaya Bahan Baku</th>
 			</tr>
 			<?php
 			$no=1;
@@ -130,8 +129,7 @@
 					echo "
 							<tr>
 							<td>Susu Sapi</td>
-							<td align='right'>".format_rp($total)."</td>
-							<td align='right'>".format_rp(round($harga))."</td>"; ?>
+							<td align='right'>".format_rp($total)."</td>"; ?>
 							
 
 						</tr>
@@ -146,22 +144,19 @@
 			?>
 			
 			<tr>
-				<th colspan="3">Biaya Tenaga Kerja</th>
+				<th colspan="2">Biaya Tenaga Kerja</th>
 			</tr>
 			<tr>
 				<td>Biaya Tenaga Kerja</td>
 				<td align='right'><?php echo format_rp(round($btk))?> </td>
-				<td align='right'><?php echo format_rp(round($btk / $jmlprod))?></td>
 				<?php $bbtk = round($btk); ?>
 			</tr>
 			<tr>
 				<th>Biaya Overhead Pabrik Variabel</th>
 				<td align="right"></td>
-				<td align="right"></td>
 			</tr>
 			
 					<?php
-
 			$no=1;
 			$bbop = 0;
 				foreach($bopv as $data){
@@ -172,8 +167,6 @@
 							
 
 							<td align='right'>".format_rp(ROUND($data['harga']))."</td>
-							
-							<td align='right'>".format_rp(ROUND(($data['harga'])/$jmlprod))."</td>
 							<tr>"; 
 							$bbop = round($bbop + ($data['harga'])); 
 					?>
@@ -187,8 +180,11 @@
 			
 			?>
 			<tr>
-				<th>Harga Pokok Produksi</th>
+				<th>Biaya Produksi</th>
 				<td align='right'><b><?php echo format_rp($biaya_produksi) ?></b></td>
+			</tr>
+			<tr>
+				<th>Biaya Produksi / Liter</th>
 				<td align="right"><b><?php echo format_rp(round($biaya_produksi / $jmlprod)) ?></b> </td> 
 			</tr>
 

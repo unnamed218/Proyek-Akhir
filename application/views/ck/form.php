@@ -72,11 +72,11 @@
 	</div>
 	<center>
 	
-	<button type="submit" class="btn btn-dark" <?php if($cek_lulus == 140000){?> disabled="disabled" <?php }?>>Tambah</button>
+	<button type="submit" class="btn btn-dark" <?php if($cek_lulus >= 140000){?> disabled="disabled" <?php }?>>Tambah</button>
 
 </form>
 	
-		<a class="btn btn-info" role="button" <?php if($cek_lulus == 140000){?> href = "<?php echo site_url()."/c_transaksi/selesai_ck/$id"?>" <?php }else{ ?> disabled="disabled" <?php }?>>Selesai Pengecekan</a>
+		<a class="btn btn-info" role="button" <?php if($cek_lulus >= 140000){?> href = "<?php echo site_url()."/c_transaksi/selesai_ck/$id"?>" <?php }else{ ?> disabled="disabled" <?php }?>>Selesai Pengecekan</a>
 	</center>
 <hr>
 

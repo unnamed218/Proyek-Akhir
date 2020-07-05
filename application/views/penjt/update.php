@@ -55,7 +55,7 @@
 					echo "
 							<tr>
 							<td>".$data['nama_produk']."</td>
-							<td>".$data['jumlah']." ".$data['satuan']."</td>
+							<td>".number($data['jumlah'])." ".$data['satuan']."</td>
 						
 							
 							<td align='right'>".format_rp($data['harga'])."</td>

@@ -39,7 +39,7 @@
 			
 			  <hr>
 			<button type="submit" class="btn btn-default btn-primary">Simpan</button>
-			<a href = "<?php echo site_url()."/c_transaksi/lihat_pemb"?>" type="button" class="btn btn-default">Kembali</a>
+			<a href = "<?php echo site_url()."/c_transaksi/lihat_pembagian"?>" type="button" class="btn btn-default">Kembali</a>
 		</form>
 	</body>
 </html>

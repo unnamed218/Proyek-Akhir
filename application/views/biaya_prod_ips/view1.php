@@ -156,20 +156,41 @@
 			</tr>
 			<tr>
 				<td>Biaya Overhead Pabrik Variabel</td>
-				<td align='right'><?php echo format_rp($bop)?></td>
+				<td align='right'></td>
 				<td></td>
 			</tr>
+
+					<?php
+			$no=1;
+			$bbop = 0;
+				foreach($bop as $data){
+
+					echo "
+					<tr>
+							<td>".$data['nama_jbop']."</td>
+							
+
+							<td align='right'>".format_rp(($data['harga'] * $jumlah_baris))."</td>
+							<td></td>
+							<tr>"; 
+							$bbop = ($bbop + ($data['harga'] * $jumlah_baris)); 
+					?>
+			</tr>
+					<?php
+					$no++;
+				} 
+				?>
 			
 
 
 			<tr>
 				<th>Total Biaya Overhead Pabrik Variabel</th>
 				<td></td>
-				<td align='right'><b><?php echo format_rp($bop)?></b></td>
+				<td align='right'><b><?php echo format_rp($bbop)?></b></td>
 			</tr>
 
 			<tr>
-				<th>Total Harga Pokok Produksi</th>
+				<th>Total Biaya Produksi</th>
 				<td></td>
 				<td align='right'><b><?php echo format_rp($totalbp)?></b></td>
 			</tr>

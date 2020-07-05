@@ -140,16 +140,6 @@
 			<td align='right'>".format_rp($data['total'])."</td>
 
 			";
-			$totalpmb =0;
-			$totalpmk = 0;
-			$total = 0;
-			$unit = 0;
-			$unitpmb = 0;
-			$unitpmk = 0 ;
-			$totalpmb = $totalpmb;;
-			$totalpmk = $totalpmk + $data['subtotal_pmk'];
-			$unitpmb = $unitpmb + $data['jumlah'];
-			$unitpmk = $unitpmk + $data['jumlah_bahan_baku'];
 	echo "
 	</tr>
 		";	}

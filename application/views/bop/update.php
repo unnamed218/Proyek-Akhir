@@ -5,7 +5,7 @@
 
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><center><b>Detail BOP</b></center></h3>
+    <h3 class="panel-title"><center><b>Edit BOP</b></center></h3>
   </div>
   	 <div class="x_content">
 <div>

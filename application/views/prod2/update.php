@@ -82,7 +82,7 @@
 				<td >Susu Sapi</td>
 				<td>1</td>
 				<td><?php echo number($jumlah);?></td>
-				<td>buah</td>
+				<td>liter</td>
 				<td align='right'><?php echo format_rp(round($bombbb['nominal'] / $jumlah_produksi))?></td>
 				<td align="right"><?php echo format_rp(round($pbdp)) ?></td>
 
@@ -95,33 +95,22 @@
 					$pengurang = $data['jumlah_bom'];
             $kode_bahan = $data['no_bbp'];
 
-         $query111 = "SELECT * FROM detail_pembelian_bp
-               WHERE no_bp = '$kode_bahan' AND 
-               jumlah_kartu_stok > 0 
-               ORDER by no ASC";
-         $row = $this->db->query($query111)->result_array();
-         		$subtotal3 = 0;
-         		$jumlah2 = 0;
-          		foreach($row as $row) {
-
-				          $tgl  = $row['no'];
-				          $stok = $row['jumlah_kartu_stok'];
-				          if($pengurang > 0) { 
-				              $temp = $pengurang;
-				              $pengurang = $pengurang - $stok;
-				              if($pengurang > 0) {      
-				                  $stok_update = 0;
-				              }else{
-				                  $stok_update = $stok - $temp;
-				              }
-				          }
-				          $jumlah1 = $row['jumlah'] - $stok_update;
-				          $subtotal =$row['harga'] * $jumlah1;
-				          $jumlah2 = $jumlah2 + $jumlah1;
-				          $subtotal3 = $subtotal3 + $subtotal;
+            if($cek == NULL ){
+         $query111 = "SELECT * FROM kartu_stok_bp
+               WHERE no_bp = '$kode_bahan' 
+               ORDER by no DESC";
+         $row = $this->db->query($query111)->row_array();
+				          $jumlah2 = $row['unit3'];
+				          $subtotal3 = ($data['jumlah_bom'] / $row['unit3']) *$row['total3'];
 				          // var_dump($subtotal3);
+				      }else{
+				      	 $query111 = "SELECT * FROM kartu_stok_bp
+						               WHERE no_bp = '$kode_bahan' AND no_trans = '$no_trans'
+						               ";
+			        			 		$row = $this->db->query($query111)->row_array();
+							          	$jumlah2 = $row['unit2'];
+							          	$subtotal3 = $row['total2'];
 				      }
-				     
 					
 					echo "
 							<tr>
@@ -162,33 +151,30 @@
 
 	<div class="col-md-12" >
 		<hr>
-		<h5><b>Harga Pokok Produksi</b></h5	>
+		<h5><b>Biaya Produksi Olahan</b></h5	>
 		<table  class="table table-striped table-bordered table-hover jambo_table" >
 		 	<thead>
 			<tr class="headings">
 				<th>Keterangan</th>
 				<th>Biaya</th>
-				<th>Per buah</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<th colspan="3">Biaya Bahan Baku</th>
+				<th colspan="2">Biaya Bahan Baku</th>
 			</tr>
 			<tr>
 				<td><?php echo $bombbb['nama_coa']?></td>
 				<td align='right'><?php echo format_rp(round($pbdp)) ?></td>
-				<td align='right'><?php echo format_rp(round($pbdp/$jumlah)) ?></td>
 				<?php $bbbb = $pbdp ?>
 			</tr>
 			<!-- ///////////////////////////////////////////////////////////////////////////////-->
 			<tr>
-				<th colspan="3">Biaya Tenaga Kerja</th>
+				<th colspan="2">Biaya Tenaga Kerja</th>
 			</tr>
 			<tr>
 				<td>Biaya Tenaga Kerja</td>
 				<td align='right'><?php echo format_rp(round($btk))?> </td>
-				<td align='right'><?php echo format_rp(round($btk / $jumlah))?></td>
 				<?php $bbtk = $btk; ?>
 			</tr>
 			<!-- ///////////////////////////////////////////////////////////////////////////////-->
@@ -197,7 +183,7 @@
 			
 			<!-- ////////////////////////////////////////////////////////////////////////////////////////  -->
 			<tr>
-				<th colspan="3">Biaya Overhead Pabrik Variabel</th>
+				<th colspan="2">Biaya Overhead Pabrik Variabel</th>
 			</tr>
 			
 
@@ -213,8 +199,6 @@
 							
 
 							<td align='right'>".format_rp(round($data['harga']))."</td>
-							
-							<td align='right'>".format_rp(round($data['harga']/$jumlah))."</td>
 							</tr>"; 
 							$bbop = $bbop + $data['harga']; 
 							?>
@@ -224,7 +208,7 @@
 			?>
 			
 			<tr>
-				<td colspan="3">Bahan Penolong</td>
+				<td colspan="2">Bahan Penolong</td>
 			</tr>
 			
 					<?php
@@ -234,31 +218,23 @@
 			$pengurang = $data['jumlah_bom'];
             $kode_bahan = $data['no_bbp'];
 
-         $query111 = "SELECT * FROM detail_pembelian_bp
-               WHERE no_bp = '$kode_bahan' AND 
-               jumlah_kartu_stok > 0 
-               ORDER by no ASC";
-         $row = $this->db->query($query111)->result_array();
-         		$subtotal4 = 0;
-         		$jumlah4 = 0;
-          		foreach($row as $row) {
-
-				          $tgl  = $row['no'];
-				          $stok = $row['jumlah_kartu_stok'];
-				          if($pengurang > 0) { 
-				              $temp = $pengurang;
-				              $pengurang = $pengurang - $stok;
-				              if($pengurang > 0) {      
-				                  $stok_update = 0;
-				              }else{
-				                  $stok_update = $stok - $temp;
-				              }
-				          }
-				          $jumlah1 = $row['jumlah'] - $stok_update;
-				          $subtotal =$row['harga'] * $jumlah1;
-				          $jumlah4 = $jumlah4 + $jumlah1;
-				          $subtotal4 = $subtotal4 + $subtotal;
+         if($cek == NULL ){
+         $query111 = "SELECT * FROM kartu_stok_bp
+               WHERE no_bp = '$kode_bahan' 
+               ORDER by no DESC";
+         $row = $this->db->query($query111)->row_array();
+				          $jumlah2 = $row['unit3'];
+				          $subtotal4 = ($data['jumlah_bom'] / $row['unit3']) *$row['total3'];
 				          // var_dump($subtotal3);
+				      }else{
+				      	 $query111 = "SELECT * FROM kartu_stok_bp
+						               WHERE no_bp = '$kode_bahan' AND no_trans = '$no_trans'
+						               ";
+			        			 		$row = $this->db->query($query111)->row_array();
+							          	$jumlah2 = $row['unit2'];
+							          	$subtotal4 = $row['total2'];
+    						// echo "<pre>"; print_r($jumlah2); echo "</pre>"; die();
+
 				      }
 				     
 					
@@ -268,10 +244,10 @@
 							
 
 							<td align='right'>".format_rp(round($subtotal4))."</td>
-							<td align='right'>".format_rp(round($subtotal/$jumlah))."</td>
 						
 							</tr>"; 
 							$bbp = $bbp + $subtotal4 ?>
+							<!-- <td align='right'>".format_rp(round($subtotal/$jumlah))."</td> -->
 					<?php
 					$no++;
 				}
@@ -283,10 +259,14 @@
 			$biaya_produksi_satuan = $biaya_produksi / $jumlah; 
 			?>
 			<tr>
-				<th>Harga Pokok Produksi</th>
+				<th>Biaya Produksi</th>
 				<td align='right'><b><?php echo format_rp(round($biaya_produksi))?></b></td>
-				<td align='right'><b><?php echo format_rp(round($biaya_produksi_satuan)) ?></b></td>
 
+			</tr>
+			<tr>
+				<th>Biaya Produksi / Liter</th>
+
+				<td align='right'><b><?php echo format_rp(round($biaya_produksi_satuan)) ?></b></td>
 			</tr>
 
 			</tbody>

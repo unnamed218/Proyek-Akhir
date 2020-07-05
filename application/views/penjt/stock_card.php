@@ -16,11 +16,8 @@
   	
   	 	<form method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_prod' ?> " class="form-inline">
   	 		
-			<div class="col-sm-2">
-
-			   <input type="text" class="form-control" value="<?php echo $produk1['nama_produk']?> - <?php echo $produk1['satuan']?>" readonly>
-			</div>
-			<div class="col-sm-8">
+			
+			<div class="col-sm-10">
 			   <label>Produk :</label>
 			  <select name="no_produk" class="form-control">
 			  	<option value="#" disabled selected>Pilih Produk</option>
@@ -56,14 +53,14 @@
 </div> -->
 <hr>
 <p>
-  	 <center><b>
+  	<center><b>
   	 	<div style="font-size: 25px">
   	 	KPSBU Lembang</div>
-  	 <div style="font-size: 20px">Kartu Persediaan</div>
+  	 <div style="font-size: 20px">Kartu Persediaan <?php echo $produk1['nama_produk']?></div>
   
   	  <?php if(isset($awal, $akhir)){?>
   	 <div style="font-size: 15px">
-  	 	Periode <?php echo $awal?> s/d <?php echo $akhir; }?>
+  	 	<?php echo $awal?> s/d <?php echo $akhir; }?>
   	 </div>
 </b>
 </center>
@@ -71,13 +68,12 @@
 <hr>
 
 
-		 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
+		
+		 <table  class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">
 				<th rowspan="2"> <center>No</center></th>
 				<th rowspan="2">Tanggal</th>
-				<th rowspan="2">ID Trans</th>
-				<th rowspan="2">Keterangan</th>
 				<th colspan="3">Produksi</th>
 				<th colspan="3">Penjualan</th>
 				<th colspan="3">Saldo</th>
@@ -101,59 +97,39 @@
 
 			<?php 
 			$no = 0;
-			$unit1 = 0;
-		$unit2 = 0;
-		$unit3 = 0;
-		$total1 = 0;
-		$total2 = 0;
-		$total3 = 0;
+		
 			foreach($result as $data){
 				
 				$no++;
-				$cek = substr($data['no_trans'],0,5);
-				if($cek == 'PROD2'){
-				$maka = 'Produksi Toko';
-				}else{
-				$maka = 'Penjualan Toko';
-				}
-			
-			
+				$cek = substr($data['tgl_trans'],0,10);
+				
 
 
 				echo "
 			<td>$no</td>
-			<td>".$data['tgl_trans']."</td>
-			<td>".$data['no_trans']."</td>
-			<td>".$maka."</td>
-			<td>".$data['unit1']."</td>
+			<td>".$cek."</td>
+			<td>".number($data['unit1'])."</td>
 			<td align='right'>".format_rp($data['harga1'])."</td>
-			<td align='right'>".format_rp($data['total1'])."</td>
-			<td>".$data['unit2']."</td>
+			<td align='right'>".format_rp($data['total1'])."</td>	
+			<td>".number($data['unit2'])."</td>
 			<td align='right'>".format_rp($data['harga2'])."</td>
 			<td align='right'>".format_rp($data['total2'])."</td>
-			<td>".$data['unit3']."</td>
+			<td>".number($data['unit3'])."</td>
 			<td align='right'>".format_rp($data['harga3'])."</td>
 			<td align='right'>".format_rp($data['total3'])."</td>
 
 			";
-			
+
 	echo "
 	</tr>
 		";	
-
-		$unit1 = $unit1 + $data['unit1'];
-			$total1 = $total1 + $data['total1'];
-			$unit2 = $unit2 + $data['unit2'];
-			$total2 = $total2 + $data['total2'];
-			$unit3 = $unit1 - $unit2;
-			$total3 = $total1 - ($total2 * (100/130));
-	}
+		
+		}
 		?>
-
-		<tr>
-			<th colspan="4">Saldo Produksi</th>
-			<td><b><?php echo $unit1 ;?></b></td>
-			<td align="right"><b><?php echo format_rp($total1 / $unit1)?></b></td>
+			<tr>
+			<th colspan="2">Saldo Produksi</th>
+			<td><b><?php echo number($unit1) ;?></b></td>
+			<td align="right"></td>
 			<td align="right"><b><?php echo format_rp($total1) ;?></b></td>
 			<td></td>
 			<td></td>
@@ -163,27 +139,27 @@
 			<td></td>
 		</tr>
 		<tr>
-			<th colspan="4">Saldo Penjualan</th>
+			<th colspan="2">Saldo Penjualan</th>
 			<td></td>
 			<td></td>
 			<td></td>
-			<td><b><?php echo $unit2 ;?></b></td>
-			<td align="right"><b><?php echo format_rp($total2 / $unit2) ;?></b></td>
+			<td><b><?php echo number($unit2) ;?></b></td>
+			<td align="right"><b></b></td>
 			<td align="right"><b><?php echo format_rp($total2) ;?></b></td>
 			<td></td>
 			<td></td>
 			<td></td>
 		</tr>
 		<tr>
-			<th colspan="4">Saldo Akhir</th>
+			<th colspan="2">Saldo Akhir</th>
 			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
-			<td><b><?php echo $unit3 ;?></b></td>
-			<td align="right"><b><?php echo format_rp($total3 / $unit3) ;?></b></td>
+			<td><b><?php echo number($unit3) ;?></b></td>
+			<td align="right"><b></b></td>
 			<td align="right"><b><?php echo format_rp($total3) ;?></b></td>
 		</tr>	
 		
