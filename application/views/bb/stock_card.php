@@ -21,7 +21,7 @@
 			   <input type="text" class="form-control" value="<?php echo $bahan_baku1['nama_bb']?> - <?php echo $bahan_baku1['satuan']?>" readonly>
 			</div> -->
 			<div class="col-md-8">
-				<form method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_prod' ?> " class="form-inline">
+				<form method="post" action="<?php echo site_url().'/c_keuangan/lap_ks_bb' ?> " class="form-inline">
 				   
 			  <label>Tanggal Awal :</label>
 		<input type = "date" name="tgl_awal" class = "form-control" required="">

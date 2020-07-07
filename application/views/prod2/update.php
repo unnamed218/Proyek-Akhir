@@ -104,8 +104,11 @@
 				          $subtotal3 = ($data['jumlah_bom'] / $row['unit3']) *$row['total3'];
 				          // var_dump($subtotal3);
 				      }else{
-				      	 $query111 = "SELECT * FROM kartu_stok_bp
-						               WHERE no_bp = '$kode_bahan' AND no_trans = '$no_trans'
+				      	 $query111 = "SELECT * FROM kartu_stok_bp a 
+										JOIN detail_produksi_ke2 b ON a.no_trans = b.no_trans
+										WHERE a.no_trans = '$no_trans' AND no_produk = '$no_prod' AND no_bp = '$kode_bahan'
+										group by no_bp
+										ORDER BY a.no DESC
 						               ";
 			        			 		$row = $this->db->query($query111)->row_array();
 							          	$jumlah2 = $row['unit2'];
@@ -122,7 +125,7 @@
 							<td>".number($data['jumlah_bom'])."</td>
 							
 							<td>".$data['satuan']."</td>
-							<td align='right'>-</td>
+							<td align='right'>".format_rp($subtotal3 / $data['jumlah_bom'])."</td>
 							<td align='right'>".format_rp($subtotal3)."</td>"; ?>
 								
 

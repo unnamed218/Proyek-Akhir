@@ -40,7 +40,7 @@
 				<div class="col-xs-3">
 				<div class="form-group">
 				<label>Total Harga</label>
-				<input readonly type="text" class="form-control"  value="<?php echo format_rp($harga * $jumlah)?> (<?php echo format_rp($harga) ?>/pcs)"  >
+				<input readonly type="text" class="form-control"  value="<?php echo format_rp($harga * $jumlah)?> (<?php echo format_rp($harga) ?>/liter)"  >
 			</div>
 		</div>
 		

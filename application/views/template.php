@@ -185,8 +185,8 @@
                                     elseif( $this->session->userdata('level')=="produksi2"):
                                      ?>
                                      
-                                 <li><a href="<?php echo site_url();?>c_transaksi/lihat_tp">Target Produksi</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_pembp">Pembelian Bahan Penolong</a></li>
+                                 <li><a href="<?php echo site_url();?>c_transaksi/lihat_tp">Target Produksi</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_produksi_ke2">Produksi Olahan</a></li>
                                     
                                       <?php
@@ -276,17 +276,19 @@
                                     
                                    <?php
                                     elseif( $this->session->userdata('level')=="keuangan1"):
-                                     ?>
+                                     ?><!-- 
                                      <li><a href="<?php echo site_url();?>c_keuangan/view_jurnal">Jurnal</a></li>
-                                    <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li> -->
                                      <li><a href="<?php echo site_url();?>c_keuangan/lap_pemb">Laporan Pembelian Bahan Baku</a></li>
+                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_bp_ips">Laporan Harga Pokok Produksi IPS</a></li>
                                    
                                    <?php
                                     elseif( $this->session->userdata('level')=="keuangan2"):
-                                     ?>
+                                     ?><!-- 
                                      <li><a href="<?php echo site_url();?>c_keuangan/view_jurnal">Jurnal</a></li>
-                                    <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li> -->
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_bp">Kartu Persediaan Bahan Penolong</a></li>
+                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_bp_olahan">Laporan Harga Pokok Produksi Olahan</a></li>
                                     <?php
                                    endif
                                    ?>

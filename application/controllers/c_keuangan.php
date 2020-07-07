@@ -72,7 +72,7 @@ class c_keuangan extends CI_Controller
 				$data['tahun'] = $_POST['tahun'];
 				$data['no_akun'] = $no_akun;
 				$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'k' order by no) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' 
-					ORDER BY no";
+					";
 				$data['saldoawal'] = $this->db->query($query)->row_array();
 				$data['akun'] = $this->m_keuangan->GetDataAkun();
 				$data['dataakun'] = $this->m_keuangan->GetSaldoAkun($no_akun);
@@ -1121,9 +1121,9 @@ ORDER BY a.no ASC";
 		$q3 = "SELECT unit3,harga3,total3 FROM kartu_stok_bp
 				WHERE no_bp = '$no' AND tgl_trans >= '$awal' AND tgl_trans <= '$akhir'
 				ORDER BY no DESC";
-		$data['unit3'] = $this->db->query($q2)->row_array()['unit3'];
-		$data['harga3'] = $this->db->query($q2)->row_array()['harga3'];
-		$data['total3'] = $this->db->query($q2)->row_array()['unit3'];
+		$data['unit3'] = $this->db->query($q3)->row_array()['unit3'];
+		$data['harga3'] = $this->db->query($q3)->row_array()['harga3'];
+		$data['total3'] = $this->db->query($q3)->row_array()['unit3'];
         // $data['saldo1_unit'] = $this->db->query($query1)->row_array()['saldo1_unit'];
         $this->template->load('template','bp/stock_card',$data);
       }else{

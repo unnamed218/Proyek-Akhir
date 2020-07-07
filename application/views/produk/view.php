@@ -52,6 +52,7 @@
 			?>
 			</tbody>
 		</table>
+		*Rumus Harga Jual = Harga Pokok Penjualan per liter*(130/100)
 		
 	
 	

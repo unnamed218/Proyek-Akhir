@@ -1943,12 +1943,12 @@ group by no_bbp";
       foreach ($jumlah_bom as $data) {
         $no_bp = $data['no_bbp'];
         $q1 = "SELECT * FROM kartu_stok_bp WHERE no_bp ='$no_bp' ORDER BY no DESC";
-        $jumlah = $this->db->query($q1)->row_array()['unit3'];
+        $jumlah_bom = $this->db->query($q1)->row_array()['unit3'];
         $total = $this->db->query($q1)->row_array()['total3'];
         $harga = $this->db->query($q1)->row_array()['harga3'];
 
         $fix_total2 = $data['jumlah_bom'] * $harga; 
-        $fix_jumlah3 = $jumlah - $data['jumlah_bom'];
+        $fix_jumlah3 = $jumlah_bom - $data['jumlah_bom'];
         $fix_total3 = $fix_jumlah3 * $harga;
          $array = [
               'no_trans'  => $id,
@@ -2112,23 +2112,11 @@ group by no_bbp";
                'jumlah_kartu_stok' => $jumlah );
       $this->db->insert('detail_produksi_ke2', $data);
 
-      //update harga jual produk
-      $this->db->where('no_produk', $no_prod);
-      $this->db->select_sum('subtotal');
-      $nominal = $this->db->get('detail_produksi_ke2')->row_array()['subtotal'];
-
-      $this->db->where('no_produk', $no_prod);
-      $this->db->select_sum('jumlah');
-      $jumlah_total = $this->db->get('detail_produksi_ke2')->row_array()['jumlah'];
-
-      $harga_jual = (($nominal * 1.3) / $jumlah_total);
-      $this->db->where('no_produk', $no_prod);
-      $this->db->set('harga_jual', $harga_jual);
-      $this->db->update('produk');
 
       //total bop + bp
-      $bbop = $bop + $bp;
       //input ke stok produk
+      $bbop = $bop + $bp;
+       $pbj = $bbb + $btk + $bbop;
 
         $this->db->set('stok', "stok - ".$jumlah."", FALSE);
       $this->db->where('no_bdp', 'BDP_001');
@@ -2153,7 +2141,6 @@ group by no_bbp";
      
      
 
-       $pbj = $bbb + $btk + $bbop;
        //jurnal persediaan jadi
        $this->m_keuangan->GenerateJurnal('1312', $id, 'd', $pbj);
        $this->m_keuangan->GenerateJurnal('1114', $id, 'k', $bbb);
@@ -2161,6 +2148,19 @@ group by no_bbp";
        $this->m_keuangan->GenerateJurnal('5113', $id, 'k', $bbop);
 
    
+      //update harga jual produk
+      $this->db->where('no_produk', $no_prod);
+      $this->db->select_sum('subtotal');
+      $nominal = $this->db->get('detail_produksi_ke2')->row_array()['subtotal'];
+
+      $this->db->where('no_produk', $no_prod);
+      $this->db->select_sum('jumlah');
+      $jumlah_total = $this->db->get('detail_produksi_ke2')->row_array()['jumlah'];
+
+      $harga_jual = (($nominal * 1.3) / $jumlah_total);
+      $this->db->where('no_produk', $no_prod);
+      $this->db->set('harga_jual', $harga_jual);
+      $this->db->update('produk');
      
 
       redirect('c_transaksi/isi_edit_produksi_ke21/'.$id.'');
