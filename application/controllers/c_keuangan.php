@@ -577,7 +577,7 @@ $query35 = "SELECT ifnull(SUM(hpp), 0) as nominal
 						FROM kartu_stok_bp a
 						JOIN bahan_penolong b ON a.no_bp = b.no_bp
 						JOIN detail_produksi_ke2 c ON a.no_trans = c.no_trans
-						WHERE a.no_bp NOT LIKE 'BB_001' AND no_produk = '$produk' AND MONTH(a.tgl_trans) = $bulan AND YEAR(a.tgl_trans) = $tahun 
+						WHERE a.no_bp NOT LIKE 'BB_001' AND c.no_produk = '$produk' AND MONTH(a.tgl_trans) = $bulan AND YEAR(a.tgl_trans) = $tahun 
 						GROUP BY no_bp";
 				$data['list_bp'] = $this->db->query($q2)->result_array();
 			}else{
@@ -648,7 +648,7 @@ $query35 = "SELECT ifnull(SUM(hpp), 0) as nominal
 						FROM kartu_stok_bp a
 						JOIN bahan_penolong b ON a.no_bp = b.no_bp
 						JOIN detail_produksi_ke2 c ON a.no_trans = c.no_trans
-						WHERE a.no_bp NOT LIKE 'BB_001' AND no_produk = '$produk' AND MONTH(a.tgl_trans) = $bulan AND YEAR(a.tgl_trans) = $tahun 
+						WHERE a.no_bp NOT LIKE 'BB_001' AND c.no_produk = '$produk' AND MONTH(a.tgl_trans) = $bulan AND YEAR(a.tgl_trans) = $tahun 
 						GROUP BY no_bp";
 				$data['list_bp'] = $this->db->query($q2)->result_array();
         // echo "<pre>"; print_r($data['list_bp']); echo "</pre>";die(); 
