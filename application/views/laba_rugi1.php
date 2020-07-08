@@ -102,7 +102,7 @@
     $beban5212 = $tbbn5212;
    
     $total_beban_tetap = $beban5221 + $beban5222  + $beban5224 ;
-    $total_beban_var = $beban5211 + $beban5212  ;
+    $total_beban_var = $beban5211 + $beban5212 +  $ibbntotalvar ;
     $total_beban = $total_beban_tetap + $total_beban_var;
     $laba_bersih = $laba_kotor - $total_beban;
 
@@ -453,7 +453,7 @@
 			<td align='right'></td>
 			<td align='right'></td>
 			<td align='right'></td>
-			<td align='right'></td>
+			<td align='right'><?php echo format_rp($ibbntotalvar)?></td>
 		</tr>
 		
 		<tr>

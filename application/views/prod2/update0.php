@@ -67,9 +67,10 @@
 							<td>".$no."</td>
 							<td>".$data['nama_produk']."</td>
 							<td>".number($data['jumlah'])."</td>"; ?>
+
 							<td>
-							<a href = "<?php echo site_url()."/c_transaksi/isi_edit_produksi_ke2/".$data['no_trans']."/".$data['no_tp']."/".$data['no_produk'] ;?>">
-							<!-- <a href="isi_edit_produksi_ke2/<?php echo $data['no_trans']; ?>/<?php echo $data['no_produk'];?>"> -->
+							<a href = "<?php echo site_url()."/c_transaksi/isi_edit_produksi_ke2/".$data['no_trans']."/".$data['no_tp']."/".$data['no_produk'] ;?>" >
+							
 							
 							<span class="fa-stack">
 							  <i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>

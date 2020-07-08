@@ -246,7 +246,7 @@ class c_transaksi extends CI_controller{
      $cek_trans = $this->db->query($query1)->row_array();
      $cek_trans1 = $cek_trans['kode'];
      $query2 = "SELECT * FROM cek_kualitas
-                WHERE no_trans = '$cek_trans1' AND status > 0";
+                WHERE no_trans = '$cek_trans1' AND status > 0 AND tgl_trans = '$date'";
       $cek1 = $this->db->query($query2)->result();
     $data['cek'] = $cek;
     $data['cek1'] = $cek1;  
@@ -1826,9 +1826,6 @@ group by no_bbp";
                   group by no_bbp";
       $data['result2'] = $this->db->query($query1)->result_array();
       $result2 = $this->db->query($query1)->result_array();
-    
-    
-
 
       //biaya tenaga kerja
       $this->db->where('no_trans', $id);
@@ -1864,6 +1861,68 @@ group by no_bbp";
       $this->db->where('no_tp', $no_tp);
       $this->db->where('no_produk', $no_prod);
       $data['cek'] = $this->db->get('detail_target_produksi')->row()->status;
+
+      //validasi bahan penolong
+      $q1 =   "
+                  SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.satuan, c.no_bbp, d.stok
+                  FROM detail_target_produksi a
+                  JOIN produk b ON a.no_produk = b.no_produk
+                  JOIN bom c ON c.no_produk = b.no_produk
+                  JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
+                  WHERE a.no_tp = '$no_tp' AND c.no_bbp = 'BP_001' AND a.no_produk = '$no_prod'
+                  group by no_bbp";
+      $q2 =   "
+                  SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.satuan, c.no_bbp, d.stok
+                  FROM detail_target_produksi a
+                  JOIN produk b ON a.no_produk = b.no_produk
+                  JOIN bom c ON c.no_produk = b.no_produk
+                  JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
+                  WHERE a.no_tp = '$no_tp' AND c.no_bbp = 'BP_002' AND a.no_produk = '$no_prod'
+                  group by no_bbp";
+      $q3 =   "
+                  SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.satuan, c.no_bbp, d.stok
+                  FROM detail_target_produksi a
+                  JOIN produk b ON a.no_produk = b.no_produk
+                  JOIN bom c ON c.no_produk = b.no_produk
+                  JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
+                  WHERE a.no_tp = '$no_tp' AND c.no_bbp = 'BP_003' AND a.no_produk = '$no_prod'
+                  group by no_bbp";
+      $q4 =   "
+                  SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.satuan, c.no_bbp, d.stok
+                  FROM detail_target_produksi a
+                  JOIN produk b ON a.no_produk = b.no_produk
+                  JOIN bom c ON c.no_produk = b.no_produk
+                  JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
+                  WHERE a.no_tp = '$no_tp' AND c.no_bbp = 'BP_004' AND a.no_produk = '$no_prod'
+                  group by no_bbp";
+      $q5 =   "
+                  SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.satuan, c.no_bbp, d.stok
+                  FROM detail_target_produksi a
+                  JOIN produk b ON a.no_produk = b.no_produk
+                  JOIN bom c ON c.no_produk = b.no_produk
+                  JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
+                  WHERE a.no_tp = '$no_tp' AND c.no_bbp = 'BP_005' AND a.no_produk = '$no_prod'
+                  group by no_bbp";
+      $data['vbp1'] = $this->db->query($q1)->row_array()['jumlah_bom'];
+      $data['vbp2'] = $this->db->query($q2)->row_array()['jumlah_bom'];
+      $data['vbp3'] = $this->db->query($q3)->row_array()['jumlah_bom'];
+      $data['vbp4'] = $this->db->query($q4)->row_array()['jumlah_bom'];
+      $data['vbp5'] = $this->db->query($q5)->row_array()['jumlah_bom'];
+      $data['bp1'] = $this->db->query($q1)->row_array()['stok'];
+      $data['bp2'] = $this->db->query($q2)->row_array()['stok'];
+      $data['bp3'] = $this->db->query($q3)->row_array()['stok'];
+      $data['bp4'] = $this->db->query($q4)->row_array()['stok'];
+      $data['bp5'] = $this->db->query($q5)->row_array()['stok'];
+
+      if($data['cek'] == NULL){
+        if($data['bp1'] < $data['vbp1'] OR $data['bp2'] < $data['vbp2'] OR $data['bp3'] < $data['vbp3'] OR $data['bp4'] < $data['vbp4'] OR $data['bp5'] < $data['vbp5']){
+
+            $data['error'] = 'Stok Bahan Penolong lebih kecil dari Bill Of Material!';
+        }
+
+      }
+
+
       
       $this->template->load('template', 'prod2/update', $data);
         // var_dump($data['btkperhari']);
@@ -1953,6 +2012,7 @@ group by no_bbp";
          $array = [
               'no_trans'  => $id,
               'tgl_trans' => date('Y-m-d H:i:s'),
+              'no_produk' => $no_prod,
               'no_bp' => $no_bp,
               'unit1'     => '-',
               'harga1'    => '-',

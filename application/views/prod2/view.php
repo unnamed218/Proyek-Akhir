@@ -7,12 +7,12 @@
     <h3 class="panel-title"><b>Daftar Produksi Olahan</b></h3>
   </div>
   	 <div class="x_content">
-  	 		<a href = "<?php echo site_url()."/c_transaksi/form_produksi_ke2"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
   	 	<?php if (isset($error)){ echo "<div class='alert alert-danger'><li>".$error."</li></div>"; }?>
   	 	<?php if (isset($clear)){ echo "<div class='alert alert-success'><li>".$clear."</li></div>"; }?>
   	 		<?php if($cek1 == FALSE OR $cek2 == FALSE OR $cek3 == TRUE){?>
   	 			<a href = "#" class="btn btn-info" role="button" disabled="disabled"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
   	 		<?php }else{ ?>
+  	 		<a href = "<?php echo site_url()."/c_transaksi/form_produksi_ke2"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
   	 	<?php } ?>
   	 	 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>

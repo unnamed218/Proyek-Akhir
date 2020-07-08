@@ -121,7 +121,7 @@
 
 				echo "
 			<td>$no</td>
-			<td>".$data['tgl_trans']."</td>
+			<td>".$data['atgl_trans']."</td>
 			<td>".number($data['unit1'])."</td>
 			<td align='right'>".format_rp($data['harga1'])."</td>
 			<td align='right'>".format_rp($data['total1'])."</td>	

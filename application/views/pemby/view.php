@@ -19,6 +19,7 @@
 				<th style="width: 2px;">No</th>
 				<th>ID Transaksi</th>
 				<th>Tanggal Transaksi</th>
+				<th>Total</th>
 				<th>Aksi</th>
 			</tr>
 		</thead>
@@ -31,6 +32,7 @@
 						<tr><td>$no</td>
 							<td>".$data['no_trans']."</td>
 							<td>".$data['tgl_trans']."</td>
+							<td align='right'>".format_rp($data['total'])."</td>
 							" ?>
 							<td>
 							<a href="isi_edit_pemby/<?php echo $data['no_trans']; ?>">

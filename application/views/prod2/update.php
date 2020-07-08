@@ -54,7 +54,7 @@
 			</div>
 	</div>
 		<hr>
-
+	<?php if (isset($error)){ echo "<div class='alert alert-danger'>".$error."</div>"; }?>
 <div class="row">
 		<div class="col-md-12">
 			<div class="form-group">
@@ -104,11 +104,9 @@
 				          $subtotal3 = ($data['jumlah_bom'] / $row['unit3']) *$row['total3'];
 				          // var_dump($subtotal3);
 				      }else{
-				      	 $query111 = "SELECT * FROM kartu_stok_bp a 
-										JOIN detail_produksi_ke2 b ON a.no_trans = b.no_trans
-										WHERE a.no_trans = '$no_trans' AND no_produk = '$no_prod' AND no_bp = '$kode_bahan'
-										group by no_bp
-										ORDER BY a.no DESC
+				      	 $query111 = "SELECT unit2, total2, no_produk,no_bp 
+				      	 				FROM kartu_stok_bp 
+				      	 				WHERE no_produk = '$no_prod' AND no_bp = '$kode_bahan'
 						               ";
 			        			 		$row = $this->db->query($query111)->row_array();
 							          	$jumlah2 = $row['unit2'];
@@ -230,8 +228,9 @@
 				          $subtotal4 = ($data['jumlah_bom'] / $row['unit3']) *$row['total3'];
 				          // var_dump($subtotal3);
 				      }else{
-				      	 $query111 = "SELECT * FROM kartu_stok_bp
-						               WHERE no_bp = '$kode_bahan' AND no_trans = '$no_trans'
+				      	 $query111 = "SELECT unit2, total2, no_produk,no_bp 
+				      	 				FROM kartu_stok_bp 
+				      	 				WHERE no_produk = '$no_prod' AND no_bp = '$kode_bahan'
 						               ";
 			        			 		$row = $this->db->query($query111)->row_array();
 							          	$jumlah2 = $row['unit2'];
@@ -285,9 +284,24 @@
 	<a href = "<?php echo site_url()."/c_transaksi/isi_edit_produksi_ke21/$no_trans"?>" class="btn btn-default" role="button">Kembali</a>
 </div>
 <div class="col-md-1">
-  	 	<div style="align-items: : : right;">
-	<!-- <a href = "<?php echo site_url()."/c_transaksi/selesai_produksi_ke2/$id/$total/$jumlah/$no_prod"?>" class="btn btn-dark" role="button">Produksi</a> -->
+  	 	<div style="align-items: right;">
+
+  	 		<?php 
+  	 		if($cek == NULL){
+        if($bp1 < $vbp1 OR $bp2 < $vbp2 OR $bp3 < $vbp3 OR $bp4 < $vbp4 OR $bp5 < $vbp5){
+        	?>
+          <a class='btn btn-dark' role="button" disabled="disabled">Produksi</a>
+
+         <?php   	
+        }else{
+
+      
+  	 		?>
 		<a class="btn btn-dark" role="button" <?php if($cek == NULL){?> href = "<?php echo site_url()."/c_transaksi/selesai_produksi_ke2/$bbbb/$bbtk/$bbop/$bbp/$no_trans/$no_tp/$no_prod/$jumlah "?>" <?php }else{?> hidden <?php } ?>>Produksi</a>
+		<?php 
+			}
+		}
+		?>
 </div>
 </div>
 

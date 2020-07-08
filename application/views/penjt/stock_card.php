@@ -101,13 +101,12 @@
 			foreach($result as $data){
 				
 				$no++;
-				$cek = substr($data['tgl_trans'],0,10);
 				
 
 
 				echo "
 			<td>$no</td>
-			<td>".$cek."</td>
+			<td>".$data['atgl_trans']."</td>
 			<td>".number($data['unit1'])."</td>
 			<td align='right'>".format_rp($data['harga1'])."</td>
 			<td align='right'>".format_rp($data['total1'])."</td>	

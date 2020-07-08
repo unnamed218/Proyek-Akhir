@@ -92,8 +92,6 @@ class m_keuangan extends CI_model
 		$this->db->where('a.no_coa', $no_akun);
 		$this->db->where('MONTH(tgl_jurnal)', $bulan );
 		$this->db->where('YEAR(tgl_jurnal)', $tahun);
-		$this->db->order_by('id_jurnal');
-		$this->db->order_by('no_coa');
 		$query = $this->db->get();
 		return $query->result_array();
 		}
