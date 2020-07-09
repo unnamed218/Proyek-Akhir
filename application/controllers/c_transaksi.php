@@ -439,8 +439,8 @@ class c_transaksi extends CI_controller{
       $ttl = $this->db->get('detail_cek_kualitas')->row_array()['total'];
       
       $total = ($lulus / $ttl) * $subtotal;
-       $this->m_keuangan->GenerateJurnal('1112', $id, 'd', $total);
-      $this->m_keuangan->GenerateJurnal('1111', $id, 'k', $total);
+       $this->M_keuangan->GenerateJurnal('1112', $id, 'd', $total);
+      $this->M_keuangan->GenerateJurnal('1111', $id, 'k', $total);
 
 
        //--------------------------------------------------------------------------//
@@ -609,8 +609,8 @@ class c_transaksi extends CI_controller{
     $this->db->insert('pembelian_bp', $data);
     
 
-      $this->m_keuangan->GenerateJurnal('1113', $id, 'd', $total);
-      $this->m_keuangan->GenerateJurnal('1111', $id, 'k', $total);
+      $this->M_keuangan->GenerateJurnal('1113', $id, 'd', $total);
+      $this->M_keuangan->GenerateJurnal('1111', $id, 'k', $total);
 
 
 
@@ -631,7 +631,7 @@ class c_transaksi extends CI_controller{
 
 
           if($cek_kartu_stok > 0){
-            $jumlah = 0; $harga = 0;
+            $jumlah = 0; $harga = 0; $total = 0;
               foreach ($isi_bp as $data) {
                 # code...
                 $array = [
@@ -1039,12 +1039,12 @@ class c_transaksi extends CI_controller{
 
      
       //jurnal pemakaian
-        $this->m_keuangan->GenerateJurnal('5111', $id, 'd', $bbb);
-       $this->m_keuangan->GenerateJurnal('1112', $id, 'k', $bbb);
-      $this->m_keuangan->GenerateJurnal('5112', $id, 'd', $btk);
-       $this->m_keuangan->GenerateJurnal('5311', $id, 'k', $btk);
-       $this->m_keuangan->GenerateJurnal('5113', $id, 'd', $bop);
-       $this->m_keuangan->GenerateJurnal('5312', $id, 'k', $bop);
+        $this->M_keuangan->GenerateJurnal('5111', $id, 'd', $bbb);
+       $this->M_keuangan->GenerateJurnal('1112', $id, 'k', $bbb);
+      $this->M_keuangan->GenerateJurnal('5112', $id, 'd', $btk);
+       $this->M_keuangan->GenerateJurnal('5311', $id, 'k', $btk);
+       $this->M_keuangan->GenerateJurnal('5113', $id, 'd', $bop);
+       $this->M_keuangan->GenerateJurnal('5312', $id, 'k', $bop);
 
       
 
@@ -1371,16 +1371,16 @@ class c_transaksi extends CI_controller{
       $pbj = $bbb2 + $btk2 + $bop2;
 
         //jurnal persediaan dalam proses
-        $this->m_keuangan->GenerateJurnal('1114', $id, 'd', $pbdp);
-        $this->m_keuangan->GenerateJurnal('5111', $id, 'k', $bbb1);
-        $this->m_keuangan->GenerateJurnal('5112', $id, 'k', $btk1);
-        $this->m_keuangan->GenerateJurnal('5113', $id, 'k', $bop1);
+        $this->M_keuangan->GenerateJurnal('1114', $id, 'd', $pbdp);
+        $this->M_keuangan->GenerateJurnal('5111', $id, 'k', $bbb1);
+        $this->M_keuangan->GenerateJurnal('5112', $id, 'k', $btk1);
+        $this->M_keuangan->GenerateJurnal('5113', $id, 'k', $bop1);
 
        //jurnal persediaan jadi
-         $this->m_keuangan->GenerateJurnal('1311', $id, 'd', $pbj);
-         $this->m_keuangan->GenerateJurnal('5111', $id, 'k', $bbb2);
-         $this->m_keuangan->GenerateJurnal('5112', $id, 'k', $btk2);
-         $this->m_keuangan->GenerateJurnal('5113', $id, 'k', $bop2);
+         $this->M_keuangan->GenerateJurnal('1311', $id, 'd', $pbj);
+         $this->M_keuangan->GenerateJurnal('5111', $id, 'k', $bbb2);
+         $this->M_keuangan->GenerateJurnal('5112', $id, 'k', $btk2);
+         $this->M_keuangan->GenerateJurnal('5113', $id, 'k', $bop2);
 
 
 
@@ -2190,22 +2190,22 @@ group by no_bbp";
 
 
       //jurnal pemakaian
-      $this->m_keuangan->GenerateJurnal('5112', $id, 'd', $btk);
-       $this->m_keuangan->GenerateJurnal('5311', $id, 'k', $btk);
-       $this->m_keuangan->GenerateJurnal('5113', $id, 'd', $bop);//Produk Dalam Proses - BOP
-       $this->m_keuangan->GenerateJurnal('5312', $id, 'k', $bop);//BOP Dibebankan
-      $this->m_keuangan->GenerateJurnal('5135', $id, 'd', $bp);
-       $this->m_keuangan->GenerateJurnal('1113', $id, 'k', $bp);
+      $this->M_keuangan->GenerateJurnal('5112', $id, 'd', $btk);
+       $this->M_keuangan->GenerateJurnal('5311', $id, 'k', $btk);
+       $this->M_keuangan->GenerateJurnal('5113', $id, 'd', $bop);//Produk Dalam Proses - BOP
+       $this->M_keuangan->GenerateJurnal('5312', $id, 'k', $bop);//BOP Dibebankan
+      $this->M_keuangan->GenerateJurnal('5135', $id, 'd', $bp);
+       $this->M_keuangan->GenerateJurnal('1113', $id, 'k', $bp);
 
 
      
      
 
        //jurnal persediaan jadi
-       $this->m_keuangan->GenerateJurnal('1312', $id, 'd', $pbj);
-       $this->m_keuangan->GenerateJurnal('1114', $id, 'k', $bbb);
-       $this->m_keuangan->GenerateJurnal('5112', $id, 'k', $btk);
-       $this->m_keuangan->GenerateJurnal('5113', $id, 'k', $bbop);
+       $this->M_keuangan->GenerateJurnal('1312', $id, 'd', $pbj);
+       $this->M_keuangan->GenerateJurnal('1114', $id, 'k', $bbb);
+       $this->M_keuangan->GenerateJurnal('5112', $id, 'k', $btk);
+       $this->M_keuangan->GenerateJurnal('5113', $id, 'k', $bbop);
 
    
       //update harga jual produk
@@ -2512,11 +2512,11 @@ group by no_bbp";
       $this->db->where('no_trans', $id);
       $this->db->update('penjualan_ips');
 
-       $this->m_keuangan->GenerateJurnal('1111', $id, 'd', $total);
-      $this->m_keuangan->GenerateJurnal('4111', $id, 'k', $total);
+       $this->M_keuangan->GenerateJurnal('1111', $id, 'd', $total);
+      $this->M_keuangan->GenerateJurnal('4111', $id, 'k', $total);
 
-       $this->m_keuangan->GenerateJurnal('6111', $id, 'd', $hpp);
-      $this->m_keuangan->GenerateJurnal('1311', $id, 'k', $hpp);
+       $this->M_keuangan->GenerateJurnal('6111', $id, 'd', $hpp);
+      $this->M_keuangan->GenerateJurnal('1311', $id, 'k', $hpp);
 
 
 
@@ -2778,10 +2778,10 @@ group by no_bbp";
       $this->db->insert('penjualan_toko', $data);
   
       $fix_total = $total * (100/130);
-       $this->m_keuangan->GenerateJurnal('1111', $id, 'd', $total);
-      $this->m_keuangan->GenerateJurnal('4112', $id, 'k', $total);
-       $this->m_keuangan->GenerateJurnal('6112', $id, 'd', $fix_total);
-      $this->m_keuangan->GenerateJurnal('1312', $id, 'k', $fix_total);
+       $this->M_keuangan->GenerateJurnal('1111', $id, 'd', $total);
+      $this->M_keuangan->GenerateJurnal('4112', $id, 'k', $total);
+       $this->M_keuangan->GenerateJurnal('6112', $id, 'd', $fix_total);
+      $this->M_keuangan->GenerateJurnal('1312', $id, 'k', $fix_total);
 
 
       redirect('c_transaksi/lihat_penjt');
@@ -2996,8 +2996,8 @@ group by no_bbp";
          $id = $data['no_trans'];
          $total = $data['subtotal'];
          $no_coa = $data['no_coa'];
-          $this->m_keuangan->GenerateJurnal($no_coa, $id, 'd', $total);
-           $this->m_keuangan->GenerateJurnal('1111', $id, 'k', $total);
+          $this->M_keuangan->GenerateJurnal($no_coa, $id, 'd', $total);
+           $this->M_keuangan->GenerateJurnal('1111', $id, 'k', $total);
 
       }
 

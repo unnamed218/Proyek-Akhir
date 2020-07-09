@@ -146,12 +146,13 @@
 							<td>".$data['nama_coa']."</td>
 						";
 					if($data['posisi_dr_cr'] == 'd'){
-					
-						if($header_akun == 1 or $header_akun == 5 or $header_akun == 6 ){
 							$saldo = $saldo + $data['nominal'];
-						}else{
-							$saldo = $saldo - $data['nominal'];
-						}        
+					
+						// if($header_akun == 1 or $header_akun == 5 or $header_akun == 6 ){
+						// 	$saldo = $saldo + $data['nominal'];
+						// }else{
+						// 	$saldo = $saldo - $data['nominal'];
+						// }        
 						echo "
 							<td align = 'right'>".format_rp($data['nominal'])."</td>
 							<td></td>
@@ -159,12 +160,13 @@
 						</tr>
 						";
 					}else{
-						
-						if($header_akun == 1 or $header_akun == 5 or $header_akun == 6 ){
 							$saldo = $saldo - $data['nominal'];
-						}else{
-							$saldo = $saldo + $data['nominal'];
-						}
+						
+						// if($header_akun == 1 or $header_akun == 5 or $header_akun == 6 ){
+						// 	$saldo = $saldo - $data['nominal'];
+						// }else{
+						// 	$saldo = $saldo + $data['nominal'];
+						// }
 						
 						echo "
 							<td></td>

@@ -101,6 +101,7 @@
                ORDER by no DESC";
          $row = $this->db->query($query111)->row_array();
 				          $jumlah2 = $row['unit3'];
+				          
 				          $subtotal3 = ($data['jumlah_bom'] / $row['unit3']) *$row['total3'];
 				          // var_dump($subtotal3);
 				      }else{

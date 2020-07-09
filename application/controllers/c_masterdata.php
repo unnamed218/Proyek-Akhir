@@ -74,7 +74,7 @@ class c_masterdata extends CI_controller{
                'saldo_awal' => ''
             );
             
-            $this->m_masterdata->tambah_data('coa', $data);
+            $this->M_masterdata->tambah_data('coa', $data);
             redirect('c_masterdata/lihat_coa');
          }
           
@@ -164,7 +164,7 @@ class c_masterdata extends CI_controller{
       
          
          
-         $x['data'] = $this->m_masterdata->edit_data('bahan_baku', "no_bb = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('bahan_baku', "no_bb = '$id'")->row_array();
          $this->template->load('template', 'bb/update', $x);
        
       
@@ -215,7 +215,7 @@ class c_masterdata extends CI_controller{
             );
             
             $this->db->where('no_bb', $no_bb);
-            $this->m_masterdata->update_data('bahan_baku', $data);
+            $this->M_masterdata->update_data('bahan_baku', $data);
             redirect('c_masterdata/lihat_bb');
             
          }
@@ -308,7 +308,7 @@ class c_masterdata extends CI_controller{
       
          
          
-         $x['data'] = $this->m_masterdata->edit_data('bahan_dalam_proses', "no_bdp = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('bahan_dalam_proses', "no_bdp = '$id'")->row_array();
          $this->template->load('template', 'bdp/update', $x);
        
       
@@ -359,7 +359,7 @@ class c_masterdata extends CI_controller{
             );
             
             $this->db->where('no_bdp', $no_bdp);
-            $this->m_masterdata->update_data('bahan_dalam_proses', $data);
+            $this->M_masterdata->update_data('bahan_dalam_proses', $data);
             redirect('c_masterdata/lihat_bdp');
             
          }
@@ -453,7 +453,7 @@ class c_masterdata extends CI_controller{
       
          
          
-         $x['data'] = $this->m_masterdata->edit_data('bahan_penolong', "no_bp = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('bahan_penolong', "no_bp = '$id'")->row_array();
          $this->template->load('template', 'bp/update', $x);
        
       
@@ -503,7 +503,7 @@ class c_masterdata extends CI_controller{
             );
             
             $this->db->where('no_bp', $no_bp);
-            $this->m_masterdata->update_data('bahan_penolong', $data);
+            $this->M_masterdata->update_data('bahan_penolong', $data);
             redirect('c_masterdata/lihat_bp');
             
          }
@@ -595,7 +595,7 @@ class c_masterdata extends CI_controller{
       
          
          
-         $x['data'] = $this->m_masterdata->edit_data('produk', "no_produk = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('produk', "no_produk = '$id'")->row_array();
          $this->template->load('template', 'produk/update', $x);
        
       
@@ -647,7 +647,7 @@ class c_masterdata extends CI_controller{
             );
             
             $this->db->where('no_produk', $no_bb);
-            $this->m_masterdata->update_data('produk', $data);
+            $this->M_masterdata->update_data('produk', $data);
             redirect('c_masterdata/lihat_produk');
             
          }
@@ -749,7 +749,7 @@ class c_masterdata extends CI_controller{
       
          
          
-         $x['data'] = $this->m_masterdata->edit_data('peternak', "no_peternak = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('peternak', "no_peternak = '$id'")->row_array();
          $this->template->load('template', 'peternak/update', $x);
        
       
@@ -808,7 +808,7 @@ class c_masterdata extends CI_controller{
             );
             
             $this->db->where('no_peternak', $no_peternak);
-            $this->m_masterdata->update_data('peternak', $data);
+            $this->M_masterdata->update_data('peternak', $data);
             redirect('c_masterdata/lihat_peternak');
             
          }
@@ -908,7 +908,7 @@ class c_masterdata extends CI_controller{
       
          
          
-         $x['data'] = $this->m_masterdata->edit_data('supplier_bp', "no_supp_bp = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('supplier_bp', "no_supp_bp = '$id'")->row_array();
          $this->template->load('template', 'supplier/update', $x);
        
       
@@ -968,7 +968,7 @@ class c_masterdata extends CI_controller{
             );
             
             $this->db->where('no_supp_bp', $no_supp_bp);
-            $this->m_masterdata->update_data('supplier_bp', $data);
+            $this->M_masterdata->update_data('supplier_bp', $data);
             redirect('c_masterdata/lihat_supp_bp');
             
          }
@@ -1068,7 +1068,7 @@ class c_masterdata extends CI_controller{
       ";
          $x['result'] = $this->db->query($query)->result_array();
          
-         $x['data'] = $this->m_masterdata->edit_data('bop', "no_bop = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('bop', "no_bop = '$id'")->row_array();
          $this->template->load('template', 'bop/update', $x);
          // var_dump($x['result']);
        
@@ -1258,7 +1258,7 @@ class c_masterdata extends CI_controller{
       
          
          
-         $x['data'] = $this->m_masterdata->edit_data('btk', "no_btk = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('btk', "no_btk = '$id'")->row_array();
          $this->template->load('template', 'btk/update', $x);
        
       
@@ -1304,7 +1304,7 @@ class c_masterdata extends CI_controller{
             );
             
             $this->db->where('no_btk', $_POST['no_btk']);
-            $this->m_masterdata->update_data('btk', $data);
+            $this->M_masterdata->update_data('btk', $data);
             redirect('c_masterdata/lihat_btk');
             
          }
@@ -1404,7 +1404,7 @@ class c_masterdata extends CI_controller{
       
          
          
-         $x['data'] = $this->m_masterdata->edit_data('konsumen_ips', "no_ips = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('konsumen_ips', "no_ips = '$id'")->row_array();
          $this->template->load('template', 'ips/update', $x);
        
       
@@ -1460,7 +1460,7 @@ class c_masterdata extends CI_controller{
             );
             
             $this->db->where('no_ips', $no_bp);
-            $this->m_masterdata->update_data('konsumen_ips', $data);
+            $this->M_masterdata->update_data('konsumen_ips', $data);
             redirect('c_masterdata/lihat_ips');
             
          }
@@ -1503,7 +1503,7 @@ class c_masterdata extends CI_controller{
                      ORDER BY no_bbp";
          $x['result1'] = $this->db->query($query1)->result_array();
          
-         $x['data'] = $this->m_masterdata->edit_data('produk', "no_produk = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('produk', "no_produk = '$id'")->row_array();
          $this->template->load('template', 'bom/update', $x);
        
       
@@ -1652,7 +1652,7 @@ class c_masterdata extends CI_controller{
       
          
          
-         $x['data'] = $this->m_masterdata->edit_data('jenis_bop', "no_jbop = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('jenis_bop', "no_jbop = '$id'")->row_array();
          $this->template->load('template', 'jenis_bop/update', $x);
        
       
@@ -1691,7 +1691,7 @@ class c_masterdata extends CI_controller{
             );
             
             $this->db->where('no_jbop', $no_jbop);
-            $this->m_masterdata->update_data('jenis_bop', $data);
+            $this->M_masterdata->update_data('jenis_bop', $data);
             redirect('c_masterdata/lihat_jbop');
             
          }

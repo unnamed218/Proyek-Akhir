@@ -16,10 +16,10 @@ class c_keuangan extends CI_Controller
 			
 		$data['awal'] = $_POST['tgl_awal'];
 		$data['akhir'] = $_POST['tgl_akhir'];
-		$data['jurnal'] = $this->m_keuangan->GetDataJurnal();
+		$data['jurnal'] = $this->M_keuangan->GetDataJurnal();
 		$this->template->load('template','jurnal', $data);
 	}else{
-		$data['jurnal'] = $this->m_keuangan->GetDataJurnal();
+		$data['jurnal'] = $this->M_keuangan->GetDataJurnal();
 		$this->template->load('template','jurnal', $data);
 		
 	// }
@@ -30,12 +30,12 @@ class c_keuangan extends CI_Controller
 }
 
 	public function jurnal_pdf_all(){
-		$data['jurnal'] = $this->m_keuangan->getdatajurnalall();
+		$data['jurnal'] = $this->M_keuangan->getdatajurnalall();
 		$this->template->load('template_pdf','jurnal_pdf', $data);
 	}
 
 	public function jurnal_pdf_filter($awal, $akhir){
-		$data['jurnal'] = $this->m_keuangan->GetDataJurnalfilter($awal, $akhir);
+		$data['jurnal'] = $this->M_keuangan->GetDataJurnalfilter($awal, $akhir);
 		$this->template->load('template_pdf','jurnal_pdf', $data);
 		//var_dump($awal);
 	}
@@ -43,14 +43,14 @@ class c_keuangan extends CI_Controller
 	public function jurnal_excel_all(){
 		header("Content-type=application/vnd.ms.excel");
 		header("Content-disposition: attachment; filename=Jurnal.xls");
-		$data['jurnal']=$this->m_keuangan->getdatajurnalall();
+		$data['jurnal']=$this->M_keuangan->getdatajurnalall();
 		$this->load->view('jurnal_excel',$data);
 		//$this->template->load('template','laporan_penj',$data);
 	}
 	public function jurnal_excel_filter($awal, $akhir){
 		header("Content-type=application/vnd.ms.excel");
 		header("Content-disposition: attachment; filename=Jurnal.xls");
-		$data['jurnal'] = $this->m_keuangan->GetDataJurnalfilter($awal, $akhir);
+		$data['jurnal'] = $this->M_keuangan->GetDataJurnalfilter($awal, $akhir);
 		$this->load->view('jurnal_excel',$data);
 		//$this->template->load('template','laporan_penj',$data);
 	}
@@ -74,9 +74,9 @@ class c_keuangan extends CI_Controller
 				$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'k' order by no) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' 
 					";
 				$data['saldoawal'] = $this->db->query($query)->row_array();
-				$data['akun'] = $this->m_keuangan->GetDataAkun();
-				$data['dataakun'] = $this->m_keuangan->GetSaldoAkun($no_akun);
-				$data['jurnal'] = $this->m_keuangan->getdatabukubesar($no_akun, $bulan1, $tahun1);
+				$data['akun'] = $this->M_keuangan->GetDataAkun();
+				$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
+				$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan1, $tahun1);
 				$this->template->load('template','bukubesar',$data);
 				// var_dump($cek);
 			}else{
@@ -91,9 +91,9 @@ class c_keuangan extends CI_Controller
 				$data['bulan'] = date('m');
 				$data['tahun'] = date('Y');
 				$data['saldoawal'] = $this->db->query($query)->row_array();
-				$data['akun'] = $this->m_keuangan->GetDataAkun();
-				$data['dataakun'] = $this->m_keuangan->GetSaldoAkun($no_akun);
-				$data['jurnal'] = $this->m_keuangan->getdatabukubesar($no_akun, $bulan1, $tahun1);
+				$data['akun'] = $this->M_keuangan->GetDataAkun();
+				$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
+				$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan1, $tahun1);
 				$this->template->load('template','bukubesar',$data);
 				// var_dump($data['saldoawal']);
 			}
@@ -103,7 +103,7 @@ class c_keuangan extends CI_Controller
 	}
 
 	// public function bukubesar_pdf_all(){
-	// 	$data['jurnal'] = $this->m_keuangan->getdatajurnalall();
+	// 	$data['jurnal'] = $this->M_keuangan->getdatajurnalall();
 	// 	$this->template->load('template_pdf','jurnal_pdf', $data);
 	// }
 
@@ -118,9 +118,9 @@ class c_keuangan extends CI_Controller
 				$data['tahun'] = $tahun5;
 				$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'K' ) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' ";
 				$data['saldoawal'] = $this->db->query($query)->row_array();
-				$data['akun'] = $this->m_keuangan->GetDataAkun();
-				$data['dataakun'] = $this->m_keuangan->GetSaldoAkun($no_akun);
-				$data['jurnal'] = $this->m_keuangan->getdatabukubesar($no_akun, $bulan5, $tahun5);
+				$data['akun'] = $this->M_keuangan->GetDataAkun();
+				$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
+				$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan5, $tahun5);
 		$this->template->load('template_pdf','bukubesar_pdf', $data);
 		//var_dump($awal);
 	}
@@ -128,7 +128,7 @@ class c_keuangan extends CI_Controller
 	// public function bukubesar_excel_all(){
 	// 	header("Content-type=application/vnd.ms.excel");
 	// 	header("Content-disposition: attachment; filename=Jurnal.xls");
-	// 	$data['jurnal']=$this->m_keuangan->getdatajurnalall();
+	// 	$data['jurnal']=$this->M_keuangan->getdatajurnalall();
 	// 	$this->load->view('jurnal_excel',$data);
 	// 	//$this->template->load('template','laporan_penj',$data);
 	// }
@@ -142,9 +142,9 @@ class c_keuangan extends CI_Controller
 				$tahun = substr($cek, 6,5);
 				$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'K' ) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' ";
 				$data['saldoawal'] = $this->db->query($query)->row_array();
-				$data['akun'] = $this->m_keuangan->GetDataAkun();
-				$data['dataakun'] = $this->m_keuangan->GetSaldoAkun($no_akun);
-				$data['jurnal'] = $this->m_keuangan->getdatabukubesar($no_akun, $bulan5, $tahun5);
+				$data['akun'] = $this->M_keuangan->GetDataAkun();
+				$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
+				$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan5, $tahun5);
 		$this->load->view('bukubesar_excel',$data);
 		//$this->template->load('template','laporan_penj',$data);
 	}
@@ -576,8 +576,7 @@ $query35 = "SELECT ifnull(SUM(hpp), 0) as nominal
 			$q2 = "SELECT a.no_bp, nama_bp, ifnull(sum(unit2),0) as jumlah, ifnull(sum(total2),0) as total
 						FROM kartu_stok_bp a
 						JOIN bahan_penolong b ON a.no_bp = b.no_bp
-						JOIN detail_produksi_ke2 c ON a.no_trans = c.no_trans
-						WHERE a.no_bp NOT LIKE 'BB_001' AND c.no_produk = '$produk' AND MONTH(a.tgl_trans) = $bulan AND YEAR(a.tgl_trans) = $tahun 
+						WHERE a.no_bp NOT LIKE 'BB_001' AND a.no_produk = '$produk' AND MONTH(a.tgl_trans) = $bulan AND YEAR(a.tgl_trans) = $tahun 
 						GROUP BY no_bp";
 				$data['list_bp'] = $this->db->query($q2)->result_array();
 			}else{
@@ -647,8 +646,7 @@ $query35 = "SELECT ifnull(SUM(hpp), 0) as nominal
 				$q2 = "SELECT a.no_bp, nama_bp, ifnull(sum(unit2),0) as jumlah, ifnull(sum(total2),0) as total
 						FROM kartu_stok_bp a
 						JOIN bahan_penolong b ON a.no_bp = b.no_bp
-						JOIN detail_produksi_ke2 c ON a.no_trans = c.no_trans
-						WHERE a.no_bp NOT LIKE 'BB_001' AND c.no_produk = '$produk' AND MONTH(a.tgl_trans) = $bulan AND YEAR(a.tgl_trans) = $tahun 
+						WHERE a.no_bp NOT LIKE 'BB_001' AND a.no_produk = '$produk' AND MONTH(a.tgl_trans) = $bulan AND YEAR(a.tgl_trans) = $tahun 
 						GROUP BY no_bp";
 				$data['list_bp'] = $this->db->query($q2)->result_array();
         // echo "<pre>"; print_r($data['list_bp']); echo "</pre>";die(); 
