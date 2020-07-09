@@ -247,8 +247,8 @@
                                       <?php
                                     elseif( $this->session->userdata('level')=="produksi2"):
                                      ?>
-                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pembp">Laporan Pembelian Bahan Penolong</a></li>
-                                     <!-- <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_bp">Kartu Persediaan Bahan Penolong</a></li> -->
+                                     <!-- <li><a href="<?php echo site_url();?>c_keuangan/lap_pembp">Laporan Pembelian Bahan Penolong</a></li> -->
+                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_bp">Kartu Persediaan Bahan Penolong</a></li>
                                      <li><a href="<?php echo site_url();?>c_keuangan/lap_bp_olahan">Laporan Harga Pokok Produksi Olahan</a></li>
                                     
                                      <?php
@@ -272,7 +272,7 @@
                                     <li><a href="<?php echo site_url();?>c_keuangan/hpp_toko">Laporan Harga Pokok Penjualan Toko</a></li>
                                      <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_prod1">Kartu Persediaan Produk IPS</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_prod">Kartu Persediaan Produk Toko</a></li>
-                                      <li><a href="<?php echo site_url();?>c_keuangan/lr">Laporan Laba Rugi</a></li>
+                                      <li><a href="<?php echo site_url();?>c_keuangan/lr1">Laporan Laba Rugi</a></li>
                                     
                                    <?php
                                     elseif( $this->session->userdata('level')=="keuangan1"):
@@ -288,6 +288,9 @@
                                      <li><a href="<?php echo site_url();?>c_keuangan/view_jurnal">Jurnal</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li>
                                     <!-- <li><a href="<?php echo site_url();?>c_keuangan/lap_ks_bp">Kartu Persediaan Bahan Penolong</a></li> -->
+                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pembp">Laporan Pembelian Bahan Penolong</a></li>
+                                    
+
                                      <li><a href="<?php echo site_url();?>c_keuangan/lap_bp_olahan">Laporan Harga Pokok Produksi Olahan</a></li>
                                     <?php
                                    endif

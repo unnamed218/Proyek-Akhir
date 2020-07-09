@@ -3,7 +3,7 @@ class c_login extends CI_Controller{
     
   function cek_login()
         {
-            $query = $this->m_login->cek($_POST['username'],($_POST['password']));
+            $query = $this->M_login->cek($_POST['username'],($_POST['password']));
             if($this->session->userdata('level') == TRUE){
                 redirect('c_masterdata/beranda');
             }elseif($query->num_rows()<>0)
