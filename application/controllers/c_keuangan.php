@@ -960,7 +960,7 @@ ORDER BY a.no ASC";
 	
 
 	public function lap_ks_prod1(){
-			 if(isset($_POST['no_produk'])){
+			 if(isset($_POST['tgl_awal'], $_POST['tgl_akhir'])){
        $no = 'PR_001';
        $awal = $_POST['tgl_awal'];
        $akhir = $_POST['tgl_akhir'];
