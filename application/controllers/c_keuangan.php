@@ -996,7 +996,7 @@ ORDER BY a.no ASC";
 				FROM kartu_stok_penj
 				WHERE no_produk = '$no' 
 				GROUP BY atgl_trans
-				HAVING atgl_trans >= '$awal'";
+				HAVING atgl_trans = '$awal'";
 
 				$q3 = "SELECT unit3,harga3,total3, substring(tgl_trans,1,10) as atgl_trans FROM kartu_stok_penj
 				WHERE no_produk = '$no'  
@@ -1621,12 +1621,11 @@ ORDER BY a.no ASC";
 		$produk_jadi = $this->db->query($qprodukjadi)->row_array()['total_jadi'];
 		$data['produk_jadi'] = $produk_jadi;
 
-		$qprodukawal = "SELECT ifnull(sum(hpp),0) as hpp_kurang,
+		$qprodukawal = "SELECT ifnull(sum(total2),0) as hpp_kurang,
 						(SELECT ifnull(sum(subtotal), 0)
 						FROM detail_produksi_ke2 a 
 						WHERE MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk') as hpp_tambah
-							FROM detail_penjualan_toko a 
-					JOIN penjualan_toko b ON a.no_trans = b.no_trans
+							FROM kartu_stok_penj
 					WHERE  MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk'";
 		$hitungawaltambah = $this->db->query($qprodukawal)->row_array()['hpp_tambah'];
 		$hitungawalkurang = $this->db->query($qprodukawal)->row_array()['hpp_kurang'];
@@ -1674,12 +1673,11 @@ ORDER BY a.no ASC";
 		$produk_jadi = $this->db->query($qprodukjadi)->row_array()['total_jadi'];
 		$data['produk_jadi'] = $produk_jadi;
 
-		$qprodukawal = "SELECT ifnull(sum(hpp),0) as hpp_kurang,
+		$qprodukawal = "SELECT ifnull(sum(total2),0) as hpp_kurang,
 						(SELECT ifnull(sum(subtotal), 0)
 						FROM detail_produksi_ke2 a 
 						WHERE MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk') as hpp_tambah
-							FROM detail_penjualan_toko a 
-					JOIN penjualan_toko b ON a.no_trans = b.no_trans
+							FROM kartu_stok_penj
 					WHERE  MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk'";
 		$hitungawaltambah = $this->db->query($qprodukawal)->row_array()['hpp_tambah'];
 		$hitungawalkurang = $this->db->query($qprodukawal)->row_array()['hpp_kurang'];

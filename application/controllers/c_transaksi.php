@@ -2541,9 +2541,9 @@ group by no_bbp";
                     'unit2' => $jumlah,
                     'harga2' => $hpp / $jumlah,
                     'total2' => $hpp,
-                    'unit3' => '-',
-                    'harga3' => '-',
-                    'total3' => '-',
+                    'unit3' => 0,
+                    'harga3' => 0,
+                    'total3' => 0,
                     'status_pro' => 0,
                     'status_pen' => 0);
       $this->db->insert('kartu_stok_penj', $data);
