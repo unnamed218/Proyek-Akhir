@@ -1367,19 +1367,23 @@ ORDER BY a.no ASC";
 		$data['ipsbeban'] = $ibbn;
 
 		//TOTAL TOKOOOO
-		$qpenjt = "SELECT ifnull(sum(subtotal), 0) as penjualan, ifnull(sum(hpp), 0) as hpp
+		$qpenjt = "SELECT ifnull(sum(subtotal), 0) as penjualan
 					FROM detail_penjualan_toko a 
 					JOIN penjualan_toko b ON  a.no_trans = b.no_trans 
 					WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun'";
 
 		$data['penj_toko'] = $this->db->query($qpenjt)->row_array()['penjualan'];
-		$data['hpp_toko'] = $this->db->query($qpenjt)->row_array()['hpp'];
+		$qhpptoko = "SELECT ifnull(sum(total2), 0) as hpp
+					FROM kartu_stok_penj
+					WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun'";
+
+		$data['hpp_toko'] = $this->db->query($qhpptoko)->row_array()['hpp'];
 		$data['laba_kotor_toko'] = $data['penj_toko'] - $data['hpp_toko'];
 
 		
 		//list tokooooooooooooooooooooooooooooooooooo
 
-		$qpenj1 = "SELECT ifnull(sum(subtotal), 0) as nominal, b.no_produk, ifnull(sum(hpp),0) as hpp, ifnull((sum(subtotal) - sum(hpp)), 0) as laba_kotor
+		$qpenj1 = "SELECT ifnull(sum(subtotal), 0) as nominal, b.no_produk
 					FROM (SELECT * FROM penjualan_toko WHERE month(tgl_trans) ='$bulan' AND YEAR(tgl_trans) = '$tahun') as ab
                     JOIN detail_penjualan_toko c ON ab.no_trans = c.no_trans
                     RIGHT JOIN produk b ON c.no_produk = b.no_produk 
@@ -1388,6 +1392,13 @@ ORDER BY a.no ASC";
 					ORDER BY b.no_produk ASC";
 		$penjt = $this->db->query($qpenj1)->result_array();
 		$data['penjt'] = $penjt;
+
+		$qhpplisttoko = "SELECT ifnull(sum(total2),0) as hpp
+						FROM kartu_stok_penj
+						WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun'
+						GROUP BY no_produk
+						ORDER BY no_produk ASC";
+		$data['hpplisttoko'] = $this->db->query($qhpplisttoko)->result_array();
 
 		$qbebantoko = "SELECT ifnull(sum(subtotal),0) as subtotal, c.no_coa, nama_coa
 					FROM (SELECT * FROM pembayaran WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun')as a 
@@ -1442,13 +1453,17 @@ ORDER BY a.no ASC";
 					WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun'";
 
 		$data['penj_toko'] = $this->db->query($qpenjt)->row_array()['penjualan'];
-		$data['hpp_toko'] = $this->db->query($qpenjt)->row_array()['hpp'];
+		$qhpptoko = "SELECT ifnull(sum(total2), 0) as hpp
+					FROM kartu_stok_penj
+					WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun'";
+
+		$data['hpp_toko'] = $this->db->query($qhpptoko)->row_array()['hpp'];
 		$data['laba_kotor_toko'] = $data['penj_toko'] - $data['hpp_toko'];
 
 		
 		//list tokooooooooooooooooooooooooooooooooooo
 
-		$qpenj1 = "SELECT ifnull(sum(subtotal), 0) as nominal, b.no_produk, ifnull(sum(hpp),0) as hpp, ifnull((sum(subtotal) - sum(hpp)), 0) as laba_kotor
+		$qpenj1 = "SELECT ifnull(sum(subtotal), 0) as nominal, b.no_produk,  ifnull((sum(subtotal) - sum(hpp)), 0) as laba_kotor
 					FROM (SELECT * FROM penjualan_toko WHERE month(tgl_trans) ='$bulan' AND YEAR(tgl_trans) = '$tahun') as ab
                     JOIN detail_penjualan_toko c ON ab.no_trans = c.no_trans
                     RIGHT JOIN produk b ON c.no_produk = b.no_produk 
@@ -1457,6 +1472,12 @@ ORDER BY a.no ASC";
 					ORDER BY b.no_produk ASC";
 		$penjt = $this->db->query($qpenj1)->result_array();
 		$data['penjt'] = $penjt;
+		$qhpplisttoko = "SELECT ifnull(sum(total2),0) as hpp
+						FROM kartu_stok_penj
+						WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun'
+						GROUP BY no_produk
+						ORDER BY no_produk ASC";
+		$data['hpplisttoko'] = $this->db->query($qhpplisttoko)->result_array();
 
 		$qbebantoko = "SELECT ifnull(sum(subtotal),0) as subtotal, c.no_coa, nama_coa
 					FROM (SELECT * FROM pembayaran WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun')as a 
@@ -1588,8 +1609,7 @@ ORDER BY a.no ASC";
 
 				//
 		$qhpp0 =  "SELECT ifnull(sum(hpp),0) as hpp
-					FROM detail_penjualan_toko a 
-					JOIN penjualan_toko b ON a.no_trans = b.no_trans
+					FROM kartu_stok_penj
 					WHERE  MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' AND no_produk = '$produk'";
 		$hpptoko = $this->db->query($qhpp0)->row_array()['hpp'];
 		$data['hpptoko'] = $hpptoko;
@@ -1641,9 +1661,8 @@ ORDER BY a.no ASC";
 		$data['nama_produk'] = $nama_produk;
 
 				//
-		$qhpp0 =  "SELECT ifnull(sum(hpp),0) as hpp
-					FROM detail_penjualan_toko a 
-					JOIN penjualan_toko b ON a.no_trans = b.no_trans
+		$qhpp0 =  "SELECT ifnull(sum(total2),0) as hpp
+					FROM kartu_stok_penj 
 					WHERE  MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' AND no_produk = '$produk'";
 		$hpptoko = $this->db->query($qhpp0)->row_array()['hpp'];
 		$data['hpptoko'] = $hpptoko;

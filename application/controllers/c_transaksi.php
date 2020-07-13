@@ -1524,7 +1524,7 @@ class c_transaksi extends CI_controller{
       	$x['status'] = $this->db->get('target_produksi')->row()->status;
          
          
-         $x['data'] = $this->m_masterdata->edit_data('target_produksi', "no_tp = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('target_produksi', "no_tp = '$id'")->row_array();
 
 
          $query3 = "SELECT ifnull(produksi,0) as jumlah
@@ -2049,6 +2049,7 @@ group by no_bbp";
         $cek_desc = $this->db->query($q_desc)->row_array()['no_trans'];
         //
         $this->db->where('no_trans', $cek_desc);
+        $this->db->where('no_produk', $no_prod);
         $this->db->select('unit3,harga3,total3');
         $tes = $this->db->get('kartu_stok_penj')->result_array();
         // echo "<pre>"; print_r($tes); echo "</pre>";die(); 
@@ -2075,7 +2076,6 @@ group by no_bbp";
 
             $this->db->insert('kartu_stok_penj', $array);
 
-            $this->db->where(array('no_trans' => $data['no_trans'], 'no_produk' => $no_prod,'tgl_trans' => $data['tgl_trans'], 'status_pro' => 0))->set('status_pro', 1)->update('kartu_stok_penj');
         }
         // die('hai dia');
         // echo "<pre>"; print_r($tes); echo "</pre>"; die();
@@ -2536,11 +2536,11 @@ group by no_bbp";
                     'harga1' => '-',
                     'total1' => '-',
                     'unit2' => $jumlah,
-                    'harga2' => $total / $jumlah,
-                    'total2' => $total,
-                    'unit3' => 0,
-                    'harga3' => 0,
-                    'total3' => 0,
+                    'harga2' => $hpp / $jumlah,
+                    'total2' => $hpp,
+                    'unit3' => '-',
+                    'harga3' => '-',
+                    'total3' => '-',
                     'status_pro' => 0,
                     'status_pen' => 0);
       $this->db->insert('kartu_stok_penj', $data);
@@ -2609,9 +2609,11 @@ group by no_bbp";
             array(
                'field' => 'jumlah',
                'label' => 'Jumlah',
-               'rules' => 'required',
+               'rules' => 'required|is_natural_no_zero|less_than[0]',
                'errors' => array(
-                  'required' => 'Inputan Salah'
+                  'required' => '%s tidak boleh kosong!',
+                  'is_natural_no_zero' => '%s hanya bisa berupa angka 1-9!',
+                  'less_than' => '%s tidak boleh minus!'
                )
             ),
             array(
@@ -2619,7 +2621,7 @@ group by no_bbp";
                'label' => 'Produk',
                'rules' => 'required',
                'errors' => array(
-                  'required' => '%s harus diisi!'
+                  'required' => '%s tidak boleh kosong!'
                )
             )
          );
@@ -2645,8 +2647,8 @@ group by no_bbp";
 
           $tgl  = $row['no'];
           $stok = $row['jumlah_kartu_stok'];
-          $biaya = $row['bbb'] + $row['btk'] + $row['bp'];
-          $harga = $biaya / $row['jumlah'];
+          $biaya = $row['bbb'] + $row['btk'] + $row['bp'] + $row['bop'];
+          $hpp_satuan = $biaya / $row['jumlah'];
           $margin = ($biaya * 1.3) / $row['jumlah'];
           if($pengurang > 0) { 
               $temp = $pengurang;
@@ -2663,23 +2665,101 @@ group by no_bbp";
             $this->db->where('no', $tgl);
             $this->db->update('detail_produksi_ke2');
 
+            $jumlah1 = $row['jumlah'] - $stok_update;
+            $data1 = array('no_trans' => $_POST['no_trans'],  
+                          'unit' => $jumlah1,
+                          'harga' => $hpp_satuan,
+                          'nominal' => $jumlah1 * $hpp_satuan);
+            $this->db->insert('update_stok_penj', $data1);
         
+           
           }
-
       }
+      $this->db->where('no_produk', $_POST['no_produk']);
+      $this->db->where('jumlah_kartu_stok >', 0);
+      $val1 = $this->db->get('detail_produksi_ke2');
+      $val2 = $this->db->get('update_stok_penj');
+
+      if($val1->num_rows() > $val2->num_rows()){
+        foreach ($val1->result_array() as $data) {
+            $harga1 = ($data['bbb'] + $data['btk'] + $data['bop'] + $data['bp']) / $data['jumlah'];
+            $d1 = array('no_trans' => $_POST['no_trans'],
+                      'tgl_trans' => date('Y-m-d H:i:s'),
+                      'no_produk' => $_POST['no_produk'],
+                     'unit1' => '-',
+                    'harga1' => '-',
+                    'total1' => '-',
+                    'unit2' => '-',
+                    'harga2' => '-',
+                    'total2' => '-',
+                    'unit3' => $data['jumlah_kartu_stok'],
+                    'harga3' => $harga1,
+                    'total3' => $data['jumlah_kartu_stok'] * $harga1);
+          $this->db->insert('kartu_stok_penj', $d1);
+        }
+
+        $this->db->where('no_trans', $_POST['no_trans']);
+        $this->db->where('no_produk', $_POST['no_produk']);
+        $this->db->order_by('no ASC');
+        $cek_no = $this->db->get('kartu_stok_penj')->row_array()['no'];
+
+        foreach ($val2->result_array() as $data) {
+          # code...
+          $this->db->where('no', $cek_no);
+          $this->db->set('unit2', $data['unit']);
+          $this->db->set('harga2', $data['harga']);
+          $this->db->set('total2', $data['nominal']);
+          $this->db->update('kartu_stok_penj');
+          $cek_no++;
+        }
+      }else{
+        foreach ($val2->result_array() as $data) {
+            $d1 = array('no_trans' => $_POST['no_trans'],
+                      'tgl_trans' => date('Y-m-d H:i:s'),
+                      'no_produk' => $_POST['no_produk'],
+                     'unit1' => '-',
+                    'harga1' => '-',
+                    'total1' => '-',
+                    'unit2' => $data['unit'],
+                    'harga2' => $data['harga'],
+                    'total2' => $data['nominal'],
+                    'unit3' => '-',
+                    'harga3' => '-',
+                    'total3' => '-');
+          $this->db->insert('kartu_stok_penj', $d1);
+        }
+
+        $this->db->where('no_trans', $_POST['no_trans']);
+        $this->db->where('no_produk', $_POST['no_produk']);
+        $this->db->order_by('no ASC');
+        $cek_no = $this->db->get('kartu_stok_penj')->row_array()['no'];
+
+        foreach ($val1->result_array() as $data) {
+          # code...
+           $harga1 = ($data['bbb'] + $data['btk'] + $data['bop'] + $data['bp']) / $data['jumlah'];
+          $this->db->where('no', $cek_no);
+          $this->db->set('unit3', $data['jumlah_kartu_stok']);
+          $this->db->set('harga3', $harga1);
+          $this->db->set('total3', $data['jumlah_kartu_stok'] * $harga1);
+          $this->db->update('kartu_stok_penj');
+          $cek_no++;
+        }
+      }
+
+          // echo "<pre>"; print_r($cek_produk); echo "</pre>"; 
+      $this->db->where('no_trans', $_POST['no_trans']);
+      $this->db->delete('update_stok_penj');
+      // die('hai');
             $this->db->where('no_produk', $_POST['no_produk']);
             $harga = $this->db->get('produk')->row_array()['harga_jual'];
             $subtotal = $harga * $_POST['jumlah'];
-            $hpp = $subtotal * 100/130;
             $data = array(
                'no_trans' => $_POST['no_trans'],
                'no_produk' => $_POST['no_produk'],
                'jumlah' => $_POST['jumlah'],
                'harga' => $harga,
                'subtotal' => $subtotal,
-               'hpp' => $hpp
-            );   
-          
+               'hpp' => 0);   
 
             $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_produk' => $_POST['no_produk']));
             $cek =  $this->db->get('detail_penjualan_toko')->num_rows();
@@ -2703,73 +2783,73 @@ group by no_bbp";
 
    public function selesai_penjt($id, $total){
 
-      $query = "SELECT no_produk FROM detail_penjualan_toko WHERE no_trans = '$id' GROUP BY no_produk";
-      $cek_produk = $this->db->query($query)->result_array();
-    // echo "<pre>"; print_r($cek_produk); echo "</pre>"; die();
+    //   $query = "SELECT no_produk FROM detail_penjualan_toko WHERE no_trans = '$id' GROUP BY no_produk";
+    //   $cek_produk = $this->db->query($query)->result_array();
+    // // echo "<pre>"; print_r($cek_produk); echo "</pre>"; die();
 
-      foreach ($cek_produk as $data) {
-        $no_produk = $data['no_produk'];
-      $q1 = "SELECT ifnull((jumlah_kartu_stok / jumlah) * subtotal ,0) as nominal, ifnull(jumlah_kartu_stok, 0) as jumlah_kartu_stok
-            FROM detail_produksi_ke2 WHERE no_produk = '$no_produk' AND jumlah_kartu_stok > 0";
-      $jb_stok = $this->db->query($q1)->num_rows();
-      $list_stok = $this->db->query($q1)->result_array();
+    //   foreach ($cek_produk as $data) {
+    //     $no_produk = $data['no_produk'];
+    //   $q1 = "SELECT ifnull((jumlah_kartu_stok / jumlah) * subtotal ,0) as nominal, ifnull(jumlah_kartu_stok, 0) as jumlah_kartu_stok
+    //         FROM detail_produksi_ke2 WHERE no_produk = '$no_produk' AND jumlah_kartu_stok > 0";
+    //   $jb_stok = $this->db->query($q1)->num_rows();
+    //   $list_stok = $this->db->query($q1)->result_array();
 
-      $q2 = "SELECT ifnull(jumlah,0) as jumlah, ifnull(harga, 0) as harga, ifnull(subtotal,0) as subtotal FROM detail_penjualan_toko WHERE no_trans = '$id' AND no_produk = '$no_produk' ";
-      $jb_penj = $this->db->query($q2)->num_rows();
-      $list_penj = $this->db->query($q2)->row_array();
-      if($jb_stok >= $jb_penj){
-       // $tes =  array_merge($list_penj, $list_stok);
-    // echo "<pre>"; print_r($tes); echo "</pre>"; die();
+    //   $q2 = "SELECT ifnull(jumlah,0) as jumlah, ifnull(harga, 0) as harga, ifnull(subtotal,0) as subtotal FROM detail_penjualan_toko WHERE no_trans = '$id' AND no_produk = '$no_produk' ";
+    //   $jb_penj = $this->db->query($q2)->num_rows();
+    //   $list_penj = $this->db->query($q2)->row_array();
+    //   if($jb_stok >= $jb_penj){
+    //    // $tes =  array_merge($list_penj, $list_stok);
+    // // echo "<pre>"; print_r($tes); echo "</pre>"; die();
       
-        foreach($list_stok as $data){
-          # code...
-          $array = array('no_trans' => $id,
-                    'tgl_trans' => date('Y-m-d H:i:s'),
-                    'no_produk' => $no_produk,
-                    'unit1' => '-',
-                    'harga1' => '-',
-                    'total1' => '-',
-                    'unit2' => '',
-                    'harga2' => '',
-                    'total2' => '',
-                    'unit3' => $data['jumlah_kartu_stok'],
-                    'harga3' => $data['nominal'] / $data['jumlah_kartu_stok'],
-                    'total3' => $data['nominal']);
-          $this->db->insert('kartu_stok_penj', $array);
-        }
-      $this->db->where('no_trans', $id);
-      $this->db->where('no_produk', $no_produk);
-      $this->db->order_by('no ASC');
-      $no_asc = $this->db->get('kartu_stok_penj')->row_array()['no'];
-    // echo "<pre>"; print_r($list_penj['harga']); echo "</pre>"; die();
+    //     foreach($list_stok as $data){
+    //       # code...
+    //       $array = array('no_trans' => $id,
+    //                 'tgl_trans' => date('Y-m-d H:i:s'),
+    //                 'no_produk' => $no_produk,
+    //                 'unit1' => '-',
+    //                 'harga1' => '-',
+    //                 'total1' => '-',
+    //                 'unit2' => '',
+    //                 'harga2' => '',
+    //                 'total2' => '',
+    //                 'unit3' => $data['jumlah_kartu_stok'],
+    //                 'harga3' => $data['nominal'] / $data['jumlah_kartu_stok'],
+    //                 'total3' => $data['nominal']);
+    //       $this->db->insert('kartu_stok_penj', $array);
+    //     }
+    //   $this->db->where('no_trans', $id);
+    //   $this->db->where('no_produk', $no_produk);
+    //   $this->db->order_by('no ASC');
+    //   $no_asc = $this->db->get('kartu_stok_penj')->row_array()['no'];
+    // // echo "<pre>"; print_r($list_penj['harga']); echo "</pre>"; die();
         
 
-      $this->db->set('unit2', $list_penj['jumlah']);
-      $this->db->set('harga2', $list_penj['harga']);
-      $this->db->set('total2', $list_penj['subtotal']);
-      $this->db->where('no_trans', $id);
-      $this->db->where('no', $no_asc);
-      $this->db->where('no_produk', $no_produk);
-      $this->db->update('kartu_stok_penj');
-      }else{
-        $array = array('no_trans' => $id,
-                    'tgl_trans' => date('Y-m-d H:i:s'),
-                    'no_produk' => $no_produk,
-                    'unit1' => '-',
-                    'harga1' => '-',
-                    'total1' => '-',
-                    'unit2' => $list_penj['jumlah'],
-                    'harga2' => $list_penj['harga'],
-                    'total2' => $list_penj['subtotal'],
-                    'unit3' => $list_penj['jumlah'],
-                    'harga3' => $list_penj['harga'] ,
-                    'total3' => $list_penj['subtotal']);
-          $this->db->insert('kartu_stok_penj', $array);
+    //   $this->db->set('unit2', $list_penj['jumlah']);
+    //   $this->db->set('harga2', $list_penj['harga']);
+    //   $this->db->set('total2', $list_penj['subtotal']);
+    //   $this->db->where('no_trans', $id);
+    //   $this->db->where('no', $no_asc);
+    //   $this->db->where('no_produk', $no_produk);
+    //   $this->db->update('kartu_stok_penj');
+    //   }else{
+    //     $array = array('no_trans' => $id,
+    //                 'tgl_trans' => date('Y-m-d H:i:s'),
+    //                 'no_produk' => $no_produk,
+    //                 'unit1' => '-',
+    //                 'harga1' => '-',
+    //                 'total1' => '-',
+    //                 'unit2' => $list_penj['jumlah'],
+    //                 'harga2' => $list_penj['harga'],
+    //                 'total2' => $list_penj['subtotal'],
+    //                 'unit3' => $list_penj['jumlah'],
+    //                 'harga3' => $list_penj['harga'] ,
+    //                 'total3' => $list_penj['subtotal']);
+    //       $this->db->insert('kartu_stok_penj', $array);
 
-      }
+    //   }
       
         
-      }
+    //   }
 
       // die('halo tes');
       
@@ -2786,7 +2866,8 @@ group by no_bbp";
                      'status' => '1' );
       $this->db->insert('penjualan_toko', $data);
   
-      $fix_total = $total * (100/130);
+      $q1 = "SELECT ifnull(sum(total2),0) as hpp FROM kartu_stok_penj WHERE no_trans ='$id'";
+      $fix_total = $this->db->query($q1)->row_array()['hpp'];
        $this->M_keuangan->GenerateJurnal('1111', $id, 'd', $total);
       $this->M_keuangan->GenerateJurnal('4112', $id, 'k', $total);
        $this->M_keuangan->GenerateJurnal('6112', $id, 'd', $fix_total);
@@ -2940,10 +3021,11 @@ group by no_bbp";
             array(
                'field' => 'jumlah',
                'label' => 'Jumlah',
-               'rules' => 'required|is_natural_no_zero',
+               'rules' => 'required|is_natural_no_zero|less_than[0]',
                'errors' => array(
                   'required' => 'Inputan Salah',
-                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!'
+                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
+                  'less_than' => '%s tidak boleh minus!'
                )
             ),
             array(

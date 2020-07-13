@@ -213,7 +213,7 @@
 			<th>Harga Pokok Penjualan</th>
 			<td align='right'><?php echo format_rp($hppips)?></td>
 			<?php 
-			foreach($penjt as $data){
+			foreach($hpplisttoko as $data){
 
 				echo "<td align='right'>".format_rp($data['hpp'])."</td>";
 			}
