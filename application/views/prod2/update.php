@@ -107,7 +107,7 @@
 				      }else{
 				      	 $query111 = "SELECT unit2, total2, no_produk,no_bp 
 				      	 				FROM kartu_stok_bp 
-				      	 				WHERE no_produk = '$no_prod' AND no_bp = '$kode_bahan'
+				      	 				WHERE no_trans = '$no_trans' AND no_produk = '$no_prod' AND no_bp = '$kode_bahan'
 						               ";
 			        			 		$row = $this->db->query($query111)->row_array();
 							          	$jumlah2 = $row['unit2'];
@@ -231,7 +231,8 @@
 				      }else{
 				      	 $query111 = "SELECT unit2, total2, no_produk,no_bp 
 				      	 				FROM kartu_stok_bp 
-				      	 				WHERE no_produk = '$no_prod' AND no_bp = '$kode_bahan'
+				      	 				WHERE no_trans = '$no_trans' AND no_produk = '$no_prod' AND no_bp = '$kode_bahan'
+				      	 				
 						               ";
 			        			 		$row = $this->db->query($query111)->row_array();
 							          	$jumlah2 = $row['unit2'];

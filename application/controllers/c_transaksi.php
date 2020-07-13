@@ -2043,7 +2043,14 @@ group by no_bbp";
       $vali = $this->db->where('no_produk', $no_prod)->get('kartu_stok_penj');
     // echo "<pre>"; print_r($vali); echo "</pre>"; die();
       if ($vali->num_rows() > 0) {
-        $tes =  $this->db->where(array('no_produk' => $no_prod, 'unit3 >' => 0, 'status_pro' => 0))->get('kartu_stok_penj')->result_array();
+        // $tes =  $this->db->where(array('no_produk' => $no_prod, 'unit3 >' => 0, 'status_pro' => 0))->get('kartu_stok_penj')->result_array();
+        //no desc transaksi
+        $q_desc = "SELECT * FROM kartu_stok_penj WHERE no_produk = '$no_prod' ORDER BY no DESC";
+        $cek_desc = $this->db->query($q_desc)->row_array()['no_trans'];
+        //
+        $this->db->where('no_trans', $cek_desc);
+        $this->db->select('unit3,harga3,total3');
+        $tes = $this->db->get('kartu_stok_penj')->result_array();
         // echo "<pre>"; print_r($tes); echo "</pre>";die(); 
 
         foreach ($tes as $data) {
