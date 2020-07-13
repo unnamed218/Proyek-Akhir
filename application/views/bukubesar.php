@@ -126,7 +126,9 @@
 		</thead>
 		<tbody>
 			<?php
-				$saldo = $saldoawal['debit'] - $saldoawal['kredit'];
+			
+				$saldo = ($saldoawal['debit'] - $saldoawal['kredit']);
+				
 				
 				echo "
 					<tr>
@@ -138,21 +140,25 @@
 					</tr>
 				";
 				foreach($jurnal as $data){
-					$header_akun = substr($data['no_coa'], 1,1);
-				
+					$header_akun = substr($data['no_coa'], 0,1);
+					$header_akun2 = substr($data['no_coa'], 0,2);
+
+					
 					echo "
 						<tr>
 							<td>".$data['tgl_jurnal']."</td>
 							<td>".$data['nama_coa']."</td>
 						";
 					if($data['posisi_dr_cr'] == 'd'){
-							$saldo = $saldo + $data['nominal'];
+							// $saldo = $saldo + $data['nominal'];
 					
-						// if($header_akun == 1 or $header_akun == 5 or $header_akun == 6 ){
-						// 	$saldo = $saldo + $data['nominal'];
-						// }else{
-						// 	$saldo = $saldo - $data['nominal'];
-						// }        
+						if($header_akun == 1 or $header_akun == 5 or $header_akun == 6){
+							$saldo = $saldo + $data['nominal'];
+						}elseif($header_akun2 == 53){
+							$saldo = $saldo - $data['nominal'];
+						}else{
+							$saldo = $saldo - $data['nominal'];
+						}        
 						echo "
 							<td align = 'right'>".format_rp($data['nominal'])."</td>
 							<td></td>
@@ -160,13 +166,18 @@
 						</tr>
 						";
 					}else{
+							// if($saldoawal['debit'] == 0){
+							// $saldo = $saldo + $data['nominal'];
+							// }else{
+							// $saldo = $saldo - $data['nominal'];
+							// }
+						if($header_akun == 1 or $header_akun == 5 or $header_akun == 6 ){
 							$saldo = $saldo - $data['nominal'];
-						
-						// if($header_akun == 1 or $header_akun == 5 or $header_akun == 6 ){
-						// 	$saldo = $saldo - $data['nominal'];
-						// }else{
-						// 	$saldo = $saldo + $data['nominal'];
-						// }
+						}elseif($header_akun2 == 53){
+							$saldo = $saldo + $data['nominal'];
+						}else{
+							$saldo = $saldo + $data['nominal'];
+						}
 						
 						echo "
 							<td></td>

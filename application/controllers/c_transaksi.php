@@ -1069,9 +1069,9 @@ class c_transaksi extends CI_controller{
                     'unit2' => $jumlah,
                     'harga2' => $bbb / $jumlah,
                     'total2' => $bbb,
-                    'unit3' => '-',
-                    'harga3' => '-',
-                    'total3' => '-',
+                    'unit3' => 0,
+                    'harga3' => 0,
+                    'total3' => 0,
                     'status_pro' => 0,
                     'status_pen' => 0);
        $this->db->insert('kartu_stok_bp', $data1);
@@ -1232,57 +1232,57 @@ class c_transaksi extends CI_controller{
       $nop  = $this->db->where('no_trans', $_POST['no_prod'])->order_by('no_trans DESC')->get('detail_produksi_ke1')->row_array();
       $vali = $this->db->where('no_produk', $nop['no_produk'])->get('kartu_stok_penj');
     // echo "<pre>"; print_r($vali); echo "</pre>"; die();
-      if ($vali->num_rows() > 0) {
-        $tes =  $this->db->where(array('no_produk' => $nop['no_produk'], 'unit3 >' => 0, 'status_pro' => 0))->get('kartu_stok_penj')->result_array();
-        // echo "<pre>"; print_r($tes); echo "</pre>";die(); 
+      // if ($vali->num_rows() > 0) {
+      //   $tes =  $this->db->where(array('no_produk' => $nop['no_produk'], 'unit3 >' => 0, 'status_pro' => 0))->get('kartu_stok_penj')->result_array();
+      //   // echo "<pre>"; print_r($tes); echo "</pre>";die(); 
 
-        foreach ($tes as $data) {
+      //   foreach ($tes as $data) {
 
-            $array = [
-              'no_trans'  => $_POST['no_prod'],
-              'tgl_trans' => date('Y-m-d H:i:s'),
-              'no_produk' => $nop['no_produk'],
-              'unit1'     => '-',
-              'harga1'    => '-',
-              'total1'    => '-',
-              'unit2'     => '-',
-              'harga2'    => '-',
-              'total2'    => '-',
-              'unit3'     => $data['unit3'],
-              'harga3'    => $data['harga3'],
-              'total3'    => $data['total3'],
-              'status_pro'=> 0,
-              'status_pen'=> 0
-            ];
-            // echo "<pre>"; print_r($array); echo "</pre>";
+      //       $array = [
+      //         'no_trans'  => $_POST['no_prod'],
+      //         'tgl_trans' => date('Y-m-d H:i:s'),
+      //         'no_produk' => $nop['no_produk'],
+      //         'unit1'     => '-',
+      //         'harga1'    => '-',
+      //         'total1'    => '-',
+      //         'unit2'     => '-',
+      //         'harga2'    => '-',
+      //         'total2'    => '-',
+      //         'unit3'     => $data['unit3'],
+      //         'harga3'    => $data['harga3'],
+      //         'total3'    => $data['total3'],
+      //         'status_pro'=> 0,
+      //         'status_pen'=> 0
+      //       ];
+      //       // echo "<pre>"; print_r($array); echo "</pre>";
 
-            $this->db->insert('kartu_stok_penj', $array);
+      //       $this->db->insert('kartu_stok_penj', $array);
 
-            $this->db->where(array('no_trans' => $data['no_trans'], 'status_pro' => 0))->set('status_pro', 1)->update('kartu_stok_penj');
-        }
-        // die('hai dia');
-        // echo "<pre>"; print_r($tes); echo "</pre>"; die();
-        $iks = [
-          'no_trans'  => $_POST['no_prod'],
-          'tgl_trans' => date('Y-m-d H:i:s'),
-          'no_produk' => $nop['no_produk'],
-          'unit1'     => $_POST['jual'],
-          'harga1'    => (($_POST['jual']/$nop['jumlah']) * $nop['subtotal']) / $_POST['jual'],
-          'total1'    => ($_POST['jual']/$nop['jumlah']) * $nop['subtotal'],
-          'unit2'     => '-',
-          'harga2'    => '-',
-          'total2'    => '-',
-          'unit3'     => $_POST['jual'],
-          'harga3'    => (($_POST['jual']/$nop['jumlah']) * $nop['subtotal']) / $_POST['jual'],
-          'total3'    => ($_POST['jual']/$nop['jumlah']) * $nop['subtotal'],
-          'status_pro'=> 0,
-          'status_pen'=> 0
-        ];
+      //       $this->db->where(array('no_trans' => $data['no_trans'], 'status_pro' => 0))->set('status_pro', 1)->update('kartu_stok_penj');
+      //   }
+      //   // die('hai dia');
+      //   // echo "<pre>"; print_r($tes); echo "</pre>"; die();
+      //   $iks = [
+      //     'no_trans'  => $_POST['no_prod'],
+      //     'tgl_trans' => date('Y-m-d H:i:s'),
+      //     'no_produk' => $nop['no_produk'],
+      //     'unit1'     => $_POST['jual'],
+      //     'harga1'    => (($_POST['jual']/$nop['jumlah']) * $nop['subtotal']) / $_POST['jual'],
+      //     'total1'    => ($_POST['jual']/$nop['jumlah']) * $nop['subtotal'],
+      //     'unit2'     => '-',
+      //     'harga2'    => '-',
+      //     'total2'    => '-',
+      //     'unit3'     => $_POST['jual'],
+      //     'harga3'    => (($_POST['jual']/$nop['jumlah']) * $nop['subtotal']) / $_POST['jual'],
+      //     'total3'    => ($_POST['jual']/$nop['jumlah']) * $nop['subtotal'],
+      //     'status_pro'=> 0,
+      //     'status_pen'=> 0
+      //   ];
 
-        $this->db->insert('kartu_stok_penj', $iks);
+      //   $this->db->insert('kartu_stok_penj', $iks);
 
         
-      } else {
+      // } else {
         // die('hai aku');
         $iks = [
           'no_trans'  => $_POST['no_prod'],
@@ -1304,7 +1304,7 @@ class c_transaksi extends CI_controller{
 
         $this->db->insert('kartu_stok_penj', $iks);
 
-      }
+      // }
       // die('hi');
     // echo "<pre>"; print_r($vali); echo "</pre>"; die();
 
@@ -1328,10 +1328,12 @@ class c_transaksi extends CI_controller{
       //update harga jual di masterdata produk
        $this->db->select_sum('subtotal');
       $this->db->select_sum('stok_jual');
+      $this->db->select_sum('jumlah');
       $query = $this->db->get('detail_produksi_ke1')->row_array();
       $totaljumlah = $query['stok_jual'];
       $totalsubtotal = $query['subtotal'];
-      $harga = ((($totalsubtotal * ($totaljumlah / $_POST['jumlah'])) *1.3) / $totaljumlah);
+      $totaljumlahproduksi = $query['jumlah']; 
+      $harga = ((($totalsubtotal * ($totaljumlah / $totaljumlahproduksi)) *1.3) / $totaljumlah);
       
        $this->db->set('harga_jual', $harga, FALSE);
       $this->db->where('no_produk', 'PR_001');

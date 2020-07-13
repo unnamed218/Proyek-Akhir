@@ -841,7 +841,36 @@ $query35 = "SELECT ifnull(SUM(hpp), 0) as nominal
          $query = "SELECT * FROM produk WHERE stok > 0 AND no_produk NOT LIKE 'PR_001'";
       $data['produk'] = $this->db->query($query)->result_array();
         // $data['produk'] = $this->db->get('produk')->result_array();
-     $query1 = "SELECT no_trans, a.no_produk, nama_produk, substring(tgl_trans,1,10) as atgl_trans,
+      if($awal == $akhir){
+      		$query1 = "SELECT no_trans, a.no_produk, nama_produk, substring(tgl_trans,1,10) as atgl_trans,
+     			ifnull(unit1,0) as unit1,
+     			ifnull(unit2,0) as unit2,
+     			ifnull(unit3,0) as unit3,
+     			ifnull(harga1,0) as harga1,
+     			ifnull(harga2,0) as harga2,
+     			ifnull(harga3,0) as harga3,
+     			ifnull(total1,0) as total1,
+     			ifnull(total2,0) as total2,
+     			ifnull(total3,0) as total3
+     			FROM kartu_stok_penj a 
+     			JOIN produk b ON a.no_produk = b.no_produk
+
+WHERE a.no_produk = '$no' 
+GROUP BY a.no
+HAVING atgl_trans = '$awal'
+ORDER BY a.no ASC";
+
+ $q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2, substring(tgl_trans,1,10) as atgl_trans
+				FROM kartu_stok_penj
+				WHERE no_produk = '$no' 
+				group by atgl_trans
+				HAVING atgl_trans = '$awal'";
+$q3 = "SELECT unit3,harga3,total3, substring(tgl_trans,1,10) as atgl_trans FROM kartu_stok_penj
+				WHERE no_produk = '$no'  
+				HAVING atgl_trans = '$awal' 
+				ORDER BY no DESC";
+      }else{
+      	$query1 = "SELECT no_trans, a.no_produk, nama_produk, substring(tgl_trans,1,10) as atgl_trans,
      			ifnull(unit1,0) as unit1,
      			ifnull(unit2,0) as unit2,
      			ifnull(unit3,0) as unit3,
@@ -859,21 +888,26 @@ GROUP BY a.no
 HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'
 ORDER BY a.no ASC";
 
-        $data['result'] = $this->db->query($query1)		->result_array();
-
-        $q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2, substring(tgl_trans,1,10) as atgl_trans
+ $q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2, substring(tgl_trans,1,10) as atgl_trans
 				FROM kartu_stok_penj
 				WHERE no_produk = '$no'  
 				HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'";
-		$data['unit1'] = $this->db->query($q2)->row_array()['unit1'];
-		$data['unit2'] = $this->db->query($q2)->row_array()['unit2'];
-		$data['total1'] = $this->db->query($q2)->row_array()['total1'];
-		$data['total2'] = $this->db->query($q2)->row_array()['total2'];
-		$q3 = "SELECT unit3,harga3,total3, substring(tgl_trans,1,10) as atgl_trans FROM kartu_stok_penj
+$q3 = "SELECT unit3,harga3,total3, substring(tgl_trans,1,10) as atgl_trans FROM kartu_stok_penj
 				WHERE no_produk = '$no'  
 				HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'
 				ORDER BY no DESC";
 
+      }
+     
+
+        $data['result'] = $this->db->query($query1)		->result_array();
+
+       
+		$data['unit1'] = $this->db->query($q2)->row_array()['unit1'];
+		$data['unit2'] = $this->db->query($q2)->row_array()['unit2'];
+		$data['total1'] = $this->db->query($q2)->row_array()['total1'];
+		$data['total2'] = $this->db->query($q2)->row_array()['total2'];
+		
 		$data['unit3'] = $this->db->query($q3)->row_array()['unit3'];
 		$data['total3'] = $this->db->query($q3)->row_array()['total3'];
 
@@ -939,7 +973,8 @@ ORDER BY a.no ASC";
         $query = "SELECT * FROM produk WHERE stok > 0";
       $data['produk'] = $this->db->query($query)->result_array();
         // $data['produk'] = $this->db->get('produk')->result_array();
-     $query1 = "SELECT no_trans, a.no_produk, nama_produk, substring(tgl_trans,1,10) as atgl_trans,
+      if($awal == $akhir){
+      	 $query1 = "SELECT no_trans, a.no_produk, nama_produk, substring(tgl_trans,1,10) as atgl_trans,
      			ifnull(unit1,0) as unit1,
      			ifnull(unit2,0) as unit2,
      			ifnull(unit3,0) as unit3,
@@ -952,25 +987,60 @@ ORDER BY a.no ASC";
      			FROM kartu_stok_penj a 
      			JOIN produk b ON a.no_produk = b.no_produk
 
-WHERE a.no_produk = '$no' 
-GROUP BY a.no
-HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'
-ORDER BY a.no ASC";
-        $data['result'] = $this->db->query($query1)->result_array();
+				WHERE a.no_produk = '$no' 
+				GROUP BY a.no
+				HAVING atgl_trans = '$awal'
+				ORDER BY a.no ASC";
 
-        $q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2, substring(tgl_trans,1,10) as atgl_trans
+ 				$q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2, substring(tgl_trans,1,10) as atgl_trans
+				FROM kartu_stok_penj
+				WHERE no_produk = '$no' 
+				GROUP BY atgl_trans
+				HAVING atgl_trans >= '$awal'";
+
+				$q3 = "SELECT unit3,harga3,total3, substring(tgl_trans,1,10) as atgl_trans FROM kartu_stok_penj
+				WHERE no_produk = '$no'  
+				HAVING atgl_trans = '$awal'
+				ORDER BY no DESC";
+      }else{
+      	 $query1 = "SELECT no_trans, a.no_produk, nama_produk, substring(tgl_trans,1,10) as atgl_trans,
+     			ifnull(unit1,0) as unit1,
+     			ifnull(unit2,0) as unit2,
+     			ifnull(unit3,0) as unit3,
+     			ifnull(harga1,0) as harga1,
+     			ifnull(harga2,0) as harga2,
+     			ifnull(harga3,0) as harga3,
+     			ifnull(total1,0) as total1,
+     			ifnull(total2,0) as total2,
+     			ifnull(total3,0) as total3
+     			FROM kartu_stok_penj a 
+     			JOIN produk b ON a.no_produk = b.no_produk
+
+				WHERE a.no_produk = '$no' 
+				GROUP BY a.no
+				HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'
+				ORDER BY a.no ASC";
+
+ 				$q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2, substring(tgl_trans,1,10) as atgl_trans
 				FROM kartu_stok_penj
 				WHERE no_produk = '$no' 
 				HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'";
+
+				$q3 = "SELECT unit3,harga3,total3, substring(tgl_trans,1,10) as atgl_trans FROM kartu_stok_penj
+				WHERE no_produk = '$no'  
+				HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'
+				ORDER BY no DESC";
+      }
+    
+        $data['result'] = $this->db->query($query1)->result_array();
+
+       
 
 		$data['unit1'] = $this->db->query($q2)->row_array()['unit1'];
 		$data['unit2'] = $this->db->query($q2)->row_array()['unit2'];
 		$data['total1'] = $this->db->query($q2)->row_array()['total1'];
 		$data['total2'] = $this->db->query($q2)->row_array()['total2'];
-		$q3 = "SELECT unit3,harga3,total3, substring(tgl_trans,1,10) as atgl_trans FROM kartu_stok_penj
-				WHERE no_produk = '$no'  
-				HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'
-				ORDER BY no DESC";
+		
 
 		$data['unit3'] = $this->db->query($q3)->row_array()['unit3'];
 		$data['total3'] = $this->db->query($q3)->row_array()['total3'];
@@ -1033,7 +1103,9 @@ ORDER BY a.no ASC";
      
         $this->db->where('no_bb', $no);
         $data['bahan_baku1'] = $this->db->get('bahan_baku')->row_array();
-     $query1 = "SELECT no_trans, a.no_bp, nama_bb, substring(tgl_trans,1,10) as atgl_trans,
+
+        if($awal == $akhir){
+        	 $query1 = "SELECT no_trans, a.no_bp, nama_bb, substring(tgl_trans,1,10) as atgl_trans,
      			ifnull(unit1,0) as unit1,
      			ifnull(unit2,0) as unit2,
      			ifnull(unit3,0) as unit3,
@@ -1046,17 +1118,43 @@ ORDER BY a.no ASC";
      			FROM kartu_stok_bp a 
      			JOIN bahan_baku b ON a.no_bp = b.no_bb
 
-WHERE a.no_bp = '$no'
-GROUP BY a.no
-HAVING atgl_trans >= '$awal' AND atgl_trans <= 'akhir'
-ORDER BY a.no ASC";
+				WHERE a.no_bp = '$no'
+				GROUP BY a.no
+				HAVING atgl_trans = '$awal'
+				ORDER BY a.no ASC";
+				$q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2,  substring(tgl_trans,1,10) as atgl_trans
+				FROM kartu_stok_bp
+				WHERE no_bp = '$no'
+				GROUP BY atgl_trans
+				HAVING atgl_trans = '$awal'";
+        }else{
+        	 $query1 = "SELECT no_trans, a.no_bp, nama_bb, substring(tgl_trans,1,10) as atgl_trans,
+     			ifnull(unit1,0) as unit1,
+     			ifnull(unit2,0) as unit2,
+     			ifnull(unit3,0) as unit3,
+     			ifnull(harga1,0) as harga1,
+     			ifnull(harga2,0) as harga2,
+     			ifnull(harga3,0) as harga3,
+     			ifnull(total1,0) as total1,
+     			ifnull(total2,0) as total2,
+     			ifnull(total3,0) as total3
+     			FROM kartu_stok_bp a 
+     			JOIN bahan_baku b ON a.no_bp = b.no_bb
 
-        $data['result'] = $this->db->query($query1)->result_array();
-
-        $q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2,  substring(tgl_trans,1,10) as atgl_trans
+				WHERE a.no_bp = '$no'
+				GROUP BY a.no
+				HAVING atgl_trans >= '$awal' AND atgl_trans <= 'akhir'
+				ORDER BY a.no ASC";
+				$q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2,  substring(tgl_trans,1,10) as atgl_trans
 				FROM kartu_stok_bp
 				WHERE no_bp = '$no'
 				HAVING atgl_trans >= '$awal' AND atgl_trans <= 'akhir'";
+        }
+    
+
+        $data['result'] = $this->db->query($query1)->result_array();
+
+        
 		$data['unit1'] = $this->db->query($q2)->row_array()['unit1'];
 		$data['unit2'] = $this->db->query($q2)->row_array()['unit2'];
 		$data['total1'] = $this->db->query($q2)->row_array()['total1'];
@@ -1114,7 +1212,8 @@ ORDER BY a.no ASC";
         $this->db->where('no_bp', $no);
         $data['bahan_penolong1'] = $this->db->get('bahan_penolong')->row_array();
         $data['bahan_penolong'] = $this->db->get('bahan_penolong')->result_array();
-     $query1 = "SELECT no_trans, a.no_bp, nama_bp,  substring(tgl_trans,1,10) as atgl_trans,
+        if($awal == $akhir){
+        	$query1 = "SELECT no_trans, a.no_bp, nama_bp,  substring(tgl_trans,1,10) as atgl_trans,
      			ifnull(unit1,0) as unit1,
      			ifnull(unit2,0) as unit2,
      			ifnull(unit3,0) as unit3,
@@ -1127,26 +1226,60 @@ ORDER BY a.no ASC";
      			FROM kartu_stok_bp a 
      			JOIN bahan_penolong b ON a.no_bp = b.no_bp
 
-WHERE a.no_bp = '$no'
-GROUP BY a.no
-HAVING atgl_trans >= '$awal' AND atgl_trans <= 'akhir'
-ORDER BY a.no ASC";
+				WHERE a.no_bp = '$no'
+				GROUP BY a.no
+				HAVING atgl_trans = '$awal'
+				ORDER BY a.no ASC";
+
+				$q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2, substring(tgl_trans,1,10) as atgl_trans
+								FROM kartu_stok_bp
+								WHERE no_bp = '$no'
+								GROUP BY atgl_trans
+								HAVING atgl_trans = '$awal'";
+				$q3 = "SELECT unit3,harga3,total3, substring(tgl_trans,1,10) as atgl_trans 
+				FROM kartu_stok_bp
+				WHERE no_bp = '$no' 
+				HAVING atgl_trans = '$awal'
+				ORDER BY no DESC";
+        }else{
+        	$query1 = "SELECT no_trans, a.no_bp, nama_bp,  substring(tgl_trans,1,10) as atgl_trans,
+     			ifnull(unit1,0) as unit1,
+     			ifnull(unit2,0) as unit2,
+     			ifnull(unit3,0) as unit3,
+     			ifnull(harga1,0) as harga1,
+     			ifnull(harga2,0) as harga2,
+     			ifnull(harga3,0) as harga3,
+     			ifnull(total1,0) as total1,
+     			ifnull(total2,0) as total2,
+     			ifnull(total3,0) as total3
+     			FROM kartu_stok_bp a 
+     			JOIN bahan_penolong b ON a.no_bp = b.no_bp
+
+				WHERE a.no_bp = '$no'
+				GROUP BY a.no
+				HAVING atgl_trans >= '$awal' AND atgl_trans <= 'akhir'
+				ORDER BY a.no ASC";
+				$q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2, substring(tgl_trans,1,10) as atgl_trans
+								FROM kartu_stok_bp
+								WHERE no_bp = '$no'
+								HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'";
+				$q3 = "SELECT unit3,harga3,total3, substring(tgl_trans,1,10) as atgl_trans 
+				FROM kartu_stok_bp
+				WHERE no_bp = '$no' 
+				HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'
+				ORDER BY no DESC";
+        }
+     
 
         $data['result'] = $this->db->query($query1)->result_array();
 
-        $q2 = "SELECT ifnull(sum(unit1),0) as unit1, ifnull(sum(total1),0) as total1, ifnull(sum(unit2),0) as unit2, ifnull(sum(total2),0) as total2, substring(tgl_trans,1,10) as atgl_trans
-				FROM kartu_stok_bp
-				WHERE no_bp = '$no'
-				HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'";
+        
 		$data['unit1'] = $this->db->query($q2)->row_array()['unit1'];
 		$data['unit2'] = $this->db->query($q2)->row_array()['unit2'];
 		$data['total1'] = $this->db->query($q2)->row_array()['total1'];
 		$data['total2'] = $this->db->query($q2)->row_array()['total2'];
 
-		$q3 = "SELECT unit3,harga3,total3, substring(tgl_trans,1,10) as atgl_trans FROM kartu_stok_bp
-				WHERE no_bp = '$no' 
-				HAVING atgl_trans >= '$awal' AND atgl_trans <= '$akhir'
-				ORDER BY no DESC";
+		
 		$data['unit3'] = $this->db->query($q3)->row_array()['unit3'];
 		$data['harga3'] = $this->db->query($q3)->row_array()['harga3'];
 		$data['total3'] = $this->db->query($q3)->row_array()['unit3'];
