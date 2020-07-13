@@ -2787,8 +2787,7 @@ group by no_bbp";
                'no_produk' => $_POST['no_produk'],
                'jumlah' => $_POST['jumlah'],
                'harga' => $harga,
-               'subtotal' => $subtotal,
-               'hpp' => 0);   
+               'subtotal' => $subtotal);   
 
             $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_produk' => $_POST['no_produk']));
             $cek =  $this->db->get('detail_penjualan_toko')->num_rows();
@@ -2881,8 +2880,22 @@ group by no_bbp";
 
       // die('halo tes');
       
+      $q2 = "SELECT ifnull(sum(total2),0) as hpp, no_produk FROM kartu_stok_penj WHERE no_trans ='$id' group by no_produk";
 
+      $cek_list_hpp = $this->db->query($q2)->result_array();
+      foreach ($cek_list_hpp as $data) {
+        $this->db->where('no_produk', $data['no_produk']);
+        $this->db->where('no_trans', $id);
+        $this->db->order_by('no ASC');
+        $cek_asc = $this->db->get('detail_penjualan_toko')->row_array()['no'];
 
+        $this->db->where('no', $cek_asc);
+        $this->db->where('no_produk', $data['no_produk']);
+        // $this->db->set('hpp', $data['hpp']);
+        $this->db->set('hpp', "hpp + ".$data['hpp']."", FALSE);
+
+        $this->db->update('detail_penjualan_toko');
+      }
 
 
 

@@ -1383,13 +1383,12 @@ ORDER BY a.no ASC";
 		
 		//list tokooooooooooooooooooooooooooooooooooo
 
-		$qpenj1 = "SELECT ifnull(sum(subtotal)/2, 0) as nominal, b.no_produk,  ifnull(((sum(subtotal)/2) - sum(e.total2)), 0) as laba_kotor, sum(e.total2) as hpp
+		$qpenj1 = "SELECT ifnull(sum(subtotal), 0) as nominal, b.no_produk, ifnull(sum(hpp),0) as hpp, ifnull((sum(subtotal) - sum(hpp)), 0) as laba_kotor
 					FROM (SELECT * FROM penjualan_toko WHERE month(tgl_trans) ='$bulan' AND YEAR(tgl_trans) = '$tahun') as ab
                     JOIN detail_penjualan_toko c ON ab.no_trans = c.no_trans
                     RIGHT JOIN produk b ON c.no_produk = b.no_produk 
-                    JOIN (SELECT * FROM kartu_stok_penj WHERE month(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun') as e ON e.no_produk = b.no_produk
                     WHERE b.no_produk NOT LIKE 'PR_001'
-					GROUP BY b.no_produk , c.no_produk
+					GROUP BY b.no_produk 
 					ORDER BY b.no_produk ASC";
 		$penjt = $this->db->query($qpenj1)->result_array();
 		$data['penjt'] = $penjt;
@@ -1464,13 +1463,12 @@ ORDER BY a.no ASC";
 		
 		//list tokooooooooooooooooooooooooooooooooooo
 
-		$qpenj1 = "SELECT ifnull(sum(subtotal)/2, 0) as nominal, b.no_produk,  ifnull(((sum(subtotal)/2) - sum(e.total2)), 0) as laba_kotor, sum(e.total2) as hpp
+		$qpenj1 = "SELECT ifnull(sum(subtotal), 0) as nominal, b.no_produk, ifnull(sum(hpp),0) as hpp, ifnull((sum(subtotal) - sum(hpp)), 0) as laba_kotor
 					FROM (SELECT * FROM penjualan_toko WHERE month(tgl_trans) ='$bulan' AND YEAR(tgl_trans) = '$tahun') as ab
                     JOIN detail_penjualan_toko c ON ab.no_trans = c.no_trans
                     RIGHT JOIN produk b ON c.no_produk = b.no_produk 
-                    JOIN (SELECT * FROM kartu_stok_penj WHERE month(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun') as e ON e.no_produk = b.no_produk
                     WHERE b.no_produk NOT LIKE 'PR_001'
-					GROUP BY b.no_produk , c.no_produk
+					GROUP BY b.no_produk 
 					ORDER BY b.no_produk ASC";
 		$penjt = $this->db->query($qpenj1)->result_array();
 		$data['penjt'] = $penjt;
@@ -1623,14 +1621,15 @@ ORDER BY a.no ASC";
 		$produk_jadi = $this->db->query($qprodukjadi)->row_array()['total_jadi'];
 		$data['produk_jadi'] = $produk_jadi;
 
-		$qprodukawal = "SELECT ifnull(sum(total2),0) as hpp_kurang,
-						(SELECT ifnull(sum(subtotal), 0)
-						FROM detail_produksi_ke2 a 
-						WHERE MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk') as hpp_tambah
-							FROM kartu_stok_penj
+		$qprodukawal = "SELECT ifnull(sum(total2),0) as hpp
+					FROM kartu_stok_penj 
 					WHERE  MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk'";
-		$hitungawaltambah = $this->db->query($qprodukawal)->row_array()['hpp_tambah'];
-		$hitungawalkurang = $this->db->query($qprodukawal)->row_array()['hpp_kurang'];
+
+		$qprodukakhir = "SELECT ifnull(sum(subtotal), 0) as hpp
+						FROM detail_produksi_ke2 a 
+						WHERE MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk'";
+		$hitungawaltambah = $this->db->query($qprodukawal)->row_array()['hpp'];
+		$hitungawalkurang = $this->db->query($qprodukakhir)->row_array()['hpp'];
 
 		$awal_hpp = $hitungawaltambah - $hitungawalkurang;
 		$data['awal_hpp'] = $awal_hpp;
@@ -1675,14 +1674,15 @@ ORDER BY a.no ASC";
 		$produk_jadi = $this->db->query($qprodukjadi)->row_array()['total_jadi'];
 		$data['produk_jadi'] = $produk_jadi;
 
-		$qprodukawal = "SELECT ifnull(sum(total2),0) as hpp_kurang,
-						(SELECT ifnull(sum(subtotal), 0)
-						FROM detail_produksi_ke2 a 
-						WHERE MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk') as hpp_tambah
-							FROM kartu_stok_penj
+		$qprodukawal = "SELECT ifnull(sum(total2),0) as hpp
+					FROM kartu_stok_penj 
 					WHERE  MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk'";
-		$hitungawaltambah = $this->db->query($qprodukawal)->row_array()['hpp_tambah'];
-		$hitungawalkurang = $this->db->query($qprodukawal)->row_array()['hpp_kurang'];
+
+		$qprodukakhir = "SELECT ifnull(sum(subtotal), 0) as hpp
+						FROM detail_produksi_ke2 a 
+						WHERE MONTH(tgl_trans) = '$bulan11' AND YEAR(tgl_trans) = '$tahun11' AND no_produk = '$produk'";
+		$hitungawaltambah = $this->db->query($qprodukawal)->row_array()['hpp'];
+		$hitungawalkurang = $this->db->query($qprodukakhir)->row_array()['hpp'];
 
 		$awal_hpp = $hitungawaltambah - $hitungawalkurang;
 		$data['awal_hpp'] = $awal_hpp;
