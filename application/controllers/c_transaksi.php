@@ -2714,7 +2714,7 @@ group by no_bbp";
           $this->db->update('kartu_stok_penj');
           $cek_no++;
         }
-      }else{
+      }elseif($val2->num_rows() > $val1->num_rows()){
         foreach ($val2->result_array() as $data) {
             $d1 = array('no_trans' => $_POST['no_trans'],
                       'tgl_trans' => date('Y-m-d H:i:s'),
@@ -2738,12 +2738,21 @@ group by no_bbp";
 
         foreach ($val1->result_array() as $data) {
           # code...
+          if($val1->num_rows() != 0){
            $harga1 = ($data['bbb'] + $data['btk'] + $data['bop'] + $data['bp']) / $data['jumlah'];
+          
           $this->db->where('no', $cek_no);
           $this->db->set('unit3', $data['jumlah_kartu_stok']);
           $this->db->set('harga3', $harga1);
           $this->db->set('total3', $data['jumlah_kartu_stok'] * $harga1);
           $this->db->update('kartu_stok_penj');
+          }else{
+          $this->db->where('no', $cek_no);
+          $this->db->set('unit3', 0);
+          $this->db->set('harga3', 0);
+          $this->db->set('total3', 0);
+          $this->db->update('kartu_stok_penj');
+          }
           $cek_no++;
         }
       }
