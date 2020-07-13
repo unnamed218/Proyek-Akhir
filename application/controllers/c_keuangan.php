@@ -1608,7 +1608,7 @@ ORDER BY a.no ASC";
 		$data['nama_produk'] = $nama_produk;
 
 				//
-		$qhpp0 =  "SELECT ifnull(sum(hpp),0) as hpp
+		$qhpp0 =  "SELECT ifnull(sum(total2),0) as hpp
 					FROM kartu_stok_penj
 					WHERE  MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' AND no_produk = '$produk'";
 		$hpptoko = $this->db->query($qhpp0)->row_array()['hpp'];
