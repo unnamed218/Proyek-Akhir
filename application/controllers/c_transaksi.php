@@ -1837,15 +1837,18 @@ group by no_bbp";
 
        $this->db->where('no_trans', $id);
       $cek = $this->db->get('produksi_ke2')->row()->status;
-
-      if($cek == 0){
-         $this->db->where('tgl_btk', date('Y-m-d'));
-      $btk = $this->db->get('btk')->row_array()['tarif'];
-      }else{
-        $this->db->where('no_trans', $id);
-        $btk = $this->db->get('detail_produksi_ke2')->row_array()['btk'];
-      }
-     
+      $this->db->where('no_trans', $id);
+      $cek_tgl = $this->db->get('produksi_ke2')->row_array()['tgl_trans'];
+      // if($cek == 0){
+      //    $this->db->where('tgl_btk', date('Y-m-d'));
+      // $btk = $this->db->get('btk')->row_array()['tarif'];
+      // }else{
+      //   $this->db->where('no_trans', $id);
+      //   $this->db->where('no_produk', $no_prod);
+      //   $btk = $this->db->get('detail_produksi_ke2')->row_array()['btk'];
+      // }
+     $this->db->where('tgl_btk', $cek_tgl);
+     $btk = $this->db->get('btk')->row_array()['tarif'];
      
       $data['btk']  = $btk * ($data['jumlah'] / $jml_produksi);
      
@@ -2609,11 +2612,10 @@ group by no_bbp";
             array(
                'field' => 'jumlah',
                'label' => 'Jumlah',
-               'rules' => 'required|is_natural_no_zero|less_than[0]',
+               'rules' => 'required|is_natural_no_zero',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s hanya bisa berupa angka 1-9!',
-                  'less_than' => '%s tidak boleh minus!'
+                  'is_natural_no_zero' => '%s hanya bisa berupa angka 1-9!'
                )
             ),
             array(
@@ -3021,11 +3023,10 @@ group by no_bbp";
             array(
                'field' => 'jumlah',
                'label' => 'Jumlah',
-               'rules' => 'required|is_natural_no_zero|less_than[0]',
+               'rules' => 'required|is_natural_no_zero',
                'errors' => array(
                   'required' => 'Inputan Salah',
-                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-                  'less_than' => '%s tidak boleh minus!'
+                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!'
                )
             ),
             array(
