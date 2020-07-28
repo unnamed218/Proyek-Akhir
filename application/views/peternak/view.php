@@ -28,7 +28,7 @@
 						<tr><td>$no</td>
 							<td>".$data['no_peternak']."</td>
 							<td>".$data['nama_peternak']."</td>
-							<td>".$data['notel']."</td>
+							<td align='right'>".$data['notel']."</td>
 							<td>".$data['alamat']."</td>" ?>
 							<td>
 							<a href="isi_edit_peternak/<?php echo $data['no_peternak']; ?>">

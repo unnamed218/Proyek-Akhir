@@ -5,16 +5,16 @@
 
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><center><b>Edit BTKL IPS</b></center></h3>
+    <h3 class="panel-title"><center><b>Edit BTKL Olahan</b></center></h3>
   </div>
   	 <div class="x_content">
 <div>
-<form method="POST" action="<?php echo site_url().'/c_masterdata/edit_btk'; ?>">
+<form method="POST" action="<?php echo site_url().'/c_masterdata/edit_btko'; ?>">
 	<div class="form-group">
 		<div class="row">
 			<div class="col-xs-4">
-				<label>ID BTKL IPS</label>
-				<input readonly type="text" class="form-control" name="no_btk" value="<?php echo $data['no_btk'] ; ?>"  >
+				<label>ID BTKL Olahan</label>
+				<input readonly type="text" class="form-control" name="no_btko" value="<?php echo $data['no_btko'] ; ?>"  >
 			</div>
 		</div>
 	</div>
@@ -22,7 +22,7 @@
 		<div class="row">
 			<div class="col-xs-4">
 				<label>Tanggal</label>
-				<input readonly type="text" class="form-control" name="tgl_btkl" value="<?php echo $data['tgl_btk'] ; ?>"  >
+				<input readonly type="text" class="form-control" name="tgl_btko" value="<?php echo $data['tgl_btko'] ; ?>"  >
 			</div>
 		</div>
 	</div>
@@ -63,7 +63,7 @@
 	</div>
 		<input type="submit" name="submit" class="btn btn-primary" value="Simpan">
 
-		<a href = "<?php echo site_url()."/c_masterdata/lihat_btk"?>" class="btn btn-default" role="button">Kembali</a><!-- 
+		<a href = "<?php echo site_url()."/c_masterdata/lihat_btko"?>" class="btn btn-default" role="button">Kembali</a><!-- 
 		<a href="lihat_BTKL" class="btn btn-default">Back</a>
 		<input type="button" class="btn btn-default" value="Back" onClick=history.go(-1);> -->
 	</div>

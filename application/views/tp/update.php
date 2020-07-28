@@ -143,7 +143,7 @@
 					echo "
 							<tr>
 							<td>".$data['nama_produk']."</td>
-							<td>".number($data['jumlah'])."</td>
+							<td align='right'>".number($data['jumlah'])."</td>
 						
 							
 							<td>".$data['satuan']."</td>"; ?>
@@ -201,7 +201,7 @@
 						}
 						echo "
 
-							<td>".number($data['jumlah_bom'])."</td>
+							<td align='right'>".number($data['jumlah_bom'])."</td>
 							
 							<td>".$data['satuan']."</td>"; ?>
 								

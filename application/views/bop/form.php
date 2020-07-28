@@ -1,19 +1,19 @@
 <html>
 	<head>
-		<title>Master Data BOP</title>
+		<title>Master Data BOP IPS</title>
 	</head>
 	<!-- <center><h3><b>Master Data BOP</h3></b></center>
 	<hr> -->
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Form BOP</b></h3>
+    <h3 class="panel-title"><b>Form BOP IPS</b></h3>
   </div>
   	 <div class="x_content">
   	 	
 	<body>
 		<form method = "POST" action = "<?php echo site_url('c_masterdata/tambah_bop');?>">
 			<div class="form-group">
-			  <label>ID BOP</label>
+			  <label>ID BOP IPS</label>
 			  <input type = "text" name = "no_bop" class = "form-control" value="<?php echo $id?>" readonly>
 			
 			</div>

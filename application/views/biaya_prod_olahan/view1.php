@@ -161,7 +161,7 @@
 				<td align='right'></td>
 				<td></td>
 			</tr>
-			
+			<!-- 
 					<?php
 			$no=1;
 			$bbop = 0;
@@ -172,13 +172,45 @@
 							<td>".$data['nama_jbop']."</td>
 							
 
-							<td align='right'>".format_rp(($data['harga'] * $jumlah_baris))."</td>
+							<td align='right'>".format_rp(($data['harga'] * $jmlproduk))."</td>
 							<td></td>
 							<tr>"; 
-							$bbop = ($bbop + ($data['harga'] * $jumlah_baris)); 
+							$bbop = ($bbop + ($data['harga'] * $jmlproduk)); 
 					?>
 			</tr>
 					<?php
+					$no++;
+				} 
+				?> -->
+
+				<?php
+			$no=1;
+			$bbop = 0;
+				foreach($jenis_bop as $data){
+					$no_jbop = $data['no_jbop'];
+			$totalbop1 = 0;
+					$q100 = "SELECT no_jbop,jumlah, harga, no_produk, a.no_bopo, ifnull(((jumlah) * (harga)),0) as total
+							FROM detail_bopo a 
+							RIGHT JOIN bopo as b ON a.no_bopo = b.no_bopo
+							LEFT JOIN detail_produksi_ke2 c ON b.tgl_bopo = c.tgl_trans
+							WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' AND no_produk = '$no_produk' AND no_jbop = '$no_jbop'";
+					$row = $this->db->query($q100)->result_array();
+					foreach ($row as $data1) {
+							$totalbop1 = $totalbop1 + $data1['total'];
+						}
+
+					echo "
+					<tr>
+							<td>".$data['nama_jbop']."</td>
+							
+
+							<td align='right'>".format_rp($totalbop1)."</td>
+							<td></td>
+							</tr>"; 
+					?>
+		
+					<?php
+					$bbop = ($bbop + $totalbop1); 
 					$no++;
 				} 
 				?>
@@ -199,9 +231,9 @@
 
 							<td align='right'>".format_rp($data['total'])."</td>
 							<td></td>
-							<tr>"; 
+							</tr>"; 
 					?>
-			</tr>
+			
 					<?php
 					$no++;
 				} 

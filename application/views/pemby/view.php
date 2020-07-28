@@ -2,11 +2,11 @@
 	<!-- <head><center><h3><b>Master Data Pembayaran</b></h3></center></head>
 	<hr> -->
 	<body>
+  	 <div class="x_content">
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar Pembayaran Beban</b></h3>
+    <h3 class="panel-title"><b>Daftar Pembayaran Beban Tetap</b></h3>
   </div>
-  	 <div class="x_content">
   	 	<?php if (isset($error)){ echo "<div class='alert alert-success'><li>".$error."</li></div>"; }?>
   	 		<?php if($cek == TRUE){?>
   	 			<a href = "#" class="btn btn-info" role="button" disabled="disabled"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
@@ -54,6 +54,11 @@
 			?>
 			</tbody>
 		</table>
+	</div>
+</div>
+
+
+		
 
 	
 	

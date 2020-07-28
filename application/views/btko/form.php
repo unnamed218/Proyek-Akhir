@@ -1,21 +1,21 @@
 <html>
 	<head>
-		<title>Master Data BTKL IPS</title>
+		<title>Master Data BTKL Olahan</title>
 	</head>
 	<!-- <center><h3><b>Master Data BTKL</h3></b></center>
 	<hr> -->
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Form BTKL IPS</b></h3>
+    <h3 class="panel-title"><b>Form BTKL Olahan</b></h3>
   </div>
   	 <div class="x_content">
   	 	
 	<body>
 	<?php if (isset($error)){ echo "<div class='alert alert-danger'><li>".$error."</li></div>"; }?>
-		<form method = "POST" action = "<?php echo site_url('c_masterdata/tambah_btk');?>">
+		<form method = "POST" action = "<?php echo site_url('c_masterdata/tambah_btko');?>">
 			<div class="form-group">
-			  <label>ID BTKL IPS</label>
-			  <input type = "text" name = "no_btk" class = "form-control" value="<?php echo $id?>" readonly>
+			  <label>ID BTKL Olahan</label>
+			  <input type = "text" name = "no_btko" class = "form-control" value="<?php echo $id?>" readonly>
 			
 			</div>
 			<!-- <div class="form-group">
@@ -24,7 +24,7 @@
 			</div> -->
 			  <div class="form-group">
               <label>Tanggal</label>
-              	<input type = "text" name = "tgl_btk" class = "form-control" value="<?php echo date('Y-m-d')?>" readonly>
+              	<input type = "text" name = "tgl_btko" class = "form-control" value="<?php echo date('Y-m-d')?>" readonly>
             <!--     <div class="form-group">
                         <div class='input-group date' id='myDatepicker2'>
                             <input type='text' class="form-control" name = "tgl_btk">
@@ -34,7 +34,7 @@
                         </div>
                     </div>
              -->
-			  <?php echo form_error('tgl_btk'); ?>
+			  <?php echo form_error('tgl_btko'); ?>
             </div>
 			<!-- <div class="form-group">
 			  <label>Bulan</label>
@@ -91,7 +91,7 @@
 			</div>
 			  <hr>
 			<button type="submit" class="btn btn-default btn-primary">Simpan</button>
-			<a href = "<?php echo site_url()."/c_masterdata/lihat_btk"?>" type="button" class="btn btn-default">Kembali</a>
+			<a href = "<?php echo site_url()."/c_masterdata/lihat_btko"?>" type="button" class="btn btn-default">Kembali</a>
 		</form>
 	</body>
 </html>

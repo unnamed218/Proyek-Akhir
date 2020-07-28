@@ -116,13 +116,13 @@
 				echo "
 			<td>$no</td>
 			<td>".$data['atgl_trans']."</td>
-			<td>".number($data['unit1'])."</td>
+			<td align='right'>".number($data['unit1'])."</td>
 			<td align='right'>".format_rp($data['harga1'])."</td>
 			<td align='right'>".format_rp($data['total1'])."</td>	
-			<td>".number($data['unit2'])."</td>
+			<td align='right'>".number($data['unit2'])."</td>
 			<td align='right'>".format_rp($data['harga2'])."</td>
 			<td align='right'>".format_rp($data['total2'])."</td>
-			<td>".number($data['unit3'])."</td>
+			<td align='right'>".number($data['unit3'])."</td>
 			<td align='right'>".format_rp($data['harga3'])."</td>
 			<td align='right'>".format_rp($data['total3'])."</td>
 
@@ -136,7 +136,7 @@
 		?>
 			<tr>
 			<th colspan="2">Saldo Pembelian</th>
-			<td><b><?php echo number($unit1) ;?></b></td>
+			<td align='right'><b><?php echo number($unit1) ;?></b></td>
 			<td align="right"></td>
 			<td align="right"><b><?php echo format_rp($total1) ;?></b></td>
 			<td></td>
@@ -151,7 +151,7 @@
 			<td></td>
 			<td></td>
 			<td></td>
-			<td><b><?php echo number($unit2) ;?></b></td>
+			<td align='right'><b><?php echo number($unit2) ;?></b></td>
 			<td align="right"><b></b></td>
 			<td align="right"><b><?php echo format_rp($total2) ;?></b></td>
 			<td></td>
@@ -166,7 +166,7 @@
 			<td></td>
 			<td></td>
 			<td></td>
-			<td><b><?php echo number($unit3) ;?></b></td>
+			<td align='right'><b><?php echo number($unit3) ;?></b></td>
 			<td align="right"><b><?php echo format_rp($harga3)?></b></td>
 			<td align="right"><b><?php echo format_rp($total3) ;?></b></td>
 		</tr>	

@@ -117,7 +117,7 @@
 							<tr>
 							<td>".$data['nama_bbp']."</td>
 							<td>".$jenis."</td>
-							<td>".$data['jumlah']."</td>
+							<td  align='right'>".$data['jumlah']."</td>
 							<td>".$data['satuan']."</td>
 							" ?>
 							<td>

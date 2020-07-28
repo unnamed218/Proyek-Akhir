@@ -77,8 +77,8 @@
 					echo "
 							<tr>
 							<td>Susu Sapi</td>
-							<td>1</td>
-							<td>".number($data['lulus'])."</td>
+							<td align='right'>1</td>
+							<td align='right'>".number($data['lulus'])."</td>
 							<td>liter</td>
 							
 							<td align='right'>".format_rp($subtotal)."</td>"; ?>
@@ -147,9 +147,9 @@
 				<th colspan="2">Biaya Tenaga Kerja</th>
 			</tr>
 			<tr>
-				<td>Biaya Tenaga Kerja</td>
-				<td align='right'><?php echo format_rp(round($btk))?> </td>
-				<?php $bbtk = round($btk); ?>
+				<td>Biaya Tenaga Kerja - @<?php echo format_rp($btk) ?></td>
+				<td align='right'><?php echo format_rp(($btk) * $jmlprod)?> </td>
+				<?php $bbtk = $btk * $jmlprod; ?>
 			</tr>
 			<tr>
 				<th>Biaya Overhead Pabrik Variabel</th>
@@ -163,12 +163,12 @@
 
 					echo "
 					<tr>
-							<td>".$data['nama_jbop']."</td>
+							<td>".$data['nama_jbop']." - @".format_rp($data['harga'])."</td>
 							
 
-							<td align='right'>".format_rp(ROUND($data['harga']))."</td>
+							<td align='right'>".format_rp(($data['harga']) * $jmlprod)."</td>
 							<tr>"; 
-							$bbop = round($bbop + ($data['harga'])); 
+							$bbop = ($bbop + ($data['harga'] * $jmlprod)); 
 					?>
 			</tr>
 					<?php
@@ -176,7 +176,7 @@
 				} 
 				?>
 			<?php 
-			$biaya_produksi = round($bbtk + $total + $bbop);
+			$biaya_produksi = ($bbtk + $total + $bbop);
 			
 			?>
 			<tr>

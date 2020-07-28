@@ -56,7 +56,8 @@
 			<div class="col-xs-4">
 				<div class="form-group">
 				<label>Penjualan ke IPS</label>
-				<input type="text" class="form-control"  name="jual" min="1" step="1"  onkeypress=" return hanyaAngka(event)" oninput="validity.valid||(value='');">
+				<input type="text" class="form-control"  value="<?php echo number(130000)?>" readonly>
+				<input type="hidden" class="form-control"  name="jual" value="130000" readonly>
 			  <?php echo form_error('jual'); ?>
 			</div>
 		</div>
@@ -157,9 +158,9 @@
 					$total = $data['produksi'] + $data['jual'];
 					echo "
 							<tr>
-							<td>".number($data['jual'])." </td>
-							<td>".number($data['produksi'])."</td>
-							<td>".number($total)." </td>"; ?>
+							<td align='right'>".number($data['jual'])." </td>
+							<td align='right'>".number($data['produksi'])."</td>
+							<td align='right'>".number($total)." </td>"; ?>
 							
 
 						</tr>

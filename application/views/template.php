@@ -98,7 +98,9 @@
                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_jbop">Jenis BOP</a></li>
                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_bom">BOM</a></li>
                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_bop">BOP</a></li>
+                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_bopo">BOP</a></li>
                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_btk">BTKL</a></li>
+                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_btko">BTKL</a></li>
                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_ips">Konsumen IPS</a></li>
                                   
                                 
@@ -118,8 +120,8 @@
                                   <li><a href="<?php echo site_url();?>c_masterdata/lihat_supp_bp">Supplier Bahan Penolong</a></li>
                                   <li><a href="<?php echo site_url();?>c_masterdata/lihat_bdp">Produk Dalam Proses</a></li>
                                   <li><a href="<?php echo site_url();?>c_masterdata/lihat_bom">BOM</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_bop">BOP</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_btk">BTKL</a></li>
+                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_bopo">BOP</a></li>
+                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_btko">BTKL</a></li>
                                   <?php
                                     elseif( $this->session->userdata('level')=="penjualan"):
                                      ?>
@@ -171,7 +173,8 @@
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_produksi_ke2">Produksi Olahan</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_penjs">Penjualan IPS</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_penjt">Penjualan Toko</a></li>
-                                 <li><a href="<?php echo site_url();?>c_transaksi/lihat_pemby">Pembayaran Beban</a></li>
+                                 <li><a href="<?php echo site_url();?>c_transaksi/lihat_pemby">Pembayaran Beban Tetap</a></li>
+                                 <li><a href="<?php echo site_url();?>c_transaksi/lihat_pembyv">Pembayaran Beban Variabel</a></li>
                                    <?php
                                     elseif( $this->session->userdata('level')=="produksi1"):
                                      ?>
@@ -194,7 +197,8 @@
                                      ?>
                                       <li><a href="<?php echo site_url();?>c_transaksi/lihat_penjs">Penjualan IPS</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_penjt">Penjualan Toko</a></li>
-                                 <li><a href="<?php echo site_url();?>c_transaksi/lihat_pemby">Pembayaran Beban</a></li>
+                                 <li><a href="<?php echo site_url();?>c_transaksi/lihat_pemby">Pembayaran Beban Tetap</a></li>
+                                 <li><a href="<?php echo site_url();?>c_transaksi/lihat_pembyv">Pembayaran Beban Variabel</a></li>
                                  <?php 
                                     endif 
                                     ?>

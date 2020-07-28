@@ -46,6 +46,9 @@
 	 	$tbbn5224 = $data['subtotal'];
 	 	}
 	 	
+	 }
+	 	foreach ($tokobebanv as $data ) {
+	 		# code...
 	 	if($data['no_coa'] == 5211){
 
 	 	$tbbn5211 = $data['subtotal'];
@@ -78,6 +81,9 @@
 	 	$ibbn5224 = $data['subtotal'];
 	 	}
 	 	
+	 }
+	 foreach ($ipsbebanv as $data) {
+	 	# code...
 	 	if($data['no_coa'] == 5213){
 
 	 	$ibbn5213 = $data['subtotal'];

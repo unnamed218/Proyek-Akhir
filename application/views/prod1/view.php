@@ -34,7 +34,7 @@
 						<tr><td>$no</td>
 							<td>".$data['no_trans']."</td>
 							<td>".$data['tgl_trans']."</td>
-							<td>".number($data['jumlah'])."</td>
+							<td align='right'>".number($data['jumlah'])."</td>
 							" ?>
 							<td>
 							<a href="isi_edit_produksi_ke1/<?php echo $data['no_trans']; ?>">

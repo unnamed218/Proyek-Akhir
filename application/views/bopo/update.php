@@ -5,7 +5,7 @@
 
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><center><b>Edit BOP IPS</b></center></h3>
+    <h3 class="panel-title"><center><b>Edit BOP Olahan</b></center></h3>
   </div>
   	 <div class="x_content">
 <div>
@@ -13,12 +13,12 @@
 		<div class="row">
 	<div class="form-group">
 			<div class="col-xs-6">
-				<label>ID BOP IPS</label>
-				<input readonly type="text" class="form-control"  value="<?php echo $data['no_bop'] ; ?>"  >
+				<label>ID BOP Olahan</label>
+				<input readonly type="text" class="form-control"  value="<?php echo $data['no_bopo'] ; ?>"  >
 			</div>
 			<div class="col-xs-6">
-				<label>Tanggal IPS</label>
-				<input type="text" class="form-control"  value="<?php echo $data['tgl_bop'] ; ?>"readonly >
+				<label>Tanggal</label>
+				<input type="text" class="form-control"  value="<?php echo $data['tgl_bopo'] ; ?>"readonly >
 			</div>
 	
 			<!-- <div class="col-xs-4">
@@ -39,11 +39,11 @@
 			<div class="col-xs-6">
 				<div class="form-group">
 
-		<form method="POST" action="<?php echo site_url().'/c_masterdata/edit_bop'; ?>">
-			<input readonly type="hidden" class="form-control" name="no_bop" value="<?php echo $data['no_bop'] ; ?>"  >
-			  <label>Nama Jenis BOP IPS</label>
+		<form method="POST" action="<?php echo site_url().'/c_masterdata/edit_bopo'; ?>">
+			<input readonly type="hidden" class="form-control" name="no_bopo" value="<?php echo $data['no_bopo'] ; ?>"  >
+			  <label>Nama Jenis BOP Olahan</label>
 			    <select name = "no_jbop" class = "form-control">
-			    <option value="#" disabled selected>Pilih Jenis BOP</option>
+			    <option value="#" disabled selected>Pilih Jenis BOP Olahan</option>
 				<?php
 				
 					foreach($jenis_bop as $data){
@@ -76,7 +76,7 @@
 	</div>
 	<div class="form-group">
 		<center>
-		<a href = "<?php echo site_url()."/c_masterdata/lihat_bop"?>" class="btn btn-default" role="button">Kembali</a>
+		<a href = "<?php echo site_url()."/c_masterdata/lihat_bopo"?>" class="btn btn-default" role="button">Kembali</a>
 <input type="submit" name="submit" class="btn btn-primary" value="Simpan">
 </form>
 </center>
@@ -91,7 +91,7 @@
 		<table  class="table table-striped table-bordered table-hover jambo_table" >
 		 	<thead>
 			<tr class="headings">
-				<th>Nama BOP IPS</th>
+				<th>Nama BOP Olahan</th>
 				<!-- <th>Harga (bulanan)</th> -->
 				<th>Harga</th>
 				<th>Aksi</th>
@@ -115,7 +115,7 @@
 							  <i class="fa fa-edit fa-stack-1x fa-inverse"></i>
 							</span></a> -->
 							<!-- <a class="btn btn-warning" href="hapus_bop/<?php echo $data['no_bop'];?>/<?php echo $data['nama_bop'];?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a> -->
-							<a class="btn btn-warning" onclick="return confirm('Apakah Anda Yakin Menghapus Data Ini?')" href="<?php echo site_url()."/c_masterdata/hapus_bop/".$data['no_bop']."/".$data['no_jbop']; ?>" >Hapus</a>
+							<a class="btn btn-warning" onclick="return confirm('Apakah Anda Yakin Menghapus Data Ini?')" href="<?php echo site_url()."/c_masterdata/hapus_bopo/".$data['no_bopo']."/".$data['no_jbop']; ?>" >Hapus</a>
 					</td>
 
 						</tr>

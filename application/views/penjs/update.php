@@ -146,6 +146,7 @@
 			<tr class="headings">
 				<th>Nama Konsumen IPS</th>
 				<th>Jumlah</th>
+				<th>Harga</th>
 				<th>Subtotal</th>
 				
 			</tr>
@@ -160,7 +161,8 @@
 					echo "
 							<tr>
 							<td>".$data['nama_ips']."</td>
-							<td>".number($data['jumlah'])."</td>
+							<td align='right'>".number($data['jumlah'])." liter</td>
+							<td align='right'>".format_rp($harga)."</td>
 						
 							
 							<td align='right'>".format_rp($data['subtotal'])."</td>"; ?>
@@ -177,7 +179,8 @@
 			?>
 			<tr>
 				<td align='center'>Total</td>
-				<td><?php echo number($total_jml); ?></td>
+				<td align='right'><?php echo number($total_jml); ?> liter</td>
+				<td align='right'><?php echo format_rp($harga)?> </td>
 				<td align='right'><?php echo format_rp($total); ?></td>
 			</tr>
 			</tbody>

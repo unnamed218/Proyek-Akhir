@@ -5,7 +5,7 @@
 
 <div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Detail Pembayaran Beban</b></h3>
+    <h3 class="panel-title"><b>Detail Pembayaran Beban Tetap</b></h3>
   </div>
   	 <div class="x_content">
 <div>

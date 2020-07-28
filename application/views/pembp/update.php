@@ -56,7 +56,7 @@
 							<tr>
 							<td>".$data['nama_bp']."</td>
 							<td>".$data['no_supp_bp']." - ".$data['nama_supp_bp']."</td>
-							<td>".number($data['jumlah'])." ".$data['satuan']."</td>
+							<td align='right'>".number($data['jumlah'])." ".$data['satuan']."</td>
 							<td align='right'>".format_rp($data['harga'])."</td>
 						
 							

@@ -1143,6 +1143,172 @@ class c_masterdata extends CI_controller{
             redirect('c_masterdata/isi_edit_bop/'.$id.'');
    }
 
+    //bopo
+
+    public function lihat_bopo()
+   {
+      
+          $this->db->where('tgl_bopo', date('Y-m-d'));
+         $data['cek'] = $this->db->get('bopo')->result();
+         $data['result'] = $this->db->get('bopo')->result_array();
+         $this->template->load('template', 'bopo/view', $data);
+       
+   }
+   public function form_bopo()
+   {
+      date_default_timezone_set('Asia/Jakarta');
+         $date = date('Y-m-d');
+         
+         $query1   = "SELECT  MAX(RIGHT(no_bopo,3)) as kode FROM bopo";
+         $abc      = $this->db->query($query1);
+         $no_trans = "";
+         if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+               $tmp = ((int) $k->kode) + 1;
+               $kd  = sprintf("%03s", $tmp);
+            }
+         } else {
+            $kd = "001";
+         }
+         $no_trans   = "BOPO_" . $kd;
+         $data['id'] = $no_trans;
+
+         $this->template->load('template', 'bopo/form', $data);
+       
+   }
+   
+   public function tambah_bopo()
+   {
+      
+         
+         $config = array(
+            
+            array(
+               'field' => 'tgl_bopo',
+               'label' => 'Tanggal',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $this->form_bop();
+         } else {
+            $data = array(
+               'no_bopo' => $_POST['no_bopo'],
+               'tgl_bopo' => $_POST['tgl_bopo']
+            );
+            $this->db->insert('bopo', $data);
+           
+            redirect('c_masterdata/lihat_bopo');
+         }
+       
+      
+   }
+   
+   public function isi_edit_bopo($id)
+   {
+      
+
+         // $this->db->where('no_bopo', $id);
+         // $tahun = $this->db->get('bopo')->row()->tahun; //Mengambil tahun saat ini
+
+
+
+         // $this->db->where('no_bopo', $id);
+         // $bulan = $this->db->get('bopo')->row()->bulan; //Mengambil bulan saat ini
+         // $tgl_hari = $tahun."-".$bulan."-01";
+         
+         $x['jenis_bop'] = $this->db->get('jenis_bop')->result_array();
+        $query = "SELECT b.no_jbop, a.no_bopo, c.nama_jbop, harga
+         FROM bopo a 
+         JOIN detail_bopo b ON b.no_bopo = a.no_bopo
+         JOIN jenis_bop c ON c.no_jbop = b.no_jbop
+         WHERE a.no_bopo LIKE '".$id."'
+         ORDER BY b.no_jbop ASC
+      ";
+         $x['result'] = $this->db->query($query)->result_array();
+         
+         $x['data'] = $this->M_masterdata->edit_data('bopo', "no_bopo = '$id'")->row_array();
+         $this->template->load('template', 'bopo/update', $x);
+         // var_dump($x['result']);
+       
+      
+   }
+   public function edit_bopo()
+   {
+      
+         $config = array(
+            
+            array(
+               'field' => 'no_jbop',
+               'label' => 'Nama BOP',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            )
+            // ,
+            // array(
+            //    'field' => 'harga',
+            //    'label' => 'Harga (bulanan)',
+            //    'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
+            //    'errors' => array(
+            //       'required' => '%s tidak boleh kosong!',
+            //       'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
+            //       'min_length' => '%s minimal 3 huruf!',
+            //       'max_length' => '%s maksimal 11 huruf!'
+            //    )
+            // )
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $id = $_POST['no_bopo'];
+            $this->isi_edit_bopo($id);
+         } else {
+            $no_bop   = $_POST['no_bopo'];
+            $no_jbop = $_POST['no_jbop'];
+            $harga   = $_POST['harga'];
+            
+            $data = array(
+               'no_bopo' => $no_bop,
+               'harga' => $harga,
+               'no_jbop' => $no_jbop
+            );
+
+            $this->db->where(array('no_bopo' => $_POST['no_bopo'], 'no_jbop' => $_POST['no_jbop']));
+            $cek =  $this->db->get('detail_bopo')->num_rows();
+            if($cek == 0 ){
+            $this->db->insert('detail_bopo', $data);
+            }else{
+            $this->db->set('harga', $_POST['harga'], FALSE);
+            $this->db->where(array('no_bopo' => $_POST['no_bopo'], 'no_jbop' => $_POST['no_jbop']));
+            $this->db->update('detail_bopo');
+            }
+            redirect('c_masterdata/isi_edit_bopo/'.$no_bop.'');
+            
+         }
+         
+         
+   }
+
+   public function hapus_bopo($id,$id2){
+      $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=0");
+         $this->db->where('no_bopo',$id);
+         $this->db->where('no_jbop', $id2);
+         $this->db->delete('detail_bopo');
+         $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=1");
+      
+            redirect('c_masterdata/isi_edit_bopo/'.$id.'');
+   }
+
+
 
  //btk
 
@@ -1151,6 +1317,7 @@ class c_masterdata extends CI_controller{
          $this->db->where('tgl_btk', date('Y-m-d'));
          $data['cek'] = $this->db->get('btk')->result();
          
+         $this->db->like('no_btk', 'BTK_', 'after');
          $data['result'] = $this->db->get('btk')->result_array();
          $this->template->load('template', 'btk/view', $data);
        
@@ -1160,7 +1327,8 @@ class c_masterdata extends CI_controller{
       date_default_timezone_set('Asia/Jakarta');
          $date = date('Y-m-d');
          
-         $query1   = "SELECT  MAX(RIGHT(no_btk,3)) as kode FROM   btk";
+         $query1   = "SELECT  MAX(RIGHT(no_btk,3)) as kode FROM   btk
+                     WHERE no_btk LIKE 'BTK_%'";
          $abc      = $this->db->query($query1);
          $no_trans = "";
          if ($abc->num_rows() > 0) {
@@ -1306,6 +1474,175 @@ class c_masterdata extends CI_controller{
             $this->db->where('no_btk', $_POST['no_btk']);
             $this->M_masterdata->update_data('btk', $data);
             redirect('c_masterdata/lihat_btk');
+            
+         }
+         
+       
+   }
+
+   //btko
+
+    public function lihat_btko()
+   {
+         $this->db->where('tgl_btko', date('Y-m-d'));
+         $data['cek'] = $this->db->get('btko')->result();
+         
+         // $this->db->like('no_btk', 'BTKO_', 'after');
+         $data['result'] = $this->db->get('btko')->result_array();
+         $this->template->load('template', 'btko/view', $data);
+       
+   }
+   public function form_btko()
+   {
+      date_default_timezone_set('Asia/Jakarta');
+         $date = date('Y-m-d');
+         
+         $query1   = "SELECT  MAX(RIGHT(no_btko,3)) as kode FROM   btko
+                     WHERE no_btko LIKE 'BTKO_%'";
+         $abc      = $this->db->query($query1);
+         $no_trans = "";
+         if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+               $tmp = ((int) $k->kode) + 1;
+               $kd  = sprintf("%03s", $tmp);
+            }
+         } else {
+            $kd = "001";
+         }
+         $no_trans   = "BTKO_" . $kd;
+         $data['id'] = $no_trans;
+         $this->template->load('template', 'btko/form', $data);
+       
+   }
+   
+   public function tambah_btko()
+   {
+      
+         
+         $config = array(
+            
+           array(
+               'field' => 'tgl_btko',
+               'label' => 'Tanggal',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!'
+               )
+            ),
+            array(
+               'field' => 'jumlah_pgw',
+               'label' => 'Jumlah Pegawai',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => 'Inputan Salah'
+               )
+            ),
+            array(
+               'field' => 'tarif',
+               'label' => 'Tarif Harga',
+               'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!',
+                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
+                  'min_length' => '%s minimal 3 huruf!',
+                  'max_length' => '%s maksimal 11 huruf!'
+               )
+            )
+
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $this->form_btko();
+         } else {
+            $this->db->where('tgl_btko', $_POST['tgl_btko']);
+            $cek = $this->db->get('btko')->result_array();
+            if($cek == FALSE){
+            $data = array(
+               'no_btko' => $_POST['no_btko'],
+               'tgl_btko' => $_POST['tgl_btko'],
+               'jumlah_pgw' => $_POST['jumlah_pgw'],
+               'tarif' => $_POST['tarif']
+            );
+            $this->db->insert('btko', $data);
+           
+            redirect('c_masterdata/lihat_btko');
+         }else{   
+         $query1   = "SELECT  MAX(RIGHT(no_btko,3)) as kode FROM   btko";
+         $abc      = $this->db->query($query1);
+         $no_trans = "";
+         if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+               $tmp = ((int) $k->kode) + 1;
+               $kd  = sprintf("%03s", $tmp);
+            }
+         } else {
+            $kd = "001";
+         }
+         $no_trans   = "BTKO_" . $kd;
+         $data['id'] = $no_trans;
+            $data['error'] = 'Tanggal sudah ada di database!';
+         $this->template->load('template', 'btko/form', $data);
+         }
+      }
+       
+      
+   }
+   
+   public function isi_edit_btko($id)
+   {
+      
+         
+         
+         $x['data'] = $this->M_masterdata->edit_data('btko', "no_btko = '$id'")->row_array();
+         $this->template->load('template', 'btko/update', $x);
+       
+      
+   }
+   public function edit_btko()
+   {
+      
+         $config = array(
+            
+            
+            array(
+               'field' => 'jumlah_pgw',
+               'label' => 'Jumlah Pegawai',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => 'Inputan Salah'
+               )
+            ),
+            array(
+               'field' => 'tarif',
+               'label' => 'Tarif Harga',
+               'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
+               'errors' => array(
+                  'required' => '%s tidak boleh kosong!',
+                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
+                  'min_length' => '%s minimal 3 huruf!',
+                  'max_length' => '%s maksimal 11 huruf!'
+               )
+            )
+
+         );
+         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+         $this->form_validation->set_rules($config);
+         
+         if ($this->form_validation->run() == FALSE) {
+            $id = $_POST['no_btko'];
+            $this->isi_edit_btko($id);
+         } else {
+          
+            $data = array(
+               'jumlah_pgw' => $_POST['jumlah_pgw'],
+               'tarif' => $_POST['tarif']
+            );
+            
+            $this->db->where('no_btko', $_POST['no_btko']);
+            $this->M_masterdata->update_data('btko', $data);
+            redirect('c_masterdata/lihat_btko');
             
          }
          

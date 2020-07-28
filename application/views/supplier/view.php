@@ -28,7 +28,7 @@
 						<tr><td>$no</td>
 							<td>".$data['no_supp_bp']."</td>
 							<td>".$data['nama_supp_bp']."</td>
-							<td>".$data['notel']."</td>
+							<td align='right'>".$data['notel']."</td>
 							<td>".$data['alamat']."</td>
 							" ?>
 							<td>

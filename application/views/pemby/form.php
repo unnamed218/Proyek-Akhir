@@ -1,12 +1,12 @@
 <html>
 	<head>
-		<title>Transaksi Pembayaran Beban</title>
+		<title>Transaksi Pembayaran Beban Tetap</title>
 	</head>
 	<!-- <center><h3><b>Transaksi Pembayaran Beban</h3></b></center>
 	<hr> -->
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Pembayaran Beban</b></h3>
+    <h3 class="panel-title"><b>Pembayaran Beban Tetap</b></h3>
   </div>
   	 <div class="x_content">
 <div>
@@ -37,19 +37,14 @@
 				<div class="form-group">
 				<label>Beban</label>
 						<select name = "no_coa" class = "form-control">
-							    <option value="#" disabled selected>Pilih Beban</option>
+							    <option value="#" disabled selected>Pilih Beban Tetap</option>
 							     <option value="#" disabled>Beban Tetap</option>
 								<?php				
 								foreach($bebant as $data){				
 								echo "<option value = ".$data['no_coa'].">".$data['nama_coa']."</option>";
 															}
 								?>
-								<option value="#" disabled>Beban Variabel</option>
-								<?php				
-								foreach($bebanv as $data){				
-								echo "<option value = ".$data['no_coa'].">".$data['nama_coa']."</option>";
-															}
-								?>
+								
 						</select>
 	
 				</div>

@@ -66,7 +66,7 @@
 							<tr>
 							<td>".$no."</td>
 							<td>".$data['nama_produk']."</td>
-							<td>".number($data['jumlah'])."</td>"; ?>
+							<td align='right'>".number($data['jumlah'])."</td>"; ?>
 
 							<td>
 							<a href = "<?php echo site_url()."/c_transaksi/isi_edit_produksi_ke2/".$data['no_trans']."/".$data['no_tp']."/".$data['no_produk'] ;?>" >

@@ -4,19 +4,19 @@
 	<body>
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Daftar BOP IPS</b></h3>
+    <h3 class="panel-title"><b>Daftar BOP Olahan</b></h3>
   </div>
   	 <div class="x_content">
   	 		<?php if($cek == TRUE){?>
   	 			<a href = "#" class="btn btn-info" role="button" disabled="disabled"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
   	 		<?php }else{ ?>
-  	 		<a href = "<?php echo site_url()."/c_masterdata/form_bop"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
+  	 		<a href = "<?php echo site_url()."/c_masterdata/form_bopo"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
   	 	<?php } ?>
   	 	 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">
 				<th style="width: 2px;">No</th>
-				<th>ID BOP IPS</th>
+				<th>ID BOP Olahan</th>
 				<th>Tanggal</th>
 				<th>Aksi</th>
 			</tr>
@@ -43,11 +43,11 @@
 					echo "
 
 						<tr><td>$no</td>
-							<td>".$data['no_bop']."</td>
-							<td>".$data['tgl_bop']."</td>
+							<td>".$data['no_bopo']."</td>
+							<td>".$data['tgl_bopo']."</td>
 							" ?>
 							<td>
-							<a href="isi_edit_bop/<?php echo $data['no_bop']; ?>">
+							<a href="isi_edit_bopo/<?php echo $data['no_bopo']; ?>">
 								
 							<span class="fa-stack">
 							  <i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>

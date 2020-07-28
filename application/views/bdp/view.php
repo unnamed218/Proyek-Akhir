@@ -28,7 +28,7 @@
 						<tr><td>$no</td>
 							<td>".$data['no_bdp']."</td>
 							<td>".$data['nama_bdp']."</td>
-							<td>".$data['stok']."</td>
+							<td align='right'>".$data['stok']."</td>
 							<td>".$data['satuan']."</td>" ?>
 							<td>
 							<a href="isi_edit_bdp/<?php echo $data['no_bdp']; ?>">
