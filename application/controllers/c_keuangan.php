@@ -871,6 +871,19 @@ $query35 = "SELECT ifnull(SUM(hpp), 0) as nominal
 		$data['result'] = $this->db->get('pembayaran')->result_array();
 		$this->template->load('template','pemby/report', $data);
 	}
+
+	public function lap_pembyv(){
+
+   		$this->db->or_not_like('no_trans', 'PMBYV_000');
+		if(isset($_POST['bulan'], $_POST['tahun'])){
+   			$this->db->where('MONTH(tgl_trans)', $_POST['bulan']);
+   			$this->db->where('YEAR(tgl_trans)', $_POST['tahun']);
+   			$data['bulan'] = $_POST['bulan'];
+   			$data['tahun'] = $_POST['tahun'];
+   		}
+		$data['result'] = $this->db->get('pembayaranv')->result_array();
+		$this->template->load('template','pemby/var/report', $data);
+	}
 	
 
 
@@ -1513,15 +1526,25 @@ ORDER BY a.no ASC";
 		$ibbn = $this->db->query($qbebanips)->result_array();
 		$data['ipsbeban'] = $ibbn;
 
-		$qbebanipsv = "SELECT ifnull(sum(subtotal),0) as subtotal, c.no_coa, nama_coa
-					FROM (SELECT * FROM pembayaranv WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun')as a 
-					JOIN (SELECT * FROM detail_pembayaranv WHERE jenis_penjualan = 'ips')as b ON a.no_trans = b.no_trans
-					RIGHT JOIN coa c ON c.no_coa = b.no_coa
-					GROUP BY no_coa
-					ORDER BY no_coa ASC
-                    ";
-		$ibbnv = $this->db->query($qbebanipsv)->result_array();
-		$data['ipsbebanv'] = $ibbnv;
+		// $qbebanipsv = "SELECT ifnull(sum(subtotal),0) as subtotal, c.no_coa, nama_coa
+		// 			FROM (SELECT * FROM pembayaranv WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun')as a 
+		// 			JOIN (SELECT * FROM detail_pembayaranv WHERE jenis_penjualan = 'ips')as b ON a.no_trans = b.no_trans
+		// 			RIGHT JOIN coa c ON c.no_coa = b.no_coa
+		// 			GROUP BY no_coa
+		// 			ORDER BY no_coa ASC
+  //                   ";
+		// $ibbnv = $this->db->query($qbebanipsv)->result_array();
+		// $data['ipsbebanv'] = $ibbnv;
+
+		$q5213 = "SELECT ifnull(sum(subtotal),0) as subtotal, no_coa
+					FROM (SELECT * FROM pembayaranv WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun') as a 
+					JOIN detail_pembayaranv b ON a.no_trans = b.no_trans
+					RIGHT JOIN produk c ON b.jenis_penjualan = c.no_produk
+					WHERE c.no_produk LIKE 'PR_001' AND no_coa = 5213
+					GROUP BY c.no_produk 
+					ORDER BY c.no_produk";
+		$coa5213 = $this->db->query($q5213)->row_array()['subtotal'];
+		$data['ipsbebanv'] = $coa5213;
 
 		//TOTAL TOKOOOO
 		$qpenjt = "SELECT ifnull(sum(subtotal), 0) as penjualan
@@ -1566,15 +1589,35 @@ ORDER BY a.no ASC";
 		$tbbn = $this->db->query($qbebantoko)->result_array();
 		$data['tokobeban'] = $tbbn;
 
-		$qbebantokov = "SELECT ifnull(sum(subtotal),0) as subtotal, c.no_coa, nama_coa
-					FROM (SELECT * FROM pembayaranv WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun')as a 
-					JOIN (SELECT * FROM detail_pembayaranv WHERE jenis_penjualan = 'toko')as b ON a.no_trans = b.no_trans
-					RIGHT JOIN coa c ON c.no_coa = b.no_coa
-					GROUP BY no_coa
-					ORDER BY no_coa ASC
-                    ";
-		$tbbnv = $this->db->query($qbebantokov)->result_array();
-		$data['tokobebanv'] = $tbbnv;
+
+		$q5211 = "SELECT ifnull(sum(subtotal),0) as subtotal, no_coa
+					FROM (SELECT * FROM pembayaranv WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun') as a 
+					JOIN detail_pembayaranv b ON a.no_trans = b.no_trans
+					RIGHT JOIN produk c ON b.jenis_penjualan = c.no_produk
+					WHERE c.no_produk NOT LIKE 'PR_001' AND no_coa = 5211
+					GROUP BY c.no_produk 
+					ORDER BY c.no_produk";
+		$coa5211 = $this->db->query($q5211)->result_array();
+		$data['coa5211'] = $coa5211;
+
+		$q5212 = "SELECT ifnull(sum(subtotal),0) as subtotal, no_coa
+					FROM (SELECT * FROM pembayaranv WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' OR tgl_trans = '0000-00-00') as a 
+					JOIN detail_pembayaranv b ON a.no_trans = b.no_trans
+					RIGHT JOIN produk c ON b.jenis_penjualan = c.no_produk
+					WHERE c.no_produk NOT LIKE 'PR_001' AND no_coa = 5212
+					GROUP BY c.no_produk 
+					ORDER BY c.no_produk";
+		$coa5212 = $this->db->query($q5212)->result_array();
+		$data['coa5212'] = $coa5212;
+		// $qbebantokov = "SELECT ifnull(sum(subtotal),0) as subtotal, c.no_coa, nama_coa
+		// 			FROM (SELECT * FROM pembayaranv WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun')as a 
+		// 			JOIN (SELECT * FROM detail_pembayaranv WHERE jenis_penjualan = 'toko')as b ON a.no_trans = b.no_trans
+		// 			RIGHT JOIN coa c ON c.no_coa = b.no_coa
+		// 			GROUP BY no_coa
+		// 			ORDER BY no_coa ASC
+  //                   ";
+		// $tbbnv = $this->db->query($qbebantokov)->result_array();
+		// $data['tokobebanv'] = $tbbnv;
 	}
 
 

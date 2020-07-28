@@ -3144,7 +3144,7 @@ group by no_bbp";
    // pembayaran variabel
 
    public function lihat_pembyv(){
-   
+      $this->db->or_not_like('no_trans', 'PMBYV_000');
       $data['result'] = $this->db->get('pembayaranv')->result_array();
         $this->template->load('template', 'pemby/var/view', $data);
    }
@@ -3155,31 +3155,13 @@ group by no_bbp";
       $this->db->where('no_trans', $id);
       $data['tgl'] = $this->db->get('pembayaranv')->row()->tgl_trans;
 
-      $this->db->where('no_trans', $id);
-      $data['no_penj'] = $this->db->get('pembayaranv')->row_array()['no_trans_penj'];
-
-      $no_penj = substr($data['no_penj'], 0,5);
-      $data['cpn'] = $no_penj;
-      if($no_penj == 'PENJS'){
-      $this->db->where('no_trans', $data['no_penj']);
-      $data['jumlahpenj'] = $this->db->get('penjualan_ips')->row_array()['jumlah'];
-
-
-
-      }else{
-        $q5 = "SELECT * FROM coa WHERE no_coa = 5211 OR no_coa = 5212";
-        $data['bebanv'] = $this->db->query($q5)->result_array();
-        // echo "<pre>"; print_r($data['bebanv']); echo "</pre>"; die();
-
-        $this->db->where('no_trans', $data['no_penj']);
-        $this->db->select_sum('jumlah');
-      $data['jumlahpenj'] = $this->db->get('detail_penjualan_toko')->row_array()['jumlah'];
-      }
+     
 
       //detailnya cok
       $this->db->where('no_trans', $id);
       $this->db->from('detail_pembayaranv a');
       $this->db->join('coa b', 'a.no_coa = b.no_coa');
+      $this->db->join('produk c', 'c.no_produk = a.jenis_penjualan');
       $data['detail'] = $this->db->get()->result_array();
 
       //total
@@ -3196,7 +3178,7 @@ group by no_bbp";
    }
 
    public function form_pembyv(){
-          $query1   = "SELECT  MAX(RIGHT(no_trans,3)) as kode FROM pembayaranv WHERE status = 0 OR status = 1";
+          $query1   = "SELECT  MAX(RIGHT(no_trans,3)) as kode FROM pembayaranv";
          $abc      = $this->db->query($query1);
          $no_trans = "";
          if ($abc->num_rows() > 0) {
@@ -3213,17 +3195,17 @@ group by no_bbp";
       $this->db->where('no_trans', $no_trans);
       $data['cek'] = $this->db->get('pembayaran')->row_array()['status'];
 
-      //id penjualan
-      $q1 = "SELECT * FROM penjualan_ips WHERE status_pembyv IS NULL";
-      $data['penjips'] = $this->db->query($q1)->result_array();
+       $q5 = "SELECT * FROM coa WHERE no_coa = 5211 OR no_coa = 5212 OR no_coa = 5213";
+        $data['bebanv'] = $this->db->query($q5)->result_array();
 
+         //detailnya cok
+      $this->db->where('no_trans', $no_trans);
+      $this->db->from('detail_pembayaranv a');
+      $this->db->join('coa b', 'a.no_coa = b.no_coa');
+      $this->db->join('produk c', 'c.no_produk = a.jenis_penjualan');
+      $data['detail'] = $this->db->get()->result_array();
 
-      $q2 = "SELECT a.no_trans, sum(jumlah) as jumlah 
-      FROM penjualan_toko a 
-      JOIN detail_penjualan_toko b ON a.no_trans = b.no_trans 
-      WHERE status_pembyv IS NULL
-      GROUP BY a.no_trans";
-      $data['penjtoko'] = $this->db->query($q2)->result_array();
+      $data['produk'] = $this->db->get('produk')->result_array();
 
       //cek status
 
@@ -3269,10 +3251,18 @@ group by no_bbp";
                   'required' => 'Inputan Salah'
                )
             ),
+             array(
+               'field' => 'no_produk',
+               'label' => 'Produk',
+               'rules' => 'required',
+               'errors' => array(
+                  'required' => 'Inputan Salah'
+               )
+            ),
             array(
                'field' => 'tarif',
                'label' => 'Tarif',
-               'rules' => 'required|is_natural_no_zero',
+               'rules' => 'required',
                'errors' => array(
                   'required' => 'Inputan Salah',
                   'is_natural_no_zero' => '%s hanya berupa angka 1-9!'
@@ -3283,66 +3273,48 @@ group by no_bbp";
          $this->form_validation->set_rules($config);
          
          if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_trans'];
-            $this->isi_edit_pembyv($id);
+            
+            $this->form_pembyv();
          } else {
           $id = $_POST['no_trans'];
-        $subtotal = $_POST['jumlah_penj'] * $_POST['tarif'];
-
-        $jenis_penj = substr($id, 0,5);
-        if($jenis_penj == 'PENJS'){
 
         $data = array('no_trans' => $_POST['no_trans'],
                      'no_coa' => $_POST['no_coa'],
                      'tarif' => $_POST['tarif'],
-                     'jumlah' => $_POST['jumlah_penj'],
-                     'subtotal' => $subtotal,
-                    'jenis_penjualan' => 'ips');
-        }else{
-           $data = array('no_trans' => $_POST['no_trans'],
-                     'no_coa' => $_POST['no_coa'],
-                     'tarif' => $_POST['tarif'],
-                     'jumlah' => $_POST['jumlah_penj'],
-                     'subtotal' => $subtotal,
-                    'jenis_penjualan' => 'toko');
-        }
+                     'jumlah' => 0,
+                     'subtotal' => $_POST['tarif'],
+                    'jenis_penjualan' => $_POST['no_produk']);
 
+       
 
-       $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_coa' => $_POST['no_coa']));
+       $this->db->where(array('no_trans' => $_POST['no_trans'], 'no_coa' => $_POST['no_coa'], 'jenis_penjualan' => $_POST['no_produk']));
             $cek =  $this->db->get('detail_pembayaranv')->num_rows();
             if($cek == 0 ){
             $this->db->insert('detail_pembayaranv', $data);
             
             }else{
 
-             $this->db->set('subtotal', "subtotal + ".$subtotal."", FALSE);
-            $this->db->where(array('no_trans' => $_POST['no_trans'] ,'no_coa' => $_POST['no_coa']));
+             $this->db->set('subtotal', "subtotal + ".$_POST['tarif']."", FALSE);
+            $this->db->where(array('no_trans' => $_POST['no_trans'] ,'no_coa' => $_POST['no_coa'], 'jenis_penjualan' => $_POST['no_produk']));
             $this->db->update('detail_pembayaranv');
 
-            $this->db->where('no_trans', $id);
-            $tarif = $this->db->get('detail_pembayaranv')->row_array()['subtotal'];
-            $this->db->where('no_trans', $id);
-            $jml = $this->db->get('detail_pembayaranv')->row_array()['jumlah'];
-            $tarif_total = $tarif / $jml;
         // echo "<pre>"; print_r($subtotal); echo "</pre>"; die();
-
-            $this->db->set('tarif', $tarif_total);
-            $this->db->where(array('no_trans' => $_POST['no_trans'] ,'no_coa' => $_POST['no_coa']));
-            $this->db->update('detail_pembayaranv');
 
 
            
    }
 
-    redirect('c_transaksi/isi_edit_pembyv/'.$id.'');
+    redirect('c_transaksi/form_pembyv');
 }
 }
 
-   public function selesai_pembyv($id,$total,$tgl){
-    $this->db->set('status', 1);
-    $this->db->set('total', $total);
-    $this->db->where(array('no_trans' => $id));
-    $this->db->update('pembayaranv');
+   public function selesai_pembyv($id,$total){
+        $data = array('no_trans' => $id,
+                     'tgl_trans' => date('Y-m-d'),
+                     'total' => $total,
+                     'status' => 1,
+                    'no_trans_penj' => 0);
+        $this->db->insert('pembayaranv', $data);
 
 
       $this->db->where('no_trans', $id);

@@ -230,7 +230,8 @@
                                     <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pemb">Laporan Pembelian Bahan Baku</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pembp">Laporan Pembelian Bahan Penolong</a></li>
-                                    <li><a href="<?php echo site_url();?>c_keuangan/lap_pemby">Laporan Pembayaran Beban</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/lap_pemby">Laporan Pembayaran Beban Tetap</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/lap_pembyv">Laporan Pembayaran Beban Variabel</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_penjs">Laporan Penjualan IPS</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_penjt">Laporan Penjualan Toko</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_bp_ips">Laporan Harga Pokok Produksi IPS</a></li>

@@ -47,17 +47,18 @@
 	 	}
 	 	
 	 }
-	 	foreach ($tokobebanv as $data ) {
-	 		# code...
-	 	if($data['no_coa'] == 5211){
-
-	 	$tbbn5211 = $data['subtotal'];
+	 	$tbbn5211 = 0;
+	 	foreach ($coa5211 as $data) {
+	 		$tbbn5211 = $tbbn5211 + $data['subtotal'];
 	 	}
-	 	if($data['no_coa'] == 5212){
 
-	 	$tbbn5212 = $data['subtotal'];
+	 	$tbbn5212 = 0;
+	 	foreach ($coa5212 as $data) {
+	 		$tbbn5212 = $tbbn5212 + $data['subtotal'];
 	 	}
-	 }
+
+	 	
+	 
 	 $tbbntotalfix = $tbbn5221 + $tbbn5222  + $tbbn5224;
 	 $tbbntotalvar = $tbbn5211 + $tbbn5212;
 	 $tbbntotalakhir = $tbbntotalfix + $tbbntotalvar;
@@ -82,15 +83,9 @@
 	 	}
 	 	
 	 }
-	 foreach ($ipsbebanv as $data) {
-	 	# code...
-	 	if($data['no_coa'] == 5213){
 
-	 	$ibbn5213 = $data['subtotal'];
-	 	}
-	 }
 	 $ibbntotalfix = $ibbn5221 + $ibbn5222  + $ibbn5224;
-	 $ibbntotalvar = $ibbn5213;
+	 $ibbntotalvar = $ipsbebanv;
 	 $ibbntotalakhir = $ibbntotalfix + $ibbntotalvar;
 	 $laba_bersih_ips =  $laba_kotor_ips - $ibbntotalakhir; 
     ?>
@@ -411,16 +406,9 @@
 			<td>Beban Pemasaran Variabel</td>
 			<td align='right'></td>
 			<?php 
-			foreach($penjt as $data){
-					if($data['laba_kotor'] == TRUE){
-				$hasil_kontribusi = ($data['laba_kotor'] / $laba_kotor_toko) * 100;
-				$kontribusi = number_format($hasil_kontribusi,2);
-				$hasil = ($kontribusi * $tbbn5212) / 100;
-			}else{
-				$hasil = 0;
-			}
+			foreach($coa5212 as $data){
 
-				echo "<td align='right'>".format_rp($hasil)."</td>";
+				echo "<td align='right'>".format_rp($data['subtotal'])."</td>";
 			}
 			?>
 			<td align='right'><?php echo format_rp($tbbn5212)?></td>
@@ -431,16 +419,9 @@
 			<td>Beban Administrasi dan Umum Variabel</td>
 			<td align='right'></td>
 			<?php 
-			foreach($penjt as $data){
-					if($data['laba_kotor'] == TRUE){
-				$hasil_kontribusi = ($data['laba_kotor'] / $laba_kotor_toko) * 100;
-				$kontribusi = number_format($hasil_kontribusi,2);
-				$hasil = ($kontribusi * $tbbn5211) / 100;
-			}else{
-				$hasil = 0;
-			}
+			foreach($coa5211 as $data){
 
-				echo "<td align='right'>".format_rp($hasil)."</td>";
+				echo "<td align='right'>".format_rp($data['subtotal'])."</td>";
 			}
 			?>
 			<td align='right'><?php echo format_rp($tbbn5211)?></td>
