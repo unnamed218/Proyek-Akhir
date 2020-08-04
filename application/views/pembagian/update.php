@@ -56,8 +56,8 @@
 			<div class="col-xs-4">
 				<div class="form-group">
 				<label>Penjualan ke IPS</label>
-				<input type="text" class="form-control"  value="<?php echo number(130000)?>" readonly>
-				<input type="hidden" class="form-control"  name="jual" value="130000" readonly>
+				<input type="text" class="form-control"  value="<?php echo number($jumlah - 10000) ?>" readonly>
+				<input type="hidden" class="form-control"  name="jual" value="<?php echo $jumlah - 10000 ?>" readonly>
 			  <?php echo form_error('jual'); ?>
 			</div>
 		</div>

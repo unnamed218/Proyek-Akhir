@@ -127,7 +127,7 @@
 							<tr>
 							<td>".$data['nama_bb']."</td>
 							<td>".$data['no_peternak']." - ".$data['nama_peternak']."</td>
-							<td>".number($data['jumlah'])." ".$data['satuan']."</td>
+							<td align ='right'>".number($data['jumlah'])." ".$data['satuan']."</td>
 							<td align='right'>".format_rp($data['harga'])."</td>
 						
 							

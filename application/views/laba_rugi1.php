@@ -447,17 +447,29 @@
 			<td>Total Beban Variabel</td>
 			<td align='right'><?php echo format_rp($ibbntotalvar)?></td>
 			<?php 
-			foreach($penjt as $data){
-					if($data['laba_kotor'] == TRUE){
-				$hasil_kontribusi = ($data['laba_kotor'] / $laba_kotor_toko) * 100;
-				$kontribusi = number_format($hasil_kontribusi,2);
-				$hasil = ($kontribusi * $tbbntotalvar) / 100;
-			}else{
-				$hasil = 0;
-			}
+			foreach($list_produk as $data){
+				$nnprod = $data['no_produk'];
+				$qcekbeban1 = "SELECT ifnull(sum(subtotal),0) as subtotal, no_coa
+					FROM (SELECT * FROM pembayaranv WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' OR tgl_trans = '0000-00-00') as a 
+					JOIN detail_pembayaranv b ON a.no_trans = b.no_trans
+					RIGHT JOIN produk c ON b.jenis_penjualan = c.no_produk
+					WHERE c.no_produk = '$nnprod' AND no_coa = 5212
+					GROUP BY c.no_produk 
+					ORDER BY c.no_produk";
+					$ttl5212 = $this->db->query($qcekbeban1)->row_array()['subtotal'];
 
+				$qcekbeban2 = "SELECT ifnull(sum(subtotal),0) as subtotal, no_coa
+					FROM (SELECT * FROM pembayaranv WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' OR tgl_trans = '0000-00-00') as a 
+					JOIN detail_pembayaranv b ON a.no_trans = b.no_trans
+					RIGHT JOIN produk c ON b.jenis_penjualan = c.no_produk
+					WHERE c.no_produk = '$nnprod' AND no_coa = 5211
+					GROUP BY c.no_produk 
+					ORDER BY c.no_produk";
+					$ttl5211 = $this->db->query($qcekbeban2)->row_array()['subtotal'];
+					$hasil = $ttl5212 + $ttl5211;
 				echo "<td align='right'>".format_rp($hasil)."</td>";
-			}
+
+				}
 			?>
 			<td align='right'><?php echo format_rp($tbbntotalvar)?></td>
 			<td align='right'><?php echo format_rp($total_beban_var)?></td>
@@ -466,18 +478,30 @@
 		<tr>
 			<td><b>Total Beban-Beban</b></td>
 			<td align='right'><?php echo format_rp($ibbntotalakhir)?></td>
-			<?php 
-			foreach($penjt as $data){
-					if($data['laba_kotor'] == TRUE){
-				$hasil_kontribusi = ($data['laba_kotor'] / $laba_kotor_toko) * 100;
-				$kontribusi = number_format($hasil_kontribusi,2);
-				$hasil = ($kontribusi * $tbbntotalakhir) / 100;
-			}else{
-				$hasil = 0;
-			}
-				
+		<?php 
+			foreach($list_produk as $data){
+				$nnprod = $data['no_produk'];
+				$qcekbeban1 = "SELECT ifnull(sum(subtotal),0) as subtotal, no_coa
+					FROM (SELECT * FROM pembayaranv WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' OR tgl_trans = '0000-00-00') as a 
+					JOIN detail_pembayaranv b ON a.no_trans = b.no_trans
+					RIGHT JOIN produk c ON b.jenis_penjualan = c.no_produk
+					WHERE c.no_produk = '$nnprod' AND no_coa = 5212
+					GROUP BY c.no_produk 
+					ORDER BY c.no_produk";
+					$ttl5212 = $this->db->query($qcekbeban1)->row_array()['subtotal'];
+
+				$qcekbeban2 = "SELECT ifnull(sum(subtotal),0) as subtotal, no_coa
+					FROM (SELECT * FROM pembayaranv WHERE MONTH(tgl_trans) = '$bulan' AND YEAR(tgl_trans) = '$tahun' OR tgl_trans = '0000-00-00') as a 
+					JOIN detail_pembayaranv b ON a.no_trans = b.no_trans
+					RIGHT JOIN produk c ON b.jenis_penjualan = c.no_produk
+					WHERE c.no_produk = '$nnprod' AND no_coa = 5211
+					GROUP BY c.no_produk 
+					ORDER BY c.no_produk";
+					$ttl5211 = $this->db->query($qcekbeban2)->row_array()['subtotal'];
+					$hasil = $ttl5212 + $ttl5211;
 				echo "<td align='right'>".format_rp($hasil)."</td>";
-			}
+
+				}
 			?>
 			<td align='right'><?php echo format_rp($tbbntotalakhir)?></td>
 			<td align='right'><?php echo format_rp($total_beban)?></td>

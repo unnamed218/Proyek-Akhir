@@ -347,7 +347,7 @@ class c_transaksi extends CI_controller{
           $this->db->select_sum('lulus');
           $cek_lulus = $this->db->get('detail_cek_kualitas')->row_array()['lulus'];
           $total_lulus = $cek_lulus + $_POST['lulus'];
-            // if($total_lulus >= 140000){
+            if($total_lulus <= 140000){
          
         $this->db->where('no_trans', $id_pmb);
         $this->db->select_sum('jumlah');
@@ -373,42 +373,41 @@ class c_transaksi extends CI_controller{
             $this->db->update('pembelian_bb');
         
        redirect('c_transaksi/form_ck');
-     // }else{
-     //  $data['error'] = 'Jumlah lulus melebihi batasan (140.000 Liter)!';
-     //    $query1   = "SELECT  MAX(RIGHT(no_trans,3)) as kode FROM cek_kualitas";
-     //     $abc      = $this->db->query($query1);
-     //     $no_trans = "";
-     //     if ($abc->num_rows() > 0) {
-     //        foreach ($abc->result() as $k) {
-     //           $tmp = ((int) $k->kode) + 1;
-     //           $kd  = sprintf("%03s", $tmp);
-     //        }
-     //     } else {
-     //        $kd = "001";
-     //     }
-     //     $no_trans   = "CK_" . $kd;
-     //     $data['id'] = $no_trans;
+     }else{
+      $data['error'] = 'Jumlah lulus melebihi batasan (140.000 Liter)!';
+  $query1   = "SELECT  MAX(RIGHT(no_trans,3)) as kode FROM cek_kualitas";
+         $abc      = $this->db->query($query1);
+         $no_trans = "";
+         if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+               $tmp = ((int) $k->kode) + 1;
+               $kd  = sprintf("%03s", $tmp);
+            }
+         } else {
+            $kd = "001";
+         }
+         $no_trans   = "CK_" . $kd;
+         $data['id'] = $no_trans;
 
-     //     $this->db->where('status', '1');
-     //     $this->db->select('a.no_trans, a.tgl_trans');
-     //     $this->db->select_sum('jumlah');
-     //     $this->db->from('pembelian_bb a');
-     //     $this->db->join('detail_pembelian_bb b', 'a.no_trans = b.no_trans');
-     //     $this->db->group_by('a.no_trans');
-     //     $data['pbb'] = $this->db->get()->result_array();
+         $this->db->where('status', '1');
+         $this->db->select('a.no_trans, a.tgl_trans');
+         $this->db->select_sum('jumlah');
+         $this->db->from('pembelian_bb a');
+         $this->db->join('detail_pembelian_bb b', 'a.no_trans = b.no_trans');
+         $this->db->group_by('a.no_trans');
+         $data['pbb'] = $this->db->get()->result_array();
 
-     //     //detail
-     //     $this->db->where('no_trans', $no_trans);
-     //     $data['detail'] = $this->db->get('detail_cek_kualitas')->result_array();
+         //detail
+         $this->db->where('no_trans', $no_trans);
+         $data['detail'] = $this->db->get('detail_cek_kualitas')->result_array();
 
-     //     //cek total lulus
-     //     $this->db->select_sum('lulus');
-     //     $this->db->where('no_trans', $no_trans);
-     //     $data['cek_lulus'] = $this->db->get('detail_cek_kualitas')->row_array()['lulus'];
+         //cek total lulus
+         $this->db->select_sum('lulus');
+         $this->db->where('no_trans', $no_trans);
+         $data['cek_lulus'] = $this->db->get('detail_cek_kualitas')->row_array()['lulus'];
 
-
-     //     $this->template->load('template', 'ck/form', $data);
-     // }
+         $this->template->load('template', 'ck/form', $data);
+     }
    }
    }
 
@@ -1635,15 +1634,15 @@ group by no_bbp";
            $this->isi_edit_tp($id);
         }else{
          $id = $_POST['no_tp'];
-         $this->db->where('no_tp', $id);
-         $this->db->select('status');
-         $x['status'] = $this->db->get('target_produksi')->row()->status;
+          $x['error'] = 'Jumlah Target Produksi melebihi jumlah produksi!';
+        $this->db->where('no_tp', $id);
+        $x['status'] = $this->db->get('target_produksi')->row()->status;
          
          
-         $x['data'] = $this->m_masterdata->edit_data('target_produksi', "no_tp = '$id'")->row_array();
+         $x['data'] = $this->M_masterdata->edit_data('target_produksi', "no_tp = '$id'")->row_array();
 
 
-         $query3 = "SELECT produksi as jumlah
+         $query3 = "SELECT ifnull(produksi,0) as jumlah
                   FROM target_produksi a
                   JOIN pembagian b ON a.no_trans_pembagian = b.no_trans
                   JOIN detail_produksi_ke1 c ON c.no_trans = b.no_trans_produksi1
@@ -1667,26 +1666,27 @@ group by no_bbp";
          $x['result1'] = $this->db->get()->result_array();
 
          //ISI BOM 
-      $query1 =   "SELECT nama_bb, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp
-                  FROM detail_target_produksi a
-                  JOIN produk b ON a.no_produk = b.no_produk
-                  JOIN bom c ON c.no_produk = b.no_produk
-                  JOIN bahan_baku d ON d.no_bb = c.no_bbp 
-                  WHERE a.no_tp = '$id'
-         UNION
-         SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.harga, d.satuan, c.no_bbp
-         FROM detail_target_produksi a
-         JOIN produk b ON a.no_produk = b.no_produk
-         JOIN bom c ON c.no_produk = b.no_produk
-         JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
-         WHERE a.no_tp = '$id' AND NOT c.no_bbp = 'BB_001'
-         group by no_bbp";
+      $query1 =   "
+SELECT nama_bb, sum(a.jumlah) * c.jumlah as jumlah_bom, d.satuan, c.no_bbp
+FROM detail_target_produksi a
+JOIN produk b ON a.no_produk = b.no_produk
+JOIN bom c ON c.no_produk = b.no_produk
+JOIN bahan_baku d ON d.no_bb = c.no_bbp 
+WHERE a.no_tp = '$id'
+UNION
+SELECT nama_bp, sum(a.jumlah) * c.jumlah as jumlah_bom, d.satuan, c.no_bbp
+FROM detail_target_produksi a
+JOIN produk b ON a.no_produk = b.no_produk
+JOIN bom c ON c.no_produk = b.no_produk
+JOIN bahan_penolong d ON d.no_bp = c.no_bbp 
+WHERE a.no_tp = '$id' AND NOT c.no_bbp = 'BB_001'
+group by no_bbp";
       $x['result2'] = $this->db->query($query1)->result_array();
          $x['id'] = $id;
-         $this->db->where('no_tp', $id);
-         $this->db->select_sum('jumlah');
-         $x['cek'] = $this->db->get('detail_target_produksi')->row()->jumlah;
-         $x['error'] = 'Jumlah Target Produksi melebihi jumlah produksi!';
+         $query = "SELECT ifnull(sum(jumlah),0) as jumlah
+                  FROM detail_target_produksi
+                  WHERE no_tp = '$id'";
+         $x['cek'] = $this->db->query($query)->row_array()['jumlah'];
          $this->template->load('template', 'tp/update', $x);
         }
       }
@@ -3144,6 +3144,15 @@ group by no_bbp";
    // pembayaran variabel
 
    public function lihat_pembyv(){
+     $this->db->where('tgl_trans', date('Y-m-d'));
+    $cek = $this->db->get('pembayaranv')->result();
+    $this->db->where('tgl_trans', date('Y-m-d'));
+    $cek1 = $this->db->get('pembayaranv')->result();
+    $data['cek'] = $cek;
+    $data['cek1'] = $cek1;
+    if($cek1 == TRUE){
+       $data['error'] = 'Pembayaran untuk hari ini sudah dilakukan!';
+    }
       $this->db->or_not_like('no_trans', 'PMBYV_000');
       $data['result'] = $this->db->get('pembayaranv')->result_array();
         $this->template->load('template', 'pemby/var/view', $data);

@@ -7,7 +7,12 @@
  <div class="x_title">
     <h3 class="panel-title"><b>Daftar Pembayaran Beban Variabel</b></h3>
   </div>
+  	 			<?php if (isset($error)){ echo "<div class='alert alert-success'><li>".$error."</li></div>"; }?>
+  	 		<?php if($cek == TRUE){?>
+  	 			<a href = "#" class="btn btn-info" role="button" disabled="disabled"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
+  	 		<?php }else{ ?>
   	 		<a href = "<?php echo site_url()."/c_transaksi/form_pembyv"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
+  	 	<?php } ?>
   	 	 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">

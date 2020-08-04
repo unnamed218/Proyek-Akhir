@@ -28,7 +28,7 @@
 						<tr><td>$no</td>
 							<td>".$data['no_trans']."</td>
 							<td>".$data['tgl_trans']."</td>
-							<td align='right'>".number($data['jumlah'])."</td>
+							<td align='right'>".number($data['jumlah'])." liter</td>
 							<td align='right'>".format_rp($data['total'])."</td>
 							" ?>
 							<td>

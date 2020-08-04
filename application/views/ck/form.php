@@ -102,9 +102,9 @@
 					echo "
 							<tr>
 							<td>".$data['no_trans_pmb']."</td>
-							<td>".number($data['lulus'])."</td>
-							<td>".number($data['gagal'])."</td>	
-							<td>".number($data['total'])."</td>"; ?>
+							<td align='right'>".number($data['lulus'])."</td>
+							<td align='right'>".number($data['gagal'])."</td>	
+							<td align='right'>".number($data['total'])."</td>"; ?>
 							
 
 						</tr>
@@ -119,9 +119,9 @@
 			?>
 			<tr>
 				<td align="center">Total</td>
-				<td ><?php echo number($lulus) ;?></td>
-				<td ><?php echo number($gagal) ;?></td>
-				<td ><?php echo number($total) ;?></td>
+				<td  align='right'><?php echo number($lulus) ;?></td>
+				<td  align='right'><?php echo number($gagal) ;?></td>
+				<td  align='right'><?php echo number($total) ;?></td>
 			</tr>
 			</tbody>
 
